@@ -1,5 +1,8 @@
 import pygame
 
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
 class World (object):
 	
 	def __init__(self):
@@ -18,8 +21,7 @@ class World (object):
 	def draw(self, screen):
 		self.sprites.draw(screen)
 		
-		#for pos in [x + self.scrollPosition % 600 for x in range(-100, 600) if x % 100 == 0]:
 		for i in range(8):
 			pos = (i * 100 + self.scrollPosition) % 800 - 100
-			pygame.draw.circle(screen, (255,0,0), (50, pos), 20)
+			pygame.draw.circle(screen, (255,0,0), (50, int(pos)), 20)
 		

@@ -7,7 +7,7 @@ from World import *
 def main():
 
 	pygame.init()
-	screen = pygame.display.set_mode((800, 600), pygame.FULLSCREEN)
+	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) #pygame.FULLSCREEN)
 	pygame.display.set_caption('Shmup!')
 
 	screen.fill((0, 0, 0))

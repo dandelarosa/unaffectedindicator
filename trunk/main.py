@@ -2,12 +2,12 @@
 
 import pygame
 
-from World import *
+import World
 
 def main():
 
 	pygame.init()
-	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) #pygame.FULLSCREEN)
+	screen = pygame.display.set_mode((World.SCREEN_WIDTH, World.SCREEN_HEIGHT),pygame.FULLSCREEN)
 	pygame.display.set_caption('Shmup!')
 
 	screen.fill((0, 0, 0))
@@ -15,7 +15,8 @@ def main():
 	
 	clock = pygame.time.Clock()
 	
-	world = World()
+	world = World.World()
+	world.spawnWorld()
 	
 	while True:
 		clock.tick(30)
@@ -31,9 +32,10 @@ def main():
 		
 		world.update()
 					
-		screen.fill((0,0,0))
-		
+		screen.fill((255,255,255))
+		pygame.draw.rect(screen, (200, 200, 255), (World.PLAY_WIDTH, 0, World.HUD_WIDTH, World.SCREEN_HEIGHT))
 		world.draw(screen)
+		
 		
 		pygame.display.flip()
 

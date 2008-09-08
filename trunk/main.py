@@ -3,11 +3,12 @@
 import pygame
 
 import world
+from constants import *
 
 def main():
 
 	pygame.init()
-	screen = pygame.display.set_mode((world.SCREEN_WIDTH, world.SCREEN_HEIGHT), False) #pygame.FULLSCREEN)
+	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) #pygame.FULLSCREEN)
 	pygame.display.set_caption('Shmup!')
 
 	screen.fill((0, 0, 0))
@@ -33,7 +34,7 @@ def main():
 		gameWorld.update()
 					
 		screen.fill((255,255,255))
-		pygame.draw.rect(screen, (200, 200, 255), (world.PLAY_WIDTH, 0, world.HUD_WIDTH, world.SCREEN_HEIGHT))
+		pygame.draw.rect(screen, (200, 200, 255), (PLAY_WIDTH, 0, HUD_WIDTH, SCREEN_HEIGHT))
 		gameWorld.draw(screen)
 		
 		

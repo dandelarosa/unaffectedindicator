@@ -1,5 +1,7 @@
 import pygame
 
+from constants import *
+
 class ScrollButton(pygame.sprite.Sprite):
 	def __init__(self, pointUp):
 		super(ScrollButton, self).__init__()
@@ -44,15 +46,14 @@ class Hud (object):
 		self.scrollButtonUp = ScrollButton(True)
 		self.scrollButtonDown = ScrollButton(False)
 		self.scrollButtonUp.rect.topleft = (0, 0)
-		self.scrollButtonDown.rect.bottomleft = (0, 768)
+		self.scrollButtonDown.rect.bottomleft = (0, SCREEN_HEIGHT)
 		
-		self.scrollbar = ScrollBar(768 - self.scrollButtonUp.rect.height, self.scrollButtonDown.rect.height)
+		self.scrollbar = ScrollBar(SCREEN_HEIGHT - self.scrollButtonUp.rect.height, self.scrollButtonDown.rect.height)
 		
 		self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar)
 	
 	def update(self):
 		self.scrollbar.update(self.world.scrollPosition / float(self.world.endPosition))
-		print "pos ", self.world.scrollPosition, "scroll bar at ", self.scrollbar.rect.bottom
 	
 	def draw(self, screen):
 		self.hudElements.draw(screen)

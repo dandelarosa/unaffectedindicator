@@ -3,12 +3,8 @@ import random
 
 from entity import Entity
 from hud import Hud
+from constants import *
 
-PLAY_WIDTH = 500
-HUD_WIDTH = 200
-SCREEN_WIDTH = PLAY_WIDTH + HUD_WIDTH
-SCREEN_HEIGHT = 768
-		
 class World (object):
 	
 	def __init__(self):

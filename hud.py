@@ -31,14 +31,29 @@ class ScrollBar(pygame.sprite.Sprite):
 	
 	def update(self, progress):
 		self.rect.bottom = (self.end - self.start) * progress + self.start
+
+class DamageBar(pygame.sprite.Sprite):
+	def __init__(self):
+		super(DamageBar, self).__init__()
+		
+		self.images = [pygame.Surface((128, 32)) for i in range(MAX_DAMAGE + 1)]
+		i = 0
+		for image in self.images:
+			image.fill((0,0,0))
+			pygame.draw.rect(image, (0, 255, 0), (0, 0, int(i * 128.0 / MAX_DAMAGE), 32))
+			i += 1
+		
+		self.image = self.images[0]
+		self.rect = self.image.get_rect()
+	
+	def update(self, damage):
+		self.image = self.images[min(MAX_DAMAGE, damage)]
 		
 
 class Hud (object):
 	
-	def __init__(self, world):
+	def __init__(self):
 		super(Hud, self).__init__()
-		
-		self.world = world
 		self.hudElements = pygame.sprite.Group()
 	
 	def createHudElements(self):
@@ -50,10 +65,14 @@ class Hud (object):
 		
 		self.scrollbar = ScrollBar(SCREEN_HEIGHT - self.scrollButtonUp.rect.height, self.scrollButtonDown.rect.height)
 		
-		self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar)
+		self.damageBar = DamageBar()
+		self.damageBar.rect.topleft = (48, 0)
+		
+		self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar)
 	
-	def update(self):
-		self.scrollbar.update(self.world.scrollPosition / float(self.world.endPosition))
+	def update(self, world):
+		self.scrollbar.update(world.scrollPosition / float(world.endPosition))
+		self.damageBar.update(world.damage)
 	
 	def draw(self, screen):
 		self.hudElements.draw(screen)

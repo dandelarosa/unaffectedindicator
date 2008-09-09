@@ -11,18 +11,20 @@ class World (object):
 		super(World, self).__init__()
 		
 		self.frames = 0
+		
+		self.playSurface = pygame.Surface((PLAY_WIDTH, SCREEN_HEIGHT))
+		self.hudSurface = pygame.Surface((HUD_WIDTH, SCREEN_HEIGHT))
 
 		self.scrollPosition = 0
 		self.scrollSpeed = 3
 		self.endPosition = 500
 		
-		self.playSurface = pygame.Surface((PLAY_WIDTH, SCREEN_HEIGHT))
-		self.hudSurface = pygame.Surface((HUD_WIDTH, SCREEN_HEIGHT))
+		self.damage = 0
 		
 		self.sprites = pygame.sprite.Group()
 		self.enemies = pygame.sprite.Group()
 	
-		self.hud = Hud(self)
+		self.hud = Hud()
 	
 	def spawnWorld(self):
 		self.player = Entity((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
@@ -39,9 +41,12 @@ class World (object):
 		
 		for enemy in self.enemies:
 			enemy.rect.move_ip((0, self.scrollSpeed))
+			if enemy.rect.top > SCREEN_HEIGHT:
+				self.enemies.remove(enemy)
+				self.damage += 1
 		
 		self.sprites.update()
-		self.hud.update()
+		self.hud.update(self)
 		
 		if self.frames % 50 == 0:
 			self.spawnEnemy()

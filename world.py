@@ -2,6 +2,7 @@ import pygame
 import random
 
 from entity import Entity
+from player import Player
 from hud import Hud
 from constants import *
 
@@ -27,7 +28,7 @@ class World (object):
 		self.hud = Hud()
 	
 	def spawnWorld(self):
-		self.player = Entity((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
+		self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50), None)
 		self.sprites.add(self.player)
 		
 		self.hud.createHudElements()

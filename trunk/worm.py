@@ -1,6 +1,6 @@
 
 import pygame, sys, os, random
-import Entity	
+import entity	
 from pygame.locals import *
 
 

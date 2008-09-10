@@ -31,7 +31,7 @@ class World (object):
 		self.hud = Hud()
 	
 	def spawnWorld(self):
-		self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50), None)
+		self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
 		self.sprites.add(self.player)
 		
 		self.hud.createHudElements()

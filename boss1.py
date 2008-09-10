@@ -11,7 +11,7 @@ from entity import Entity
 class Chainlink(Entity):
     """A link on the chain"""
     def __init__(self, position = (0, 0), image = None):
-        Entity.__init__(self, position, image)
+        Entity.__init__(self, position, image, 32, 0)
         # Set default position of the link
         self.default_pos = position
         # Set destination to the default position
@@ -59,7 +59,7 @@ class Tentacle():
         self.num_links = num_links
         for i in range(self.num_links):
             # all links start at the origin of the tentacle
-            new_link = Chainlink((self.x, self.y))
+            new_link = Chainlink((self.x, self.y),"data/images/Tentacle.png")
             self.links.append(new_link)
     def init_extend(self, destination = (0,0)):
         """Specify distance (vector) to extend tentacle"""

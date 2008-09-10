@@ -7,7 +7,7 @@ from pygame.locals import *
 class Player(entity.Entity):
     
     def __init__(self, pos):
-        entity.Entity.__init__(self, pos, "data/down.png", 50, 10)
+        entity.Entity.__init__(self, pos, "data/images/down.png", 50, 10)
         pygame.mouse.set_visible(False)
         self.health = 100
         self.powerup = 0

@@ -14,7 +14,7 @@ class World (object):
 	def __init__(self):
 		super(World, self).__init__()
 		
-		self.frames = 0
+		self.frames = 1
 		
 		self.playSurface = pygame.Surface((PLAY_WIDTH, SCREEN_HEIGHT))
 		self.hudSurface = pygame.Surface((HUD_WIDTH, SCREEN_HEIGHT))

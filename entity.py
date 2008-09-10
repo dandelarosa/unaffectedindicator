@@ -20,9 +20,13 @@ class Entity(pygame.sprite.Sprite):
             self.images = [self.image]
             
         else:
-            self.imageStrip = pygame.image.load(imageFilename).convert_alpha()
+            self.imageStrip = pygame.image.load('data/images/' + imageFilename).convert_alpha()
             self.rectStrip = self.imageStrip.get_rect()
             self.images = []
+            
+            if frameWidth == 0:
+                frameWidth = self.rectStrip.width
+            
             for i in range(self.rectStrip.width / frameWidth):
                 image = pygame.Surface((frameWidth, self.rectStrip.height))
                 image.blit(self.imageStrip, (0, 0), (i * frameWidth, 0, frameWidth, self.rectStrip.height))

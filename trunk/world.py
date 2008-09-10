@@ -55,6 +55,9 @@ class World (object):
 		enemy = Entity((random.randint(0, PLAY_WIDTH), -50))
 		self.sprites.add(enemy)
 		self.enemies.add(enemy)
+
+        def leftMouseButtonDown(self):
+                self.player.shoot()
 	
 	def update(self):
 		

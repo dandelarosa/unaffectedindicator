@@ -10,7 +10,7 @@ from entity import Entity
 
 class Chainlink(Entity):
     """A link on the chain"""
-    def __init__(self, position = (0, 0), image = None):
+    def __init__(self, position = (0, 0), image = "data/images/Tentacle.png"):
         Entity.__init__(self, position, image, 32, 0)
         # Set default position of the link
         self.default_pos = position
@@ -59,7 +59,7 @@ class Tentacle():
         self.num_links = num_links
         for i in range(self.num_links):
             # all links start at the origin of the tentacle
-            new_link = Chainlink((self.x, self.y),"data/images/Tentacle.png")
+            new_link = Chainlink((self.x, self.y))
             self.links.append(new_link)
     def init_extend(self, destination = (0,0)):
         """Specify distance (vector) to extend tentacle"""
@@ -88,5 +88,17 @@ class Tentacle():
 
 class Boss(Entity):
     """Overall handler for the final boss"""
-    def __init__(self):
-        super(Boss,self).__init__()
+    def __init__(self, position = (0, 0), image = "data/images/Bossintro.png"):
+        Entity.__init__(self, position, image, 400, 0)
+        # Define phase constants
+        self.phase = 0
+        self.timer = pygame.time.get_ticks()
+    def update(self):
+        # Check what phase the boss is in
+        if self.phase == 0:
+            currenttime = pygame.time.get_ticks()
+            if currenttime - self.timer > 30:
+                self.rect.move_ip((0,1))
+                if self.rect.topleft == 0:
+                    self.phase = 1
+            self.timer = currenttime

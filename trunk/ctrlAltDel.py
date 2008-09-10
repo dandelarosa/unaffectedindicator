@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pygame, random
-from entity import Entity
+import entity
 from pygame.locals import *
 
 class CtrlAltDel(entity.Entity):

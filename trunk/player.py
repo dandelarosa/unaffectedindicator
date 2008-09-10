@@ -12,6 +12,9 @@ class Player(entity.Entity):
                 self.health = 100
                 self.powerup = 0
                 self.lives = 3
+                self.hasCtrl = False
+                self.hasAlt = False
+                self.hasDel = False
                 self.invincible = False
                 
         def set_position(self,pos):
@@ -23,6 +26,16 @@ class Player(entity.Entity):
         
         def shoot(self):
                 print "Bang"
+
+        def collected_ctrlAltDel(self, cadId):
+                if cadId is 1:
+                        self.hasCtrl = True
+                elif cadId is 2:
+                        self.hasAlt = True
+                elif cadId is 3:
+                        self.hasDel = True
+                if self.hasCtrl and self.hasAlt and self.hasDel:
+                        self.increase_health(50)
                 
         def init_safe_mode(self, time):
                 if not self.invincible:

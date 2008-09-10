@@ -14,9 +14,9 @@ class Popup(pygame.sprite.Sprite):
 		
         def update(self):
                 self.lifetime+=1
-                if (self.lifetime < 30):
+               # if (self.lifetime < 30):
                         #need to still display pop up animation
-                        print "popping up"
+                  #      print "popping up"
 
 
         def destroy(self):

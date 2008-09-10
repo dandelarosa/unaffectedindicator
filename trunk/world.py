@@ -52,7 +52,7 @@ class World (object):
         self.enemies.add(enemy)
 
     def spawnPopup(self):
-        enemy = Popup()
+        enemy = Popup((random.randint(0, PLAY_WIDTH), -50))
         self.sprites.add(enemy)
         self.enemies.add(enemy)
 
@@ -67,6 +67,7 @@ class World (object):
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
             print "player collided with enemy"
             self.sprites.remove(enemy)
+            self.enemies.remove(enemy)
             self.player.decrease_life()
             if self.player.lives == 0 :
                 print "Game over"

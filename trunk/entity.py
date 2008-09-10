@@ -20,7 +20,7 @@ class Entity(pygame.sprite.Sprite):
             self.images = [self.image]
             
         else:
-            self.imageStrip = pygame.image.load(imageFilename).convert()
+            self.imageStrip = pygame.image.load(imageFilename).convert_alpha()
             self.rectStrip = self.imageStrip.get_rect()
             self.images = []
             for i in range(self.rectStrip.width / frameWidth):

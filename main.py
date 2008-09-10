@@ -5,6 +5,8 @@ import pygame
 import world
 from constants import *
 
+
+
 def main():
 
 	pygame.init()

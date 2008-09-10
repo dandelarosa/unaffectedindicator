@@ -11,13 +11,14 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) #pygame.FULLSCREEN)
     pygame.display.set_caption('Shmup!')
 
-    screen.fill((0, 0, 0))
+    screen.fill((255, 255, 255))
     pygame.display.flip()
 
     masterclock = pygame.time.Clock()
 
     # Create chain (pending implementation)
     # Tentacle is created with origin at (100,100) with 10 chain links attached
+    boss = Boss((0,-200))
     tentacles = [ Tentacle((250,300),10), Tentacle((350,300),10)]
     to_pull = (0,0)
 
@@ -44,13 +45,15 @@ def main():
                     tentacle.init_extend(to_pull)
 
         #update stuff
+        boss.update()
         for tentacle in tentacles:
             tentacle.update()
 
         #draw stuff
-        screen.fill((0, 0, 0))
+        screen.fill((255, 255, 255))
 
         # this function call displays the tentacle
+        screen.blit(boss.image,boss.rect)
         for tentacle in tentacles:
             for link in tentacle.links:
                 screen.blit(link.image,link.rect)

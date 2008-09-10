@@ -71,12 +71,18 @@ class World (object):
 
     def leftMouseButtonDown(self):
         self.player.shoot()
+        
 
     def update(self):
         
         for enemy in self.sprites:
             if self.player.rect.colliderect(enemy) and self.player != enemy:
-                self.sprites.remove(enemy)
+                self.player.decrease_live()
+                if self.player.lives == 0 :
+                    print "Game over"
+                    sys.exit()
+                
+            
             if enemy.rect.top > SCREEN_HEIGHT:
                 self.sprites.remove(enemy)
                 self.damage += 1

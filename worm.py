@@ -8,7 +8,7 @@ from pygame.locals import *
 class Worm(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = load_image('worm.bmp', -1)
+		self.image, self.rect = load_image('images/worm.bmp', -1)
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 		self.rect.topleft = random.randint(10, 450), 0

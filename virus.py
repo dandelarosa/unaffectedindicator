@@ -8,7 +8,7 @@ class Virus(pygame.sprite.Sprite):
 	def __init__(self):
 		#image, rect, move
 		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = load_image('virus.bmp', -1)
+		self.image, self.rect = load_image('images/virus.bmp', -1)
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 		self.rect.topleft = random.randint(10,490) , 10

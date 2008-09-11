@@ -28,6 +28,7 @@ class World (object):
 
         self.sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
         self.hud = Hud()
 
         
@@ -57,8 +58,7 @@ class World (object):
         self.enemies.add(enemy)
 
     def leftMouseButtonDown(self):
-        self.player.shoot()
-        
+        self.player.shoot(self.bullets, self.sprites)
 
     def update(self):
         self.sprites.update()
@@ -77,6 +77,11 @@ class World (object):
             if enemy.rect.top > SCREEN_HEIGHT:
                 self.sprites.remove(enemy)
                 self.damage += 1
+        
+        for bullet in self.bullets:
+            if bullet.rect.top < 0:
+                self.sprites.remove(bullet)
+                self.bullets.remove(bullet)
         
         if self.frames % 50 == 0:
             self.spawnVirus()

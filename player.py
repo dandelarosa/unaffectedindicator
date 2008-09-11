@@ -2,11 +2,13 @@
 
 import pygame, threading
 import entity
+from playerBullet import PlayerBullet
 from pygame.locals import *
 
 class Player(entity.Entity):
     
     def __init__(self, pos):
+        self.bullets = []
         entity.Entity.__init__(self, pos, "down.png", 50, 10)
         pygame.mouse.set_visible(False)
         self.health = 100
@@ -25,8 +27,11 @@ class Player(entity.Entity):
         pos = pygame.mouse.get_pos()
         self.set_position(pos)
     
-    def shoot(self):
-        print "Bang"
+    def shoot(self, bullets, sprites):
+        b = PlayerBullet(pygame.mouse.get_pos())
+        self.bullets.append(b)
+        bullets.add(b)
+        sprites.add(b)
 
     def collected_ctrlAltDel(self, cadId):
         if cadId is 1:

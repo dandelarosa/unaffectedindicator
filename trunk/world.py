@@ -60,10 +60,13 @@ class World (object):
     def leftMouseButtonDown(self):
         self.player.shoot(self.bullets, self.sprites)
 
+
     def update(self):
+    
         self.sprites.update()
         self.hud.update(self)
         
+        # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
             print "player collided with enemy"
             self.sprites.remove(enemy)
@@ -73,16 +76,26 @@ class World (object):
                 print "Game over"
                 sys.exit()
         
+        # Test enemy-playerBullet collisions
+        for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
+            for bullet in bullets:
+                #enemy.collideBullet(bullet)
+                print "Enemy hit by bullet!"
+        
+        # Check enemies offscreen
         for enemy in self.enemies:       
             if enemy.rect.top > SCREEN_HEIGHT:
                 self.sprites.remove(enemy)
+                self.enemies.remove(enemy)
                 self.damage += 1
         
+        # Check bullets offscreen
         for bullet in self.bullets:
             if bullet.rect.top < 0:
                 self.sprites.remove(bullet)
                 self.bullets.remove(bullet)
         
+        # Spawn more enemies
         if self.frames % 50 == 0:
             self.spawnVirus()
             
@@ -92,19 +105,20 @@ class World (object):
         if self.frames % 250 == 0:
             self.spawnPopup()
 
+        # Scroll level
         self.scrollPosition += self.scrollSpeed
         self.scrollPosition = min(self.scrollPosition, self.endPosition)
 
         self.frames += 1
 
-    def draw(self, screen):
-        self.sprites.draw(screen)
 
+    def draw(self, screen):
         self.playSurface.fill((255, 255, 255))
         self.hudSurface.fill((100, 100, 255))
 
         self.sprites.draw(self.playSurface)
         self.hud.draw(self.hudSurface)
+        
         screen.blit(self.playSurface, (0, 0))
         screen.blit(self.hudSurface, (PLAY_WIDTH, 0))
         

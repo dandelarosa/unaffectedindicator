@@ -10,7 +10,7 @@ from entity import Entity
 
 class Chainlink(Entity):
     """A link on the chain"""
-    def __init__(self, position = (0, 0), image = "data/images/Tentacle.png"):
+    def __init__(self, position = (0, 0), image = "Tentacle.png"):
         Entity.__init__(self, position, image, 32, 0)
         # Set default position of the link
         self.default_pos = position
@@ -88,7 +88,7 @@ class Tentacle():
 
 class Boss(Entity):
     """Overall handler for the final boss"""
-    def __init__(self, position = (0, 0), image = "data/images/Bossintro.png"):
+    def __init__(self, position = (0, 0), image = "Bossintro.png"):
         Entity.__init__(self, position, image, 400, 0)
         # Define phase constants
         self.phase = 0

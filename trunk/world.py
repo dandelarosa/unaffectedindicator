@@ -68,7 +68,7 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            print "player collided with enemy"
+
             self.sprites.remove(enemy)
             self.enemies.remove(enemy)
             self.player.decrease_life()
@@ -80,8 +80,12 @@ class World (object):
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
             for bullet in bullets:
                 #enemy.collideBullet(bullet)
+                self.sprites.remove(enemy)
+                self.sprites.remove(bullet)
+                self.enemies.remove(enemy)
+                self.bullets.remove(bullet)
                 self.player.increase_powerup(5)
-                print "Enemy hit by bullet!"
+
         
         # Check enemies offscreen
         for enemy in self.enemies:       

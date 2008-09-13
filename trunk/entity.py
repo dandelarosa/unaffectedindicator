@@ -8,10 +8,21 @@ class Entity(pygame.sprite.Sprite):
 
     def __init__(self, position = (0, 0), imageFilename = None, frameWidth = 0, frameRate = 1):
         super(Entity, self).__init__()
-        
+        self.typed = imageFilename
         self.frame = 0
         self.frameRate = frameRate
-        
+        if imageFilename == 'virus.bmp':
+            self.movex = 0
+            self.movey = 4
+        elif imageFilename == 'popup.bmp':
+            self.movex = 0
+            self.movey = 0
+        elif imageFilename == 'worm.bmp':
+            self.movex = 5
+            self.movey = 0
+        else:
+            self.movex = 0
+            self.movey = 0
         if imageFilename is None:
             self.image = pygame.Surface((32, 32))
             color = (100, 100, 100)
@@ -40,7 +51,13 @@ class Entity(pygame.sprite.Sprite):
     def update(self):
         self.image = self.images[(self.frame / self.frameRate) % len(self.images)]
         self.frame += 1
-    
+        newpos = self.rect.move((self.movex, self.movey))
+        if self.rect.left < 0 or self.rect.right > 500:
+            self.movex = -self.movex
+            newpos = self.rect.move((self.movex, 30))
+            self.image = pygame.transform.flip(self.image, 1, 0)
+        self.rect = newpos
+
     def set_position(self, pos):
         self.rect.center = pos
 

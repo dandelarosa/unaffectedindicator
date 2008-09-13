@@ -53,7 +53,7 @@ class World (object):
         self.enemies.add(enemy)
 
     def spawnPopup(self):
-        enemy = Popup((random.randint(0, PLAY_WIDTH), -50))
+        enemy = Popup()
         self.sprites.add(enemy)
         self.enemies.add(enemy)
 

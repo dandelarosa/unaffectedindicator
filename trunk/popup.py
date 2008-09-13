@@ -4,8 +4,9 @@ from pygame.locals import *
 
 
 class Popup(entity.Entity):
-    def __init__(self, position):
-        super(Popup, self).__init__(position, 'popup.gif')
+    def __init__(self):
+        position = random.randint(10,450), random.randint(10, 350)
+        super(Popup, self).__init__(position, 'popup.bmp')
         self.lifetime = 1
 		
     def update(self):

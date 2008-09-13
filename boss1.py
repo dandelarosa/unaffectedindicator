@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import division
+import random
 
 import pygame
 
@@ -72,9 +73,9 @@ class Tentacle():
         for i in range(1,self.num_links-1):
             this_destination = ( i * destination[0]/factor , i * destination[1]/factor)
             self.links[i].init_motion(this_destination)
-    def destroy_link(self):
+    def destroy_link(self, link_id = -1):
         if self.num_links > 1:
-            del self.links[-1]
+            del self.links[link_id]
             self.num_links = self.num_links - 1
     def update(self):
         """updates state of the Tentacle"""
@@ -88,17 +89,53 @@ class Tentacle():
 
 class Boss(Entity):
     """Overall handler for the final boss"""
-    def __init__(self, position = (0, 0), image = "Bossintro.png"):
+    def __init__(self, position = (0, 0), image = "bossstrip.png"):
         Entity.__init__(self, position, image, 400, 0)
         # Define phase constants
         self.phase = 0
         self.timer = pygame.time.get_ticks()
+        self.tentacles = []
+        self.death_frame = 0
+    def create_tentacles(self):
+        for i in range(5):
+            self.tentacles.append( Tentacle((i * 72 + 40,150),10) )
+    def destroy_tentacles(self):
+        # Does this remove the tentacle objects from memory?
+        self.tentacles = []
+    def go_to_main_phase(self):
+        # Show attack face
+        self.image = self.images[1]
+        self.death_frame = 0
+        # Create Tentacles
+        self.create_tentacles()
+        # Switch to next phase
+        self.phase = 1
+    def skip_to_main_phase(self):
+        self.rect.topleft = (0,0)
+        self.go_to_main_phase()
+    def go_to_death_phase(self):
+        self.destroy_tentacles()
+        self.phase = 2
     def update(self):
         # Check what phase the boss is in
-        if self.phase == 0:
-            currenttime = pygame.time.get_ticks()
+        currenttime = pygame.time.get_ticks()
+        if self.phase == 0: # Entry Phase
             if currenttime - self.timer > 30:
                 self.rect.move_ip((0,1))
-                if self.rect.topleft == 0:
-                    self.phase = 1
-            self.timer = currenttime
+                if self.rect.topleft == (0,0):
+                    self.go_to_main_phase()
+                self.timer = currenttime
+        elif self.phase == 1:   # Main Phase
+            currenttime = pygame.time.get_ticks()
+            if currenttime - self.timer > 600:
+                for tentacle in self.tentacles:
+                    tentacle.init_extend(( random.randint(-100,100),random.randint(0,500) ))
+                self.timer = currenttime
+        elif self.phase == 2:   # Death Phase
+            if currenttime - self.timer > 60:
+                if self.death_frame < 5:
+                    self.image = self.images[2+self.death_frame]
+                    self.death_frame = self.death_frame + 1
+                else:
+                    self.death_frame = 6
+                self.timer = currenttime

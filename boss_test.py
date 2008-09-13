@@ -19,7 +19,6 @@ def main():
     # Create chain (pending implementation)
     # Tentacle is created with origin at (100,100) with 10 chain links attached
     boss = Boss((0,-200))
-    tentacles = [ Tentacle((250,300),10), Tentacle((350,300),10)]
     to_pull = (0,0)
 
     # Main game loop
@@ -33,28 +32,33 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     return
                 elif event.key == pygame.K_SPACE:
-                    for tentacle in tentacles:
+                    for tentacle in boss.tentacles:
                         tentacle.destroy_link()
                 elif event.key == pygame.K_a:
-                    tentacles[0].destroy_link()
+                    boss.tentacles[0].destroy_link()
                 elif event.key == pygame.K_s:
-                    tentacles[1].destroy_link()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                to_pull = ( event.pos[0]-tentacle.x, event.pos[1]-tentacle.y )
-                for tentacle in tentacles:
-                    tentacle.init_extend(to_pull)
+                    boss.tentacles[1].destroy_link()
+                elif event.key == pygame.K_1:
+                    boss.skip_to_main_phase()
+                elif event.key == pygame.K_2:
+                    boss.go_to_death_phase()
+#            elif event.type == pygame.MOUSEBUTTONDOWN:
+#                to_pull = ( event.pos[0]-200, event.pos[1]-150 )
+#                for tentacle in boss.tentacles:
+#                    tentacle.init_extend(to_pull)
 
         #update stuff
         boss.update()
-        for tentacle in tentacles:
+        for tentacle in boss.tentacles:
             tentacle.update()
 
         #draw stuff
         screen.fill((255, 255, 255))
 
         # this function call displays the tentacle
-        screen.blit(boss.image,boss.rect)
-        for tentacle in tentacles:
+        if boss.death_frame < 6:
+            screen.blit(boss.image,boss.rect)
+        for tentacle in boss.tentacles:
             for link in tentacle.links:
                 screen.blit(link.image,link.rect)
 

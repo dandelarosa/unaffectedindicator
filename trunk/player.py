@@ -18,6 +18,7 @@ class Player(entity.Entity):
         self.hasAlt = False
         self.hasDel = False
         self.invincible = False
+        self.destroyAllEnemies = False
         
     def set_position(self,pos):
         entity.Entity.set_position(self,pos)
@@ -68,3 +69,10 @@ class Player(entity.Entity):
 
     def increase_powerup(self, amount):
         self.powerup += amount
+        if self.powerup is 100:
+            self.destroyAllEnemies = True
+
+    def after_destroy_all(self):
+        self.powerup = 0
+        self.destroyAllEnemies = False
+        

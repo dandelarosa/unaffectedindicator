@@ -34,6 +34,8 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return
+                elif event.key == pygame.K_k:
+                    gameWorld.destroy_all_enemies()
         
         gameWorld.update()
                     

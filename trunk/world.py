@@ -80,6 +80,7 @@ class World (object):
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
             for bullet in bullets:
                 #enemy.collideBullet(bullet)
+                self.player.increase_powerup(5)
                 print "Enemy hit by bullet!"
         
         # Check enemies offscreen
@@ -108,9 +109,17 @@ class World (object):
         # Scroll level
         self.scrollPosition += self.scrollSpeed
         self.scrollPosition = min(self.scrollPosition, self.endPosition)
-
+        
         self.frames += 1
 
+
+    def destroy_all_enemies(self):
+        print "trying to destroy all enemies"
+        if self.player.destroyAllEnemies:
+            print "destroying!"
+            self.enemies.clear
+        self.player.after_destroy_all()
+        
 
     def draw(self, screen):
         self.playSurface.fill((255, 255, 255))

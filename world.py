@@ -33,7 +33,9 @@ class World (object):
         self.bullets = pygame.sprite.Group()
         self.hud = Hud()
 
-
+    
+        self.music = pygame.mixer.Sound("data/music/Main.wav")
+        self.music.play()
         
     def spawnWorld(self):
         self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
@@ -62,6 +64,9 @@ class World (object):
 
     def leftMouseButtonDown(self):
         self.player.shoot(self.bullets, self.sprites)
+        sound = pygame.mixer.Sound("data/sounds/shoot.wav")
+        sound.set_volume(.5)
+        sound.play()
 
     def rightMouseButtonDown(self):
         self.player.quarantine(self.sprites)
@@ -99,6 +104,8 @@ class World (object):
                     self.score += 10
                 elif enemy.typeofenemy == "popup":
                     self.score += 15
+                sounds = pygame.mixer.Sound("data/sounds/hit.wav")
+                sounds.play()
         
         # Check enemies offscreen
         for enemy in self.enemies:       
@@ -127,9 +134,13 @@ class World (object):
         if self.frames % 250 == 0:
             self.spawnPopup()
             
-        if self.frames % 300 == 0:
+        if self.frames % 5400 == 0:
             self.player.destroyAllEnemies = True
-
+        
+        if self.frames % 4200 == 0:
+            self.music.stop()
+            self.music = pygame.mixer.Sound("data/music/Mainloop.wav")
+            self.music.play(-1)
         # Scroll level
         self.scrollPosition += self.scrollSpeed
         self.scrollPosition = min(self.scrollPosition, self.endPosition)
@@ -138,7 +149,9 @@ class World (object):
 
 
     def destroy_all_enemies(self):
-        if self.player.destroyAllEnemies:            
+        if self.player.destroyAllEnemies:
+            sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
+            sound.play()
             for spr in self.enemies:
                 if self.player != spr:
                     self.enemies.remove(spr)

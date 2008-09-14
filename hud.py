@@ -65,6 +65,21 @@ class Lives(pygame.sprite.Sprite):
         lnr = "Lives: " + str(lives)
         self.image = f.render(lnr, 1, (255,0,0))
         #nothing
+        
+class Destr(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Destr, self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None, 32)
+
+        
+    def update(self):
+        
+        f = pygame.font.Font(None, 32)
+        txt1 = "Nukes Active"
+        self.image = f.render(txt1, 1, (255,0,0))
+        self.rect = self.image.get_rect()
+
 
 class Hud (object):
 	
@@ -87,13 +102,27 @@ class Hud (object):
         self.lives = Lives()
         self.lives.rect.topleft = (48,40)
 		
+        self.destr = Destr()
+        
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives)
 	
     def update(self, world):
         self.scrollbar.update(world.scrollPosition / float(world.endPosition))
         self.damageBar.update(world.damage)
         self.lives.update(world.lives)
+        if world.player.destroyAllEnemies:
+            self.destr.update()
+            self.destr.rect.topleft = (48,80)
+            self.hudElements.add(self.destr)
+            
+    def undestr(self, world):
+        if world.player.destroyAllEnemies == False:
+            self.hudElements.remove(self.destr)
+            
+
 	
+
+    
     def draw(self, screen):
         self.hudElements.draw(screen)
 		

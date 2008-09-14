@@ -9,6 +9,7 @@ from worm import Worm
 from entity import Entity
 from player import Player
 from hud import Hud
+from boss1 import Boss
 from constants import *
 
 class World (object):
@@ -23,7 +24,9 @@ class World (object):
 
         self.scrollPosition = 0
         self.scrollSpeed = 3
-        self.endPosition = 1000
+        self.endPosition = 4200 * self.scrollSpeed
+        
+        self.bossMode = False
 
         self.damage = 0
         self.lives = 3
@@ -36,7 +39,6 @@ class World (object):
         self.mines = pygame.sprite.Group()
         self.hud = Hud()
 
-    
         self.music = pygame.mixer.Sound("data/music/Main.wav")
         self.music.play()
         
@@ -79,11 +81,16 @@ class World (object):
         enemy = Popup()
         self.sprites.add(enemy)
         self.enemies.add(enemy)
+    
+    def spawnBoss(self):
+        self.boss = Boss((0,-200), self.sprite, self.enemies)
+        self.sprites.add(self.boss)
+        self.enemies.add(self.boss)
 
     def leftMouseButtonDown(self):
         self.player.shoot(self.bullets, self.sprites)
         sound = pygame.mixer.Sound("data/sounds/shoot.wav")
-        sound.set_volume(.5)
+        sound.set_volume(.25)
         sound.play()
 
     def rightMouseButtonDown(self):
@@ -117,6 +124,8 @@ class World (object):
         # Test player-pickup collisions
         for pickup in pygame.sprite.spritecollide(self.player, self.pickups, False):
             pickup.on_collision(self.player)
+            self.sprites.remove(pickup)
+            self.pickups.remove(pickup)
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
@@ -153,26 +162,27 @@ class World (object):
                 self.bullets.remove(bullet)
         
         # Spawn more enemies
-        if self.frames % 50 == 0:
-            self.spawnVirus()
-            
-        if self.frames % 300 == 0:
-            self.spawnWorm()
+        if not self.bossMode:
+            if self.frames % 50 == 0:
+                self.spawnVirus()
+                
+            if self.frames % 300 == 0:
+                self.spawnWorm()
 			
-        if self.frames % 250 == 0:
-            self.spawnPopup()
-            
-        if self.frames == 1100:
-            self.player.destroyAllEnemies = True
-            
-        if self.frames == 200:
-            self.spawnCtrl()
-            
-        if self.frames == 400:
-            self.spawnAlt()
-            
-        if self.frames == 600:
-            self.spawnDel()
+            if self.frames % 250 == 0:
+                self.spawnPopup()
+                
+            if self.frames == 1100:
+                self.player.destroyAllEnemies = True
+                
+            if self.frames == 200:
+                self.spawnCtrl()
+                
+            if self.frames == 400:
+                self.spawnAlt()
+                
+            if self.frames == 600:
+                self.spawnDel()
         
         if self.frames % 4200 == 0:
             self.music.stop()
@@ -182,6 +192,10 @@ class World (object):
         # Scroll level
         self.scrollPosition += self.scrollSpeed
         self.scrollPosition = min(self.scrollPosition, self.endPosition)
+        
+        if self.scrollPosition == self.endPosition and not self.bossMode:
+            self.bossMode = True
+            self.spawnBoss()
         
         self.frames += 1
 

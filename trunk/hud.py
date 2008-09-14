@@ -169,9 +169,9 @@ class Hud (object):
         #update all the elements
         self.scrollbar.update(world.scrollPosition / float(world.endPosition))
         self.damageBar.update(world.damage)
-        self.lives.update(world.lives)
-        self.score.update(world.score)
-        
+        #self.lives.update(world.lives)
+        #self.score.update(world.score)
+        '''
         if world.player.hasCtrl:
             self.hudElements.add(self.ctrl)
         else:
@@ -191,8 +191,9 @@ class Hud (object):
             self.hudElements.add(self.destr)
         else:
             self.hudElements.remove(self.destr)
-
+        '''
     
-    def draw(self, screen):
-        self.hudElements.draw(screen)
+    def draw(self, screen, offset):
+        for element in self.hudElements:
+            screen.blit(element.image, (element.rect.left + offset, element.rect.top))
 		

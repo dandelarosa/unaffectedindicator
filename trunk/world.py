@@ -20,9 +20,6 @@ class World (object):
 
         self.frames = 1
 
-        self.playSurface = pygame.Surface((PLAY_WIDTH, SCREEN_HEIGHT))
-        self.hudSurface = pygame.Surface((HUD_WIDTH, SCREEN_HEIGHT))
-
         self.scrollPosition = 0
         self.scrollSpeed = 3
         self.endPosition = 4200 * self.scrollSpeed
@@ -225,12 +222,9 @@ class World (object):
         
 
     def draw(self, screen):
-        self.playSurface.fill((255, 255, 255))
-        self.hudSurface.fill((100, 100, 255))
-
-        self.sprites.draw(self.playSurface)
-        self.hud.draw(self.hudSurface)
+        for sprite in self.sprites:
+            sprite.draw(screen)
+            
+        self.hud.draw(screen, PLAY_WIDTH)
         
-        screen.blit(self.playSurface, (0, 0))
-        screen.blit(self.hudSurface, (PLAY_WIDTH, 0))
         

@@ -9,7 +9,7 @@ class Virus(entity.Entity):
         self.typeofenemy = "virus"
         position = random.randint(10,450), 10
         
-        super(Virus, self).__init__(position, 'virus.png', 32)
+        super(Virus, self).__init__(position, 'virus.png')
         
         self.movex = 0
         self.movey = 4

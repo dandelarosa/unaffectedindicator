@@ -10,6 +10,7 @@ from entity import Entity
 from player import Player
 from hud import Hud
 from boss1 import Boss
+from safeMode import SafeMode
 from constants import *
 
 class World (object):
@@ -87,6 +88,11 @@ class World (object):
         self.sprites.add(self.boss)
         self.enemies.add(self.boss)
 
+    def spawnSafe(self):
+        safe = SafeMode()
+        self.sprites.add(safe)
+        self.pickups.add(safe)
+
     def leftMouseButtonDown(self):
         self.player.shoot(self.bullets, self.sprites)
         sound = pygame.mixer.Sound("data/sounds/shoot.wav")
@@ -111,11 +117,13 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            self.player.decrease_life()
-            self.lives -= 1
-            self.score -= 100
-            if self.player.lives == 0 :
-                print "game over!"
+            if not self.player.invincible:
+                self.player.decrease_life()
+                self.lives -= 1
+                self.score -= 100
+                if self.player.lives == 0 :
+                    print "game over!"
+                
             self.sprites.remove(enemy)
             self.enemies.remove(enemy)
         
@@ -181,6 +189,9 @@ class World (object):
                 
             if self.frames == 600:
                 self.spawnDel()
+                
+            if self.frames == 350:
+                self.spawnSafe()
         
         if self.frames % 4200 == 0:
             self.music.stop()

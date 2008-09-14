@@ -23,6 +23,8 @@ class Chainlink(Entity):
         self.error = (0,0)
         self.previous_error = (0,0)
         self.sum_error = (0,0)
+        self.health = 100
+        
     def init_motion(self, position = (0,0)):
         # Initiate motion to given distance from the default position
         self.destination = ( self.default_pos[0] + position[0] , self.default_pos[1] + position[1] )
@@ -30,6 +32,7 @@ class Chainlink(Entity):
         current_pos = self.rect.topleft
         self.error = ( self.destination[0]-current_pos[0] , self.destination[1]-current_pos[1] )
         self.previous_error = self.error
+        
     def update(self, PID = ( 0.1, 0.001, 0.05) ):
         """PID Control for motion"""
         proportional_gain = PID[0]
@@ -62,6 +65,7 @@ class Tentacle():
             # all links start at the origin of the tentacle
             new_link = Chainlink((self.x, self.y))
             self.links.append(new_link)
+            
     def init_extend(self, destination = (0,0)):
         """Specify distance (vector) to extend tentacle"""
         factor = self.num_links -1
@@ -73,10 +77,12 @@ class Tentacle():
         for i in range(1,self.num_links-1):
             this_destination = ( i * destination[0]/factor , i * destination[1]/factor)
             self.links[i].init_motion(this_destination)
+            
     def destroy_link(self, link_id = -1):
         if self.num_links > 1:
             del self.links[link_id]
             self.num_links = self.num_links - 1
+            
     def update(self):
         """updates state of the Tentacle"""
         currenttime = pygame.time.get_ticks()
@@ -97,6 +103,8 @@ class Boss(Entity):
         self.tentacles = []
         self.death_frame = 0
         self.typeofenemy = "boss"
+        self.health = 100
+        
     def create_tentacles(self):
         # Get current boss coordinates
         x = self.rect.topleft[0]
@@ -104,9 +112,11 @@ class Boss(Entity):
         # Create the tentacles
         for i in range(5):
             self.tentacles.append( Tentacle(( i * 72 + 40 + x, 150 + y ), 10) )
+            
     def destroy_tentacles(self):
         # Does this remove the tentacle objects from memory?
         self.tentacles = []
+        
     def go_to_main_phase(self):
         # Show attack face
         self.image = self.images[1]
@@ -115,12 +125,15 @@ class Boss(Entity):
         self.create_tentacles()
         # Switch to next phase
         self.phase = 1
+        
     def skip_to_main_phase(self):
         self.rect.topleft = ( self.rect.topleft[0], 0)
         self.go_to_main_phase()
+        
     def go_to_death_phase(self):
         self.destroy_tentacles()
         self.phase = 2
+        
     def update(self):
         # Check what phase the boss is in
         currenttime = pygame.time.get_ticks()
@@ -144,3 +157,4 @@ class Boss(Entity):
                 else:
                     self.death_frame = 6
                 self.timer = currenttime
+                

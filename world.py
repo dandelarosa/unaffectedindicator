@@ -122,6 +122,7 @@ class World (object):
             self.sprites.remove(mine)
             self.mines.remove(mine)
 
+
     def update(self):
     
         self.sprites.update()

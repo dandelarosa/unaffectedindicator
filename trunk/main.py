@@ -20,6 +20,7 @@ def main():
     
     gameWorld = world.World()
     gameWorld.spawnWorld()
+
     
     while True:
         clock.tick(30)
@@ -61,7 +62,7 @@ def main():
             screen.blit(s1, (0,0))
             f = pygame.font.Font(None,32)
             txt = "Score: "+str(gameWorld.score)
-            image = f.render(txt,1,(0,0,0))
+            image = f.render(txt,1,(255,255,255))
             r = image.get_rect()
             r.center = (350,100)
             screen.blit(image,r)

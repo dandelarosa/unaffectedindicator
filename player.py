@@ -61,6 +61,7 @@ class Player(entity.Entity):
     def decrease_life(self):
         self.lives -= 1
         self.set_position(self.respawnPos)
+        pygame.mouse.set_pos(self.respawnPos)
         self.init_safe_mode(2.0)
     
     def increase_health(self, amount):

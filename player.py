@@ -3,6 +3,7 @@
 import pygame, threading
 import entity
 from playerBullet import PlayerBullet
+from quarantineMine import QuarantineMine
 from pygame.locals import *
 
 class Player(entity.Entity):
@@ -76,7 +77,7 @@ class Player(entity.Entity):
 
     def quarantine(self, sprites):
         if not self.quarantineSet and self.mines > 0:
-            mine = QuarantineMine(self.pos)
+            mine = QuarantineMine(pygame.mouse.get_pos())
             sprites.add(mine)
             self.quarantineSet = True
             self.mines -= 1

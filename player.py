@@ -12,7 +12,7 @@ class Player(entity.Entity):
         self.bullets = []
         self.respawnPos = pos
         self.gameWorld = world
-        entity.Entity.__init__(self, pos, "down.png", 50, 10)
+        entity.Entity.__init__(self, pos, "player icon.png", 32)
         pygame.mouse.set_visible(False)
         self.health = 100
         self.powerup = 0

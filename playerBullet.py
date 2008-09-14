@@ -7,7 +7,7 @@ from pygame.locals import *
 class PlayerBullet(Entity):
     def __init__(self, pos):
         self.position = pos
-        super(PlayerBullet, self).__init__(pos, None)
+        super(PlayerBullet, self).__init__(pos, "bullet.png",32)
         
     def set_position(self,pos):
         Entity.set_position(self,pos)

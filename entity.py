@@ -37,7 +37,7 @@ class Entity(pygame.sprite.Sprite):
             
         else:
             #load the image
-            self.imageStrip = pygame.image.load('data/images/' + imageFilename).convert_alpha()
+            self.imageStrip = pygame.image.load('data/images/' + imageFilename).convert()
             self.rectStrip = self.imageStrip.get_rect()
             self.images = []
             

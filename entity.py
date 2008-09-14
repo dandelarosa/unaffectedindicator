@@ -3,6 +3,7 @@
 import pygame
 from pygame.locals import *
 import math
+from constants import *
 
 """Entity subclasses sprite.  It takes care of movement of all the enemies"""
 class Entity(pygame.sprite.Sprite):
@@ -60,14 +61,7 @@ class Entity(pygame.sprite.Sprite):
             self.animFrame += 1
             self.animFrame %= len(self.animRects)
             
-        newpos = self.rect.move((self.movex, self.movey))
-        #moves to the left and the right the correct amount, as given above.
-        if self.rect.left < 0 or self.rect.right > 500:
-            #if the resulting frame is off the board, switch it into the other direction!
-            self.movex = -self.movex
-            newpos = self.rect.move((self.movex, 30))
-            self.image = pygame.transform.flip(self.image, 1, 0)
-        self.rect = newpos
+        self.rect.move_ip((self.movex, self.movey))
     
     def draw(self, screen):
         screen.blit(self.image, self.rect, self.animRect)

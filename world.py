@@ -22,7 +22,7 @@ class World (object):
 
         self.scrollPosition = 0
         self.scrollSpeed = 3
-        self.endPosition = 4200 * self.scrollSpeed
+        self.endPosition = FRAMES_UNTIL_BOSS * self.scrollSpeed
         
         self.bossMode = False
 
@@ -137,18 +137,20 @@ class World (object):
                 enemy.health -= 1
                 self.sprites.remove(bullet)
                 self.bullets.remove(bullet)
+                
                 if enemy.health == 0:
                     self.sprites.remove(enemy)
-                    
                     self.enemies.remove(enemy)
                     
                     self.player.increase_powerup(5)
+                    
                     if enemy.typeofenemy == "worm":
                         self.score += 25
                     elif enemy.typeofenemy == "virus":
                         self.score += 10
                     elif enemy.typeofenemy == "popup":
                         self.score += 15
+                        
                     sounds = pygame.mixer.Sound("data/sounds/hit.wav")
                     sounds.play()
             

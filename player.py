@@ -5,6 +5,7 @@ import entity
 from playerBullet import PlayerBullet
 from quarantineMine import QuarantineMine
 from pygame.locals import *
+from constants import *
 
 class Player(entity.Entity):
     
@@ -30,8 +31,12 @@ class Player(entity.Entity):
         
     def update(self):
         super(Player, self).update()
-        pos = pygame.mouse.get_pos()
-        self.set_position(pos)
+        
+        mousepos = list(pygame.mouse.get_pos())
+        mousepos[0] = min(PLAY_WIDTH - self.rect.height / 2, max(self.rect.width / 2, mousepos[0]))
+        mousepos[1] = min(SCREEN_HEIGHT - self.rect.height / 2, max(self.rect.height / 2, mousepos[1]))
+        
+        self.set_position(mousepos)
     
     def shoot(self, bullets, sprites):
         b = PlayerBullet(pygame.mouse.get_pos())

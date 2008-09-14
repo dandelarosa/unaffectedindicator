@@ -50,7 +50,7 @@ class Chainlink(Entity):
 
 class Tentacle():
     """Overall handler for the boss's tentacle"""
-    def __init__(self, init_pos, num_links, link_size=32):
+    def __init__(self, init_pos, num_links):
         # Set origin of object
         self.x = init_pos[0]
         self.y = init_pos[1]
@@ -97,8 +97,12 @@ class Boss(Entity):
         self.tentacles = []
         self.death_frame = 0
     def create_tentacles(self):
+        # Get current boss coordinates
+        x = self.rect.topleft[0]
+        y = self.rect.topleft[1]
+        # Create the tentacles
         for i in range(5):
-            self.tentacles.append( Tentacle((i * 72 + 40,150),10) )
+            self.tentacles.append( Tentacle(( i * 72 + 40 + x, 150 + y ), 10) )
     def destroy_tentacles(self):
         # Does this remove the tentacle objects from memory?
         self.tentacles = []
@@ -111,7 +115,7 @@ class Boss(Entity):
         # Switch to next phase
         self.phase = 1
     def skip_to_main_phase(self):
-        self.rect.topleft = (0,0)
+        self.rect.topleft = ( self.rect.topleft[0], 0)
         self.go_to_main_phase()
     def go_to_death_phase(self):
         self.destroy_tentacles()
@@ -122,7 +126,7 @@ class Boss(Entity):
         if self.phase == 0: # Entry Phase
             if currenttime - self.timer > 30:
                 self.rect.move_ip((0,1))
-                if self.rect.topleft == (0,0):
+                if self.rect.topleft[1] == 0:
                     self.go_to_main_phase()
                 self.timer = currenttime
         elif self.phase == 1:   # Main Phase

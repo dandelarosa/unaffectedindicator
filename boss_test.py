@@ -18,7 +18,7 @@ def main():
 
     # Create chain (pending implementation)
     # Tentacle is created with origin at (100,100) with 10 chain links attached
-    boss = Boss((0,-200))
+    boss = Boss((25,-200))
     to_pull = (0,0)
 
     # Main game loop

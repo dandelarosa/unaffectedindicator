@@ -32,6 +32,9 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     gameWorld.leftMouseButtonDown()
+
+                if event.button == 2:
+                    gameWorld.rightMouseButtonDown()
                                         
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:

@@ -63,6 +63,9 @@ class World (object):
     def leftMouseButtonDown(self):
         self.player.shoot(self.bullets, self.sprites)
 
+    def rightMouseButtonDown(self):
+        self.player.quarantine(self.sprites)
+
 
     def update(self):
     

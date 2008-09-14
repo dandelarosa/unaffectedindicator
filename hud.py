@@ -48,32 +48,52 @@ class DamageBar(pygame.sprite.Sprite):
 	
 	def update(self, damage):
 		self.image = self.images[min(MAX_DAMAGE, damage)]
-		
+
+        
+class Lives(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Lives,self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None, 32)
+        lvr = "Lives: "
+        self.image = f.render(lvr, 1, (255,0,0))
+
+        self.rect = self.image.get_rect()
+        
+    def update(self, lives):
+        f = pygame.font.Font(None, 32)
+        lnr = "Lives: " + str(lives)
+        self.image = f.render(lnr, 1, (255,0,0))
+        #nothing
 
 class Hud (object):
 	
-	def __init__(self):
-		super(Hud, self).__init__()
-		self.hudElements = pygame.sprite.Group()
+    def __init__(self):
+        super(Hud, self).__init__()
+        self.hudElements = pygame.sprite.Group()
 	
-	def createHudElements(self):
+    def createHudElements(self):
 		
-		self.scrollButtonUp = ScrollButton(True)
-		self.scrollButtonDown = ScrollButton(False)
-		self.scrollButtonUp.rect.topleft = (0, 0)
-		self.scrollButtonDown.rect.bottomleft = (0, SCREEN_HEIGHT)
+        self.scrollButtonUp = ScrollButton(True)
+        self.scrollButtonDown = ScrollButton(False)
+        self.scrollButtonUp.rect.topleft = (0, 0)
+        self.scrollButtonDown.rect.bottomleft = (0, SCREEN_HEIGHT)
 		
-		self.scrollbar = ScrollBar(SCREEN_HEIGHT - self.scrollButtonUp.rect.height, self.scrollButtonDown.rect.height)
+        self.scrollbar = ScrollBar(SCREEN_HEIGHT - self.scrollButtonUp.rect.height, self.scrollButtonDown.rect.height)
 		
-		self.damageBar = DamageBar()
-		self.damageBar.rect.topleft = (48, 0)
+        self.damageBar = DamageBar()
+        self.damageBar.rect.topleft = (48, 0)
+        
+        self.lives = Lives()
+        self.lives.rect.topleft = (48,40)
 		
-		self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar)
+        self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives)
 	
-	def update(self, world):
-		self.scrollbar.update(world.scrollPosition / float(world.endPosition))
-		self.damageBar.update(world.damage)
+    def update(self, world):
+        self.scrollbar.update(world.scrollPosition / float(world.endPosition))
+        self.damageBar.update(world.damage)
+        self.lives.update(world.lives)
 	
-	def draw(self, screen):
-		self.hudElements.draw(screen)
+    def draw(self, screen):
+        self.hudElements.draw(screen)
 		

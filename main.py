@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import pygame
+import pygame, time
 
 import world
 from constants import *
@@ -15,6 +15,8 @@ def main():
     pygame.display.flip()
     
     clock = pygame.time.Clock()
+    
+    gameOver = False
     
     gameWorld = world.World()
     gameWorld.spawnWorld()
@@ -36,6 +38,11 @@ def main():
                     return
                 elif event.key == pygame.K_k:
                     gameWorld.destroy_all_enemies()
+                elif event.key == pygame.K_SPACE and gameOver == True:
+                    gameOver = False
+                    gameWorld = world.World()
+                    gameWorld.spawnWorld()
+                    
         
         gameWorld.update()
                     
@@ -43,7 +50,19 @@ def main():
         pygame.draw.rect(screen, (200, 200, 255), (PLAY_WIDTH, 0, HUD_WIDTH, SCREEN_HEIGHT))
         gameWorld.draw(screen)
         
+        if gameOver == True:
+                    
+            pygame.display.set_caption("Game Over")
+            screen = pygame.display.get_surface()
+            s1 = pygame.image.load('data/images/Gameover1.png')
+            screen.blit(s1, (0,0))
+            pygame.display.flip()
+          
+        
+        if gameWorld.lives == 0:
+            gameOver = True
         
         pygame.display.flip()
 
+    
 main()

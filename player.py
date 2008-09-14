@@ -8,8 +8,10 @@ from pygame.locals import *
 
 class Player(entity.Entity):
     
-    def __init__(self, pos):
+    def __init__(self, world, pos):
         self.bullets = []
+        self.respawnPos = pos
+        self.gameWorld = world
         entity.Entity.__init__(self, pos, "down.png", 50, 10)
         pygame.mouse.set_visible(False)
         self.health = 100
@@ -58,6 +60,8 @@ class Player(entity.Entity):
     
     def decrease_life(self):
         self.lives -= 1
+        self.set_position(self.respawnPos)
+        self.init_safe_mode(2.0)
     
     def increase_health(self, amount):
         self.health += amount
@@ -75,15 +79,17 @@ class Player(entity.Entity):
         if self.powerup is 100:
             self.destroyAllEnemies = True
 
-    def quarantine(self, sprites):
+    def quarantine(self, sprites, mines):
         if not self.quarantineSet and self.mines > 0:
             mine = QuarantineMine(self, pygame.mouse.get_pos())
             sprites.add(mine)
+            mines.add(mine)
             self.quarantineSet = True
             self.mines -= 1
 
     def quarantine_explode(self):
-         self.quarantineSet = False   
+         self.quarantineSet = False
+         self.gameWorld.quarantine_explode()
 
     def after_destroy_all(self):
         self.powerup = 0

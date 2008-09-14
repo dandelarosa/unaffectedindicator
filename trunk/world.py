@@ -116,10 +116,6 @@ class World (object):
                     print "game over!"
             self.sprites.remove(enemy)
             self.enemies.remove(enemy)
-
-
-        
-        
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
@@ -146,8 +142,7 @@ class World (object):
                 self.enemies.remove(enemy)
                 self.damage += 1
             if enemy.typeofenemy == "popup":
-                if enemy.lifetime > 20:
-                    enemy.lifetime = 0
+                if enemy.frame % 20 == 0:
                     self.score -= 1
         
         # Check bullets offscreen
@@ -182,6 +177,7 @@ class World (object):
             self.music.stop()
             self.music = pygame.mixer.Sound("data/music/Mainloop.wav")
             self.music.play(-1)
+            
         # Scroll level
         self.scrollPosition += self.scrollSpeed
         self.scrollPosition = min(self.scrollPosition, self.endPosition)

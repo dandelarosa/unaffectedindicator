@@ -11,18 +11,10 @@ class Entity(pygame.sprite.Sprite):
         self.typed = imageFilename
         self.frame = 0
         self.frameRate = frameRate
-        if imageFilename == 'virus.bmp':
-            self.movex = 0
-            self.movey = 4
-        elif imageFilename == 'popup.bmp':
-            self.movex = 0
-            self.movey = 0
-        elif imageFilename == 'worm.bmp':
-            self.movex = 5
-            self.movey = 0
-        else:
-            self.movex = 0
-            self.movey = 0
+        
+        self.movex = 0
+        self.movey = 0
+            
         if imageFilename is None:
             self.image = pygame.Surface((32, 32))
             color = (100, 100, 100)

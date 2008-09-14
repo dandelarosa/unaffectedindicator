@@ -9,7 +9,7 @@ class Ctrl(entity.Entity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Ctrl, self).__init__(self.position, 'ctrl.bmp')
+        super(Ctrl, self).__init__(self.position, 'ctrl button.png')
         self.id = 1
         self.lifetime = 1
         self.typeofenemy = "cad"
@@ -30,7 +30,7 @@ class Alt(entity.Entity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Alt, self).__init__(self.position, 'alt.bmp')
+        super(Alt, self).__init__(self.position, 'alt button.png')
         self.id = 2
         self.lifetime = 1
         self.typeofenemy = "cad"
@@ -51,7 +51,7 @@ class Del(entity.Entity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Del, self).__init__(self.position, 'del.bmp')
+        super(Del, self).__init__(self.position, 'del button.png')
         self.id = 3
         self.lifetime = 1
         self.typeofenemy = "cad"

@@ -2,6 +2,7 @@ import pygame
 import random
 import sys
 
+from ctrlAltDel import *
 from virus import Virus
 from popup import Popup
 from worm import Worm
@@ -47,6 +48,21 @@ class World (object):
         self.scrollPosition = 0
         self.scrollSpeed = 3
 
+    def spawnCtrl(self):
+        ctrl = Ctrl()
+        self.sprites.add(ctrl)
+        self.enemies.add(ctrl)
+        
+    def spawnAlt(self):
+        alt = Alt()
+        self.sprites.add(alt)
+        self.enemies.add(alt)
+    
+    def spawnDel(self):
+        d = Del()
+        self.sprites.add(d)
+        self.enemies.add(d)
+        
     def spawnVirus(self):
         enemy = Virus()
         self.sprites.add(enemy)
@@ -79,15 +95,21 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-
+            
+            if enemy.typeofenemy == "cad":
+                enemy.on_collision(self.player)
+            else:
+                self.player.decrease_life()
+                self.lives -= 1
+                self.score -= 100
+                if self.player.lives == 0 :
+                    print "game over!"
             self.sprites.remove(enemy)
             self.enemies.remove(enemy)
-            self.player.decrease_life()
-            self.lives -= 1
-            self.score -= 100
-            if self.player.lives == 0 :
-                print "game over!"
 
+
+        
+        
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
@@ -134,8 +156,17 @@ class World (object):
         if self.frames % 250 == 0:
             self.spawnPopup()
             
-        if self.frames % 5400 == 0:
+        if self.frames == 1100:
             self.player.destroyAllEnemies = True
+            
+        if self.frames == 200:
+            self.spawnCtrl()
+            
+        if self.frames == 400:
+            self.spawnAlt()
+            
+        if self.frames == 600:
+            self.spawnDel()
         
         if self.frames % 4200 == 0:
             self.music.stop()

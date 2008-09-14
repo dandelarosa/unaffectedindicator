@@ -71,10 +71,6 @@ class Destr(pygame.sprite.Sprite):
         super(Destr, self).__init__()
         pygame.font.init()
         f = pygame.font.Font(None, 32)
-
-        
-    def update(self):
-        
         f = pygame.font.Font(None, 32)
         txt1 = "Nukes Active"
         self.image = f.render(txt1, 1, (255,0,0))
@@ -103,6 +99,7 @@ class Hud (object):
         self.lives.rect.topleft = (48,40)
 		
         self.destr = Destr()
+        self.destr.rect.topleft = (48,80)
         
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives)
 	
@@ -111,16 +108,9 @@ class Hud (object):
         self.damageBar.update(world.damage)
         self.lives.update(world.lives)
         if world.player.destroyAllEnemies:
-            self.destr.update()
-            self.destr.rect.topleft = (48,80)
             self.hudElements.add(self.destr)
-            
-    def undestr(self, world):
-        if world.player.destroyAllEnemies == False:
+        else:
             self.hudElements.remove(self.destr)
-            
-
-	
 
     
     def draw(self, screen):

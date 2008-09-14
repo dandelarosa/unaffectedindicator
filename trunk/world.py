@@ -137,20 +137,24 @@ class World (object):
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
             for bullet in bullets:
                 #enemy.collideBullet(bullet)
-                self.sprites.remove(enemy)
+                enemy.health -= 1
                 self.sprites.remove(bullet)
-                self.enemies.remove(enemy)
                 self.bullets.remove(bullet)
-                self.player.increase_powerup(5)
-                if enemy.typeofenemy == "worm":
-                    self.score += 25
-                elif enemy.typeofenemy == "virus":
-                    self.score += 10
-                elif enemy.typeofenemy == "popup":
-                    self.score += 15
-                sounds = pygame.mixer.Sound("data/sounds/hit.wav")
-                sounds.play()
-        
+                if enemy.health == 0:
+                    self.sprites.remove(enemy)
+                    
+                    self.enemies.remove(enemy)
+                    
+                    self.player.increase_powerup(5)
+                    if enemy.typeofenemy == "worm":
+                        self.score += 25
+                    elif enemy.typeofenemy == "virus":
+                        self.score += 10
+                    elif enemy.typeofenemy == "popup":
+                        self.score += 15
+                    sounds = pygame.mixer.Sound("data/sounds/hit.wav")
+                    sounds.play()
+            
         # Check enemies offscreen
         for enemy in self.enemies:       
             if enemy.rect.top > SCREEN_HEIGHT:

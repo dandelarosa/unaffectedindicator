@@ -11,7 +11,7 @@ class Worm(entity.Entity):
         position = random.randint(10,450),10
         
         super(Worm, self).__init__(position, 'worm.bmp')
-        
+        self.health = 2
         self.movex = 5
         self.movey = 0
  

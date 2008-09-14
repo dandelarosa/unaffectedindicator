@@ -6,8 +6,9 @@ from pygame.locals import *
 class Popup(entity.Entity):
     def __init__(self):
         position = random.randint(10,399), random.randint(10, 350)
-        super(Popup, self).__init__(position, 'pop up window 1.png')
+        super(Popup, self).__init__(position, 'pop up window '+str(random.randint(1,8)) +'.png')
         self.typeofenemy = "popup"
+        self.health = 3
         
     def update(self):
         super(Popup, self).update()

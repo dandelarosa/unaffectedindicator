@@ -46,7 +46,12 @@ def main():
                     gameOver = False
                     gameWorld = world.World()
                     gameWorld.spawnWorld()
-                    
+                elif event.key == pygame.K_r:
+                    if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:
+                        gameWorld.damage = 0
+                        gameWorld.player.hasCtrl = False
+                        gameWorld.player.hasAlt = False
+                        gameWorld.player.hasDel = False
         
         gameWorld.update()
                     

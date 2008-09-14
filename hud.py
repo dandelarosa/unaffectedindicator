@@ -89,7 +89,35 @@ class Score(pygame.sprite.Sprite):
         txt = "Score: " + str(score)
         self.image = f.render(txt,1,(255,0,0))
 
-
+class hasCtrl(pygame.sprite.Sprite):
+    def __init__(self):
+        super(hasCtrl,self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None,32)
+        txt = "CTRL"
+        self.image = f.render(txt, 1, (255,0,0))
+        self.rect = self.image.get_rect()
+        
+class hasAlt(pygame.sprite.Sprite):
+    def __init__(self):
+        super(hasAlt,self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None,32)
+        txt = "ALT"
+        self.image = f.render(txt, 1, (255,0,0))
+        self.rect = self.image.get_rect()
+        
+    
+class hasDel(pygame.sprite.Sprite):
+    def __init__(self):
+        super(hasDel,self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None,32)
+        txt = "DEL"
+        self.image = f.render(txt, 1, (255,0,0))
+        self.rect = self.image.get_rect()
+        
+    
 class Hud (object):
 	
     def __init__(self):
@@ -117,6 +145,15 @@ class Hud (object):
         self.score = Score(0)
         self.score.rect.topleft = (48, 700)
         
+        self.ctrl = hasCtrl()
+        self.ctrl.rect.topleft = (48, 200)
+        
+        self.alt = hasAlt()
+        self.alt.rect.topleft = (48, 230)
+        
+        self.dele = hasDel()
+        self.dele.rect.topleft = (48, 260)
+        
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score)
 	
     def update(self, world):
@@ -124,6 +161,22 @@ class Hud (object):
         self.damageBar.update(world.damage)
         self.lives.update(world.lives)
         self.score.update(world.score)
+        
+        if world.player.hasCtrl:
+            self.hudElements.add(self.ctrl)
+        else:
+            self.hudElements.remove(self.ctrl)
+            
+        if world.player.hasAlt:
+            self.hudElements.add(self.alt)
+        else:
+            self.hudElements.remove(self.alt)
+            
+        if world.player.hasDel:
+            self.hudElements.add(self.dele)
+        else:
+            self.hudElements.remove(self.dele)
+            
         if world.player.destroyAllEnemies:
             self.hudElements.add(self.destr)
         else:

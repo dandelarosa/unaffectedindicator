@@ -33,7 +33,7 @@ def main():
                 if event.button == 1:
                     gameWorld.leftMouseButtonDown()
 
-                if event.button == 2:
+                if event.button == 3:
                     gameWorld.rightMouseButtonDown()
                                         
             elif event.type == pygame.KEYDOWN:

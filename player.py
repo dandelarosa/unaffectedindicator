@@ -14,10 +14,12 @@ class Player(entity.Entity):
         self.health = 100
         self.powerup = 0
         self.lives = 3
+        self.mines = 3
         self.hasCtrl = False
         self.hasAlt = False
         self.hasDel = False
         self.invincible = False
+        self.quarantineSet = False
         self.destroyAllEnemies = False
         
     def set_position(self,pos):
@@ -71,6 +73,16 @@ class Player(entity.Entity):
         self.powerup += amount
         if self.powerup is 100:
             self.destroyAllEnemies = True
+
+    def quarantine(self, sprites):
+        if not self.quarantineSet and self.mines > 0:
+            mine = QuarantineMine(self.pos)
+            sprites.add(mine)
+            self.quarantineSet = True
+            self.mines -= 1
+
+    def quarantine_explode(self):
+         self.quarantineSet = False   
 
     def after_destroy_all(self):
         self.powerup = 0

@@ -98,10 +98,9 @@ class World (object):
 
     def quarantine_explode(self):
         for mine in self.mines:
-            for enemy in self.enemies:
-                if pygame.sprite.collide_rect(mine, enemy):
-                    self.enemies.remove(enemy)
-                    self.sprites.remove(enemy)
+            for enemy in pygame.sprite.spritecollide(mine, self.enemies, False):
+                self.enemies.remove(enemy)
+                self.sprites.remove(enemy)
             self.sprites.remove(mine)
             self.mines.remove(mine)
 

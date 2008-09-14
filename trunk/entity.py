@@ -12,14 +12,10 @@ class Entity(pygame.sprite.Sprite):
         self.typed = imageFilename
         self.frame = 0
         self.frameRate = frameRate
-        if imageFilename == 'virus.bmp':
+        if imageFilename == 'virus.png':
             #virus moves in the downward direction only 
             self.movex = 0
             self.movey = 4
-        elif imageFilename == 'popup.bmp':
-            #popups don't move
-            self.movex = 0
-            self.movey = 0
         elif imageFilename == 'worm.bmp':
             #worms move to the right and left, then jump down when it hits an edge
             self.movex = 5

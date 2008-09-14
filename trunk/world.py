@@ -32,13 +32,7 @@ class World (object):
         self.bullets = pygame.sprite.Group()
         self.hud = Hud()
 
-        
-    def gameOver(self):
-        pygame.display.set_caption("Game Over")
-        screen = pygame.display.get_surface()
-        s1 = pygame.image.load('data/images/Gameover1.png')
-        screen.blit(s1, (0,0))
-        pygame.display.flip()
+
         
     def spawnWorld(self):
         self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
@@ -83,7 +77,7 @@ class World (object):
             self.lives -= 1
             if self.player.lives == 0 :
                 print "game over!"
-                self.gameOver()
+
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
@@ -118,6 +112,9 @@ class World (object):
 			
         if self.frames % 250 == 0:
             self.spawnPopup()
+            
+        if self.frames % 300 == 0:
+            self.player.destroyAllEnemies = True
 
         # Scroll level
         self.scrollPosition += self.scrollSpeed
@@ -127,12 +124,13 @@ class World (object):
 
 
     def destroy_all_enemies(self):
-        print "trying to destroy all enemies"
-        if self.player.destroyAllEnemies:
-            print "destroying!"
-            self.enemies.clear
-            self.sprites.clear
+        if self.player.destroyAllEnemies:            
+            for spr in self.enemies:
+                if self.player != spr:
+                    self.enemies.remove(spr)
+                    self.sprites.remove(spr)
         self.player.after_destroy_all()
+        self.hud.undestr(self)
         
 
     def draw(self, screen):

@@ -83,7 +83,7 @@ class World (object):
         self.enemies.add(enemy)
     
     def spawnBoss(self):
-        self.boss = Boss((0,-200), self.sprite, self.enemies)
+        self.boss = Boss((0,-200))
         self.sprites.add(self.boss)
         self.enemies.add(self.boss)
 
@@ -98,7 +98,6 @@ class World (object):
 
     def quarantine_explode(self):
         for mine in self.mines:
-            mine.rect.inflate(10, 10)
             for enemy in self.enemies:
                 if pygame.sprite.collide_rect(mine, enemy):
                     self.enemies.remove(enemy)

@@ -31,6 +31,7 @@ class World (object):
 
         self.sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.pickups = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.mines = pygame.sprite.Group()
         self.hud = Hud()
@@ -52,17 +53,17 @@ class World (object):
     def spawnCtrl(self):
         ctrl = Ctrl()
         self.sprites.add(ctrl)
-        self.enemies.add(ctrl)
+        self.pickups.add(ctrl)
         
     def spawnAlt(self):
         alt = Alt()
         self.sprites.add(alt)
-        self.enemies.add(alt)
+        self.pickups.add(alt)
     
     def spawnDel(self):
         d = Del()
         self.sprites.add(d)
-        self.enemies.add(d)
+        self.pickups.add(d)
         
     def spawnVirus(self):
         enemy = Virus()
@@ -105,17 +106,17 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            
-            if enemy.typeofenemy == "cad":
-                enemy.on_collision(self.player)
-            else:
-                self.player.decrease_life()
-                self.lives -= 1
-                self.score -= 100
-                if self.player.lives == 0 :
-                    print "game over!"
+            self.player.decrease_life()
+            self.lives -= 1
+            self.score -= 100
+            if self.player.lives == 0 :
+                print "game over!"
             self.sprites.remove(enemy)
             self.enemies.remove(enemy)
+        
+        # Test player-pickup collisions
+        for pickup in pygame.sprite.spritecollide(self.player, self.pickups, False):
+            pickup.on_collision(self.player)
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():

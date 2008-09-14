@@ -7,6 +7,7 @@ from pygame.locals import *
 class QuarantineMine(entity.Entity):
 	def __init__(self,player,pos):
                 self.player = player
+                self.position = pos
                 super(QuarantineMine, self).__init__(pos, None)
 		t = threading.Timer(5.0, self.explode)
 		t.start()

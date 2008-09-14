@@ -32,6 +32,7 @@ class World (object):
         self.sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
+        self.mines = pygame.sprite.Group()
         self.hud = Hud()
 
     
@@ -39,7 +40,7 @@ class World (object):
         self.music.play()
         
     def spawnWorld(self):
-        self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
+        self.player = Player(self, (SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
         self.sprites.add(self.player)
 
         self.hud.createHudElements()
@@ -85,8 +86,18 @@ class World (object):
         sound.play()
 
     def rightMouseButtonDown(self):
-        self.player.quarantine(self.sprites)
+        self.player.quarantine(self.sprites, self.mines)
 
+    def quarantine_explode(self):
+        for mine in self.mines:
+            mine.radius = 50
+            for enemy in self.enemies:
+                enemy.radius = 15
+                if pygame.sprite.collide_circle(mine, enemy):
+                    self.enemies.remove(enemy)
+                    self.sprites.remove(enemy)
+            self.sprites.remove(mine)
+            self.mines.remove(mine)
 
     def update(self):
     

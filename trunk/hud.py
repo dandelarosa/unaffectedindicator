@@ -121,11 +121,12 @@ class hasDel(pygame.sprite.Sprite):
 class Hud (object):
 	
     def __init__(self):
+        #just initialize the group
         super(Hud, self).__init__()
         self.hudElements = pygame.sprite.Group()
 	
     def createHudElements(self):
-		
+		#initialize everything.
         self.scrollButtonUp = ScrollButton(True)
         self.scrollButtonDown = ScrollButton(False)
         self.scrollButtonUp.rect.topleft = (0, 0)
@@ -133,30 +134,39 @@ class Hud (object):
 		
         self.scrollbar = ScrollBar(SCREEN_HEIGHT - self.scrollButtonUp.rect.height, self.scrollButtonDown.rect.height)
 		
+        #initialize the damage bar
         self.damageBar = DamageBar()
         self.damageBar.rect.topleft = (48, 0)
         
+        #initialize the box displaying amount of lives
         self.lives = Lives()
         self.lives.rect.topleft = (48,40)
 		
+        #initialize the box displaying whether nukes are active or not
         self.destr = Destr()
         self.destr.rect.topleft = (48,80)
         
+        #initialize the rect displaying the score
         self.score = Score(0)
         self.score.rect.topleft = (48, 700)
         
+        #initialize the rect displaying whether or not Ctrl has been picked up
         self.ctrl = hasCtrl()
         self.ctrl.rect.topleft = (48, 200)
         
+        #initialize the rect displaying whether or not Alt has been picked up
         self.alt = hasAlt()
         self.alt.rect.topleft = (48, 230)
         
+        #initialize the rect displaying whether or not Del has been picked up
         self.dele = hasDel()
         self.dele.rect.topleft = (48, 260)
         
+        #add all these elements to the group
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score)
 	
     def update(self, world):
+        #update all the elements
         self.scrollbar.update(world.scrollPosition / float(world.endPosition))
         self.damageBar.update(world.damage)
         self.lives.update(world.lives)

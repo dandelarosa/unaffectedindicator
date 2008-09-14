@@ -6,9 +6,11 @@ import world
 from constants import *
 
 def main():
+    """Does the main loop, 30fps, handles input and output of the game world"""
 
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) #pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) 
+    #initialize the screen
     pygame.display.set_caption('Shmup!')
 
     screen.fill((0, 0, 0))
@@ -20,11 +22,11 @@ def main():
     
     gameWorld = world.World()
     gameWorld.spawnWorld()
-
+    #create the world
     
     while True:
         clock.tick(30)
-
+        #30 fps
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -32,21 +34,26 @@ def main():
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    #shooting
                     gameWorld.leftMouseButtonDown()
-
+                    
                 if event.button == 3:
                     gameWorld.rightMouseButtonDown()
                                         
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    #quit
                     return
                 elif event.key == pygame.K_k:
+                    #destroy all enemies if possible
                     gameWorld.destroy_all_enemies()
                 elif event.key == pygame.K_SPACE and gameOver == True:
+                    #reset the game if the game is over
                     gameOver = False
                     gameWorld = world.World()
                     gameWorld.spawnWorld()
                 elif event.key == pygame.K_r:
+                    #use CTRL_ALT_DEL function, resets the damage
                     if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:
                         gameWorld.damage = 0
                         gameWorld.player.hasCtrl = False
@@ -60,7 +67,7 @@ def main():
         gameWorld.draw(screen)
         
         if gameOver == True:
-                    
+            #the game is over at this point, blit the game over screen and give option for replay
             pygame.display.set_caption("Game Over")
             screen = pygame.display.get_surface()
             s1 = pygame.image.load('data/images/Gameover1.png')

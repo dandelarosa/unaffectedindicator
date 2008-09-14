@@ -130,7 +130,6 @@ class World (object):
                     self.enemies.remove(spr)
                     self.sprites.remove(spr)
         self.player.after_destroy_all()
-        self.hud.undestr(self)
         
 
     def draw(self, screen):

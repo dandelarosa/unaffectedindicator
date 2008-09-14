@@ -96,6 +96,7 @@ class Boss(Entity):
         self.timer = pygame.time.get_ticks()
         self.tentacles = []
         self.death_frame = 0
+        self.typeofenemy = "boss"
     def create_tentacles(self):
         # Get current boss coordinates
         x = self.rect.topleft[0]

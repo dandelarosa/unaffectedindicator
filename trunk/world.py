@@ -90,10 +90,9 @@ class World (object):
 
     def quarantine_explode(self):
         for mine in self.mines:
-            mine.radius = 50
+            mine.rect.inflate(10, 10)
             for enemy in self.enemies:
-                enemy.radius = 15
-                if pygame.sprite.collide_circle(mine, enemy):
+                if pygame.sprite.collide_rect(mine, enemy):
                     self.enemies.remove(enemy)
                     self.sprites.remove(enemy)
             self.sprites.remove(mine)

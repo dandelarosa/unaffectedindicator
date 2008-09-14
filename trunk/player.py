@@ -77,7 +77,7 @@ class Player(entity.Entity):
 
     def quarantine(self, sprites):
         if not self.quarantineSet and self.mines > 0:
-            mine = QuarantineMine(pygame.mouse.get_pos())
+            mine = QuarantineMine(self, pygame.mouse.get_pos())
             sprites.add(mine)
             self.quarantineSet = True
             self.mines -= 1

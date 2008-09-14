@@ -9,6 +9,7 @@ class QuarantineMine(entity.Entity):
                 self.player = player
                 self.position = pos
                 super(QuarantineMine, self).__init__(pos, None)
+                self.rect = self.rect.inflate(100, 100)
 		t = threading.Timer(5.0, self.explode)
 		t.start()
 		

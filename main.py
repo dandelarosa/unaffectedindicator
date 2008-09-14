@@ -56,6 +56,12 @@ def main():
             screen = pygame.display.get_surface()
             s1 = pygame.image.load('data/images/Gameover1.png')
             screen.blit(s1, (0,0))
+            f = pygame.font.Font(None,32)
+            txt = "Score: "+str(gameWorld.score)
+            image = f.render(txt,1,(0,0,0))
+            r = image.get_rect()
+            r.center = (350,100)
+            screen.blit(image,r)
             pygame.display.flip()
           
         

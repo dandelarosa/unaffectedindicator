@@ -103,6 +103,10 @@ class World (object):
                 self.sprites.remove(enemy)
                 self.enemies.remove(enemy)
                 self.damage += 1
+            if enemy.typeofenemy == "popup":
+                if enemy.lifetime > 20:
+                    enemy.lifetime = 0
+                    self.score -= 1
         
         # Check bullets offscreen
         for bullet in self.bullets:

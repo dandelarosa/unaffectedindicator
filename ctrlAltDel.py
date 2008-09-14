@@ -4,6 +4,7 @@ import pygame, random
 import entity
 from pygame.locals import *
 
+"""Ctrl subclass of entity.  Basic powerup, when collected in combination with Alt and Del allows for reset of the damage"""
 class Ctrl(entity.Entity):
     def __init__(self):
         
@@ -24,7 +25,7 @@ class Ctrl(entity.Entity):
     def on_collision(self, player1):
         player1.collected_ctrlAltDel(self.id);
         
-
+"""Alt subclass of entity.  Basic powerup, when collected in combination with Ctrl and Del allows for reset of the damage"""
 class Alt(entity.Entity):
     def __init__(self):
         
@@ -45,7 +46,7 @@ class Alt(entity.Entity):
     def on_collision(self, player1):
         player1.collected_ctrlAltDel(self.id);
         
-
+"""Del subclass of entity.  Basic powerup, when collected in combination with Alt and Ctrl allows for reset of the damage"""
 class Del(entity.Entity):
     def __init__(self):
         

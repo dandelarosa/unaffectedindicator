@@ -2,7 +2,7 @@ import pygame, sys, os, random
 import entity
 from pygame.locals import *
 
-
+"""Popup subclasses entity.  Pops up randomly in the top half of the screen and saps your score for every second it is left alive.  """
 class Popup(entity.Entity):
     def __init__(self):
         position = random.randint(10,450), random.randint(10, 350)

@@ -3,7 +3,7 @@ import pygame, sys, os, random
 import entity
 from pygame.locals import *
 
-	
+"""Virus subclass of entity.  Starts at random position across the top and falls down."""
 class Virus(entity.Entity):
     def __init__(self):
         self.typeofenemy = "virus"

@@ -71,9 +71,24 @@ class World (object):
         self.enemies.add(enemy)
 
     def spawnWorm(self):
-        enemy = Worm()
+        position1 = random.randint(140,400)
+        position2 = 10
+        position = position1, position2
+        enemy = Worm(position,'worm head.png')
         self.sprites.add(enemy)
         self.enemies.add(enemy)
+        for i in range(random.randint(1,5)):
+            position1 -= 32
+            position = position1, position2
+            enemy = Worm(position,'worm body.png')
+            self.sprites.add(enemy)
+            self.enemies.add(enemy)
+        position1 -= 32
+        position = position1, position2
+        enemy = Worm(position,'worm tail.png')
+        self.sprites.add(enemy)
+        self.enemies.add(enemy)
+        
 
     def spawnPopup(self):
         enemy = Popup()

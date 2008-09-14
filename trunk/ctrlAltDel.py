@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 
-import pygame, random
+import pygame, random, threading
 import entity
 from pygame.locals import *
 
-"""Ctrl subclass of entity.  Basic powerup, when collected in combination with Alt and Del allows for reset of the damage"""
 class Ctrl(entity.Entity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Ctrl, self).__init__(self.position, 'ctrl button.png')
+        super(Ctrl, self).__init__(self.position, 'ctrl.bmp')
         self.id = 1
         self.lifetime = 1
         self.typeofenemy = "cad"
+        t = threading.Timer(2.5, self.delete_pickup)
+        t.start()
 
 		
     def update(self):
@@ -24,16 +25,22 @@ class Ctrl(entity.Entity):
 
     def on_collision(self, player1):
         player1.collected_ctrlAltDel(self.id);
+
+    def delete_pickup(self):
+        self.kill()
+        del(self)
         
-"""Alt subclass of entity.  Basic powerup, when collected in combination with Ctrl and Del allows for reset of the damage"""
+
 class Alt(entity.Entity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Alt, self).__init__(self.position, 'alt button.png')
+        super(Alt, self).__init__(self.position, 'alt.bmp')
         self.id = 2
         self.lifetime = 1
         self.typeofenemy = "cad"
+        t = threading.Timer(2.5, self.delete_pickup)
+        t.start()
 
 
     def update(self):
@@ -44,17 +51,23 @@ class Alt(entity.Entity):
         entity.Entity.set_position(self,pos)
 
     def on_collision(self, player1):
-        player1.collected_ctrlAltDel(self.id);
+        player1.collected_ctrlAltDel(self.id)
+
+    def delete_pickup(self):
+        self.kill()
+        del(self)
         
-"""Del subclass of entity.  Basic powerup, when collected in combination with Alt and Ctrl allows for reset of the damage"""
+
 class Del(entity.Entity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Del, self).__init__(self.position, 'del button.png')
+        super(Del, self).__init__(self.position, 'del.bmp')
         self.id = 3
         self.lifetime = 1
         self.typeofenemy = "cad"
+        t = threading.Timer(2.5, self.delete_pickup)
+        t.start()
 
 
     def update(self):
@@ -65,7 +78,11 @@ class Del(entity.Entity):
         entity.Entity.set_position(self,pos)
 
     def on_collision(self, player1):
-        player1.collected_ctrlAltDel(self.id);
+        player1.collected_ctrlAltDel(self.id)
+
+    def delete_pickup(self):
+        self.kill()
+        del(self)
 
 
 

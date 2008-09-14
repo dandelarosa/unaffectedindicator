@@ -8,7 +8,8 @@ class Popup(entity.Entity):
         position = random.randint(10,450), random.randint(10, 350)
         super(Popup, self).__init__(position, 'popup.bmp')
         self.lifetime = 1
-		
+        self.typeofenemy = "popup"
+        
     def update(self):
         super(Popup, self).update()
         self.lifetime += 1

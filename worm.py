@@ -7,7 +7,7 @@ from pygame.locals import *
 
 class Worm(entity.Entity):
     def __init__(self):
-        
+        self.typeofenemy = "worm"
         position = random.randint(10,450),10
         
         super(Worm, self).__init__(position, 'worm.bmp')

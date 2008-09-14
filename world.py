@@ -26,6 +26,7 @@ class World (object):
 
         self.damage = 0
         self.lives = 3
+        self.score = 0
 
         self.sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
@@ -75,6 +76,7 @@ class World (object):
             self.enemies.remove(enemy)
             self.player.decrease_life()
             self.lives -= 1
+            self.score -= 100
             if self.player.lives == 0 :
                 print "game over!"
 
@@ -88,7 +90,12 @@ class World (object):
                 self.enemies.remove(enemy)
                 self.bullets.remove(bullet)
                 self.player.increase_powerup(5)
-
+                if enemy.typeofenemy == "worm":
+                    self.score += 25
+                elif enemy.typeofenemy == "virus":
+                    self.score += 10
+                elif enemy.typeofenemy == "popup":
+                    self.score += 15
         
         # Check enemies offscreen
         for enemy in self.enemies:       

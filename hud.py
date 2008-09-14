@@ -71,10 +71,23 @@ class Destr(pygame.sprite.Sprite):
         super(Destr, self).__init__()
         pygame.font.init()
         f = pygame.font.Font(None, 32)
-        f = pygame.font.Font(None, 32)
         txt1 = "Nukes Active"
         self.image = f.render(txt1, 1, (255,0,0))
         self.rect = self.image.get_rect()
+        
+class Score(pygame.sprite.Sprite):
+    def __init__(self, score):
+        super(Score,self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None,32)
+        txt = "Score: " +str(score)
+        self.image = f.render(txt,1,(255,0,0))
+        self.rect = self.image.get_rect()
+        
+    def update(self,score):
+        f = pygame.font.Font(None,32)
+        txt = "Score: " + str(score)
+        self.image = f.render(txt,1,(255,0,0))
 
 
 class Hud (object):
@@ -101,12 +114,16 @@ class Hud (object):
         self.destr = Destr()
         self.destr.rect.topleft = (48,80)
         
-        self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives)
+        self.score = Score(0)
+        self.score.rect.topleft = (48, 700)
+        
+        self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score)
 	
     def update(self, world):
         self.scrollbar.update(world.scrollPosition / float(world.endPosition))
         self.damageBar.update(world.damage)
         self.lives.update(world.lives)
+        self.score.update(world.score)
         if world.player.destroyAllEnemies:
             self.hudElements.add(self.destr)
         else:

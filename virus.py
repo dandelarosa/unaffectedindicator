@@ -10,7 +10,7 @@ class Virus(entity.Entity):
         position = random.randint(10,450), 10
         
         super(Virus, self).__init__(position, 'virus.png')
-        
+        self.health = 1
         self.movex = 0
         self.movey = 4
         

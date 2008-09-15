@@ -127,6 +127,20 @@ class invincible(pygame.sprite.Sprite):
         self.image = f.render(txt,1,(255,0,0))
         self.rect = self.image.get_rect()
 
+class mines(pygame.sprite.Sprite):
+    def __init__(self, amt):
+        super(mines, self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None, 32)
+        txt = "Quarantines: " + str(amt)
+        self.image = f.render(txt,1,(255,0,0))
+        self.rect = self.image.get_rect()
+        
+    def update(self, amt):
+        f = pygame.font.Font(None,32)
+        txt = "Quarantines: " + str(amt)
+        self.image = f.render(txt, 1, (255,0,0))
+
 class Hud (object):
 	
     def __init__(self):
@@ -175,8 +189,12 @@ class Hud (object):
         self.invincible = invincible()
         self.invincible.rect.topleft = (48, 300)
         
+        #initialize the rect displaying amount of mines left
+        self.mines = mines(3)
+        self.mines.rect.topleft = (48,110)
+        
         #add all these elements to the group
-        self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score)
+        self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score, self.mines)
 	
     def update(self, world):
         #update all the elements
@@ -184,6 +202,7 @@ class Hud (object):
         self.damageBar.update(world.damage)
         self.lives.update(world.lives)
         self.score.update(world.score)
+        self.mines.update(world.player.mines)
         
         if world.player.hasCtrl:
             self.hudElements.add(self.ctrl)

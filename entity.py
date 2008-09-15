@@ -60,8 +60,11 @@ class Entity(pygame.sprite.Sprite):
         if self.frame % self.frameRate == 0:
             self.animFrame += 1
             self.animFrame %= len(self.animRects)
-            
-        self.rect.move_ip((self.movex, self.movey))
+        newpos = self.rect.move((self.movex, self.movey))
+        if self.rect.left < 0 or self.rect.right > PLAY_WIDTH:
+            self.movex = -self.movex
+            newpos = self.rect.move((self.movex, 30))
+        self.rect = newpos
     
     def draw(self, screen):
         screen.blit(self.image, self.rect, self.animRect)

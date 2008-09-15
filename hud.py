@@ -118,6 +118,15 @@ class hasDel(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
     
+class invincible(pygame.sprite.Sprite):
+    def __init__(self):
+        super(invincible, self).__init__()
+        pygame.font.init()
+        f = pygame.font.Font(None,32)
+        txt = "GOD MODE"
+        self.image = f.render(txt,1,(255,0,0))
+        self.rect = self.image.get_rect()
+
 class Hud (object):
 	
     def __init__(self):
@@ -162,6 +171,10 @@ class Hud (object):
         self.dele = hasDel()
         self.dele.rect.topleft = (48, 260)
         
+        #initialize the rect displaying whether or not god mode is active
+        self.invincible = invincible()
+        self.invincible.rect.topleft = (48, 300)
+        
         #add all these elements to the group
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score)
 	
@@ -169,9 +182,9 @@ class Hud (object):
         #update all the elements
         self.scrollbar.update(world.scrollPosition / float(world.endPosition))
         self.damageBar.update(world.damage)
-        #self.lives.update(world.lives)
-        #self.score.update(world.score)
-        '''
+        self.lives.update(world.lives)
+        self.score.update(world.score)
+        
         if world.player.hasCtrl:
             self.hudElements.add(self.ctrl)
         else:
@@ -191,7 +204,12 @@ class Hud (object):
             self.hudElements.add(self.destr)
         else:
             self.hudElements.remove(self.destr)
-        '''
+            
+        if world.player.invincible:
+            self.hudElements.add(self.invincible)
+        else:
+            self.hudElements.remove(self.invincible)
+        
     
     def draw(self, screen, offset):
         for element in self.hudElements:

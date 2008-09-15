@@ -35,6 +35,7 @@ class World (object):
         self.pickups = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.mines = pygame.sprite.Group()
+        self.backgrounds = pygame.sprite.Group()
         self.hud = Hud()
 
         self.music = pygame.mixer.Sound("data/music/Main.wav")
@@ -50,6 +51,11 @@ class World (object):
         self.scrollPosition = 0
         self.scrollSpeed = 3
 
+
+    def spawnBkg(self):
+        bkg = Bkg()
+        self.backgrounds.add(bkg)
+        
     def spawnCtrl(self):
         ctrl = Ctrl()
         self.sprites.add(ctrl)
@@ -186,6 +192,9 @@ class World (object):
                 self.sprites.remove(bullet)
                 self.bullets.remove(bullet)
         
+        if self.frames % 30 == 0:
+            self.spawnBkg()
+        
         # Spawn more enemies
         if not self.bossMode:
             if self.frames % 50 == 0:
@@ -240,6 +249,8 @@ class World (object):
         
 
     def draw(self, screen):
+        for sprite in self.backgrounds:
+            sprite.draw(screen)
         for sprite in self.sprites:
             sprite.draw(screen)
             

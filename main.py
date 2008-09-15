@@ -60,7 +60,8 @@ def main():
                         gameWorld.player.hasAlt = False
                         gameWorld.player.hasDel = False
         
-        gameWorld.update()
+        if not gameOver:
+            gameWorld.update()
                     
         screen.fill((200,200,200))
         gameWorld.draw(screen)
@@ -79,7 +80,7 @@ def main():
             screen.blit(image,r)
             pygame.display.flip()
         
-        if gameWorld.lives == 0:
+        if gameWorld.lives == 0 or gameWorld.damage > 5:
             gameOver = True
         
         pygame.display.flip()

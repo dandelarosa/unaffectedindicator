@@ -119,6 +119,9 @@ class World (object):
 
     def rightMouseButtonDown(self):
         self.player.quarantine(self.sprites, self.mines)
+        sound = pygame.mixer.Sound("data/sounds/minedeploy.wav")
+        sound.set_volume(.25)
+        sound.play()
 
     def quarantine_explode(self):
         for mine in self.mines:
@@ -127,6 +130,8 @@ class World (object):
                 self.sprites.remove(enemy)
             self.sprites.remove(mine)
             self.mines.remove(mine)
+        sound = pygame.mixer.Sound("data/sounds/mineexplosion.wav")
+        sound.play()
 
 
     def update(self):
@@ -140,6 +145,9 @@ class World (object):
                 self.player.decrease_life()
                 self.lives -= 1
                 self.score -= 100
+                sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
+                sound.set_volume(.25)
+                sound.play()
                 if self.player.lives == 0 :
                     print "game over!"
                 
@@ -151,6 +159,8 @@ class World (object):
             pickup.on_collision(self.player)
             self.sprites.remove(pickup)
             self.pickups.remove(pickup)
+            sound = pygame.mixer.Sound("data/sounds/keypickup.wav")
+            sound.play()
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
@@ -239,7 +249,7 @@ class World (object):
 
     def destroy_all_enemies(self):
         if self.player.destroyAllEnemies:
-            sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
+            sound = pygame.mixer.Sound("data/sounds/destroyall.wav")
             sound.play()
             for spr in self.enemies:
                 if self.player != spr:

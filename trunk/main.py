@@ -13,7 +13,9 @@ def main():
     #initialize the screen
     pygame.display.set_caption('Shmup!')
 
-    screen.fill((0, 0, 0))
+    playArea = pygame.Rect(0,0,PLAY_WIDTH,SCREEN_HEIGHT)
+    screen.fill((200,200,200))
+    screen.fill((255, 255, 255),playArea)
     pygame.display.flip()
     
     clock = pygame.time.Clock()
@@ -62,8 +64,8 @@ def main():
         
         if not gameOver:
             gameWorld.update()
-                    
         screen.fill((200,200,200))
+        screen.fill((255,255,255),playArea)
         gameWorld.draw(screen)
         
         if gameOver == True:

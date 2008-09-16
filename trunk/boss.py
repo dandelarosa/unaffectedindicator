@@ -37,8 +37,9 @@ class Chainlink(enemy.Enemy):
         self.previous_error = self.error
         
     def update(self, PID = ( 0.1, 0.001, 0.05) ):
-        super(Chainlink, self).update()
         """PID Control for motion"""
+        super(Chainlink, self).update()
+        
         proportional_gain = PID[0]
         integral_gain = PID[1]
         derivative_gain = PID[2]
@@ -140,7 +141,6 @@ class Boss(enemy.Enemy):
         self.go_to_main_phase()
         
     def go_to_death_phase(self):
-        print "Boss to death phase"
         self.destroy_tentacles()
         self.phase = 2
         sound = pygame.mixer.Sound("data/sounds/bossxplode.wav")

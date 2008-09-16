@@ -9,7 +9,7 @@ from worm import Worm
 from entity import Entity
 from player import Player
 from hud import Hud
-from boss1 import Boss
+from boss import Boss
 from safeMode import SafeMode
 from background import Bkg
 from constants import *

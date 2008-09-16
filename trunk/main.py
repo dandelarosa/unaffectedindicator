@@ -56,6 +56,7 @@ def main():
                     gameOver = False
                     gameWorld = world.World()
                     gameWorld.spawnWorld()
+                    pygame.display.set_caption('Shmup!')
                 elif event.key == pygame.K_r:
                     #use CTRL_ALT_DEL function, resets the damage
                     if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:

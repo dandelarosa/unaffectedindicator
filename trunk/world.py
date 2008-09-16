@@ -75,7 +75,7 @@ class World (object):
         self.enemies.add(enemy)
 
     def spawnWorm(self):
-        position1 = random.randint(165,PLAY_WIDTH-50)
+        position1 = random.randint(195,PLAY_WIDTH-50)
         position2 = 10
         position = position1, position2
         enemy = Worm(position,'head')

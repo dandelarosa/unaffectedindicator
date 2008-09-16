@@ -38,11 +38,10 @@ class Player(entity.Entity):
         
         self.set_position(mousepos)
     
-    def shoot(self, bullets, sprites):
+    def shoot(self, bullets):
         b = PlayerBullet(pygame.mouse.get_pos())
         self.bullets.append(b)
         bullets.add(b)
-        sprites.add(b)
 
     def collected_ctrlAltDel(self, cadId):
         if cadId is 1:

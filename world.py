@@ -11,6 +11,7 @@ from player import Player
 from hud import Hud
 from boss1 import Boss
 from safeMode import SafeMode
+from background import Bkg
 from constants import *
 
 class World (object):
@@ -30,12 +31,16 @@ class World (object):
         self.lives = 3
         self.score = 0
 
-        self.sprites = pygame.sprite.Group()
+        self.playerGroup = pygame.sprite.GroupSingle()
         self.enemies = pygame.sprite.Group()
         self.pickups = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.mines = pygame.sprite.Group()
         self.backgrounds = pygame.sprite.Group()
+        
+        # sprite groups listed in draw order (lowest sprite get drawn first)
+        self.spriteGroups = [self.backgrounds, self.mines, self.pickups, self.bullets, self.enemies, self.playerGroup]
+        
         self.hud = Hud()
 
         self.music = pygame.mixer.Sound("data/music/Main.wav")
@@ -43,7 +48,7 @@ class World (object):
         
     def spawnWorld(self):
         self.player = Player(self, (SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
-        self.sprites.add(self.player)
+        self.playerGroup.add(self.player)
 
         self.hud.createHudElements()
         self.frames = 1
@@ -58,22 +63,18 @@ class World (object):
         
     def spawnCtrl(self):
         ctrl = Ctrl()
-        self.sprites.add(ctrl)
         self.pickups.add(ctrl)
         
     def spawnAlt(self):
         alt = Alt()
-        self.sprites.add(alt)
         self.pickups.add(alt)
     
     def spawnDel(self):
         d = Del()
-        self.sprites.add(d)
         self.pickups.add(d)
         
     def spawnVirus(self):
         enemy = Virus()
-        self.sprites.add(enemy)
         self.enemies.add(enemy)
 
     def spawnWorm(self):
@@ -81,42 +82,35 @@ class World (object):
         position2 = 10
         position = position1, position2
         enemy = Worm(position,'worm head.png')
-        self.sprites.add(enemy)
         self.enemies.add(enemy)
         for i in range(random.randint(1,5)):
             position1 -= 32
             position = position1, position2
             enemy = Worm(position,'worm body.png')
-            self.sprites.add(enemy)
             self.enemies.add(enemy)
         position1 -= 32
         position = position1, position2
         enemy = Worm(position,'worm tail.png')
-        self.sprites.add(enemy)
         self.enemies.add(enemy)
         
 
     def spawnPopup(self):
         enemy = Popup()
-        self.sprites.add(enemy)
         self.enemies.add(enemy)
     
     def spawnBoss(self):
         self.boss = Boss((200,-200))
-        self.sprites.add(self.boss)
         self.enemies.add(self.boss)
         for tentacle in self.boss.tentacles:
             for link in tentacle.links:
-                self.sprites.add(link)
                 self.enemies.add(link)
 
     def spawnSafe(self):
         safe = SafeMode()
-        self.sprites.add(safe)
         self.pickups.add(safe)
 
     def leftMouseButtonDown(self):
-        self.player.shoot(self.bullets, self.sprites)
+        self.player.shoot(self.bullets)
         sound = pygame.mixer.Sound("data/sounds/shoot.wav")
         sound.set_volume(.25)
         sound.play()
@@ -131,8 +125,6 @@ class World (object):
         for mine in self.mines:
             for enemy in pygame.sprite.spritecollide(mine, self.enemies, False):
                 self.enemies.remove(enemy)
-                self.sprites.remove(enemy)
-            self.sprites.remove(mine)
             self.mines.remove(mine)
         sound = pygame.mixer.Sound("data/sounds/mineexplosion.wav")
         sound.play()
@@ -140,28 +132,27 @@ class World (object):
 
     def update(self):
     
-        self.sprites.update()
+        for group in self.spriteGroups:
+            group.update()
+        
         self.hud.update(self)
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
             if not self.player.invincible:
                 self.player.decrease_life()
-                self.lives -= 1
                 self.score -= 100
                 sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
                 sound.set_volume(.25)
                 sound.play()
                 if self.player.lives == 0 :
                     print "game over!"
-                
-            self.sprites.remove(enemy)
+            
             self.enemies.remove(enemy)
         
         # Test player-pickup collisions
         for pickup in pygame.sprite.spritecollide(self.player, self.pickups, False):
             pickup.on_collision(self.player)
-            self.sprites.remove(pickup)
             self.pickups.remove(pickup)
             sound = pygame.mixer.Sound("data/sounds/keypickup.wav")
             sound.play()
@@ -169,9 +160,7 @@ class World (object):
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
             for bullet in bullets:
-                #enemy.collideBullet(bullet)
                 enemy.health -= 1
-                self.sprites.remove(bullet)
                 self.bullets.remove(bullet)
                 
                 if enemy.health <= 0:
@@ -179,15 +168,13 @@ class World (object):
                         enemy.go_to_death_phase()
                         for entry in self.enemies:
                             if entry.typeofenemy == "link":
-                                self.sprites.remove(entry)
                                 self.enemies.remove(entry)
+                                
                     elif enemy.typeofenemy == "boss" and enemy.death_frame == 3:
-                        self.sprites.remove(enemy)
-                        self.enemies.remove(enemy)
-                    else:
-                        self.sprites.remove(enemy)
                         self.enemies.remove(enemy)
                         
+                    else:
+                        self.enemies.remove(enemy)
                         self.player.increase_powerup(5)
                         
                         if enemy.typeofenemy == "worm":
@@ -203,7 +190,6 @@ class World (object):
         # Check enemies offscreen
         for enemy in self.enemies:       
             if enemy.rect.top > SCREEN_HEIGHT:
-                self.sprites.remove(enemy)
                 self.enemies.remove(enemy)
                 self.damage += 1
             if enemy.typeofenemy == "popup":
@@ -212,9 +198,13 @@ class World (object):
         
         # Check bullets offscreen
         for bullet in self.bullets:
-            if bullet.rect.top < 0:
-                self.sprites.remove(bullet)
+            if bullet.rect.bottom < 0:
                 self.bullets.remove(bullet)
+        
+        # Check backgrounds offscreen
+        for bkg in self.backgrounds:
+            if bkg.rect.top > SCREEN_HEIGHT:
+                self.backgrounds.remove(bkg)
         
         if self.frames % 30 == 0:
             self.spawnBkg()
@@ -265,19 +255,15 @@ class World (object):
         if self.player.destroyAllEnemies:
             sound = pygame.mixer.Sound("data/sounds/destroyall.wav")
             sound.play()
-            for spr in self.enemies:
-                if self.player != spr:
-                    self.enemies.remove(spr)
-                    self.sprites.remove(spr)
+            if not self.bossMode:
+                self.enemies.empty()
         self.player.after_destroy_all()
         
 
     def draw(self, screen):
-        for sprite in self.backgrounds:
-            sprite.draw(screen)
-        for sprite in self.sprites:
-            sprite.draw(screen)
-            
+        for group in self.spriteGroups:
+            for sprite in group:
+                sprite.draw(screen)
         self.hud.draw(screen, PLAY_WIDTH)
         
         

@@ -10,23 +10,14 @@ class Entity(pygame.sprite.Sprite):
 
     def __init__(self, position = (0, 0), imageFilename = None, frameWidth = 0, frameRate = 1):
         super(Entity, self).__init__()
-        self.typed = imageFilename
+        
         self.frame = 0
         self.animFrame = 0
         self.frameRate = frameRate
-        if imageFilename == 'virus.png':
-            #virus moves in the downward direction only 
-            self.movex = 0
-            self.movey = 4
-        elif imageFilename == 'worm.bmp':
-            #worms move to the right and left, then jump down when it hits an edge
-            self.movex = 5
-            self.movey = 0
-        else:
-            #nothing else moves.
-            self.movex = 0
-            self.movey = 0
-            
+        
+        self.movex = 0
+        self.movey = 0
+        
         self.loadAnimation(imageFilename, frameWidth)
         self.rect.topleft = position
     
@@ -60,11 +51,8 @@ class Entity(pygame.sprite.Sprite):
         if self.frame % self.frameRate == 0:
             self.animFrame += 1
             self.animFrame %= len(self.animRects)
-        newpos = self.rect.move((self.movex, self.movey))
-        if self.rect.left < 0 or self.rect.right > PLAY_WIDTH:
-            self.movex = -self.movex
-            newpos = self.rect.move((self.movex, 30))
-        self.rect = newpos
+            
+        self.rect.move_ip((self.movex, self.movey))
     
     def draw(self, screen):
         screen.blit(self.image, self.rect, self.animRect)

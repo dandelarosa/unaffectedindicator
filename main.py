@@ -65,8 +65,8 @@ def main():
         if not gameOver:
             gameWorld.update()
             
-        screen.fill((200,200,200))
-        screen.fill((255,255,255),playArea)
+        screen.fill(HUD_BG_COLOR)
+        screen.fill(PLAY_BG_COLOR, playArea)
         
         gameWorld.draw(screen)
         

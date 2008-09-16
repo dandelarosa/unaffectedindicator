@@ -10,3 +10,9 @@ FRAMES_UNTIL_BOSS = 6900
 
 LIVES = 3
 MAX_DAMAGE = 5
+
+PLAY_BG_COLOR = (255, 255, 255)
+HUD_BG_COLOR = (200, 200, 200)
+
+BACKGROUND_IMAGE_FILES = ('disc.png', 'folder.png', 'game icon.png', 'game icon 2.png', 'monkey exe.png', 'mp3.png', 'my computer.png', 'notepad.png', 'world icon.png')
+

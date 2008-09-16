@@ -175,6 +175,8 @@ class Boss(enemy.Enemy):
                 for tentacle in self.tentacles:
                     tentacle.init_extend(( random.randint(-300,300),random.randint(-100,550) ))
                 self.timer = currenttime
+            if self.health == 0:
+                self.go_to_death_phase()
                 
         elif self.phase == 2:   # Death Phase
             pass

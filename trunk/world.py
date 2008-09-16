@@ -95,6 +95,8 @@ class World (object):
         
     def spawnPopup(self):
         enemy = Popup()
+        while len(pygame.sprite.spritecollide(enemy, self.playerGroup, False)) > 0:
+            enemy = Popup()
         self.enemies.add(enemy)
     
     def spawnBoss(self):
@@ -129,12 +131,15 @@ class World (object):
 
     def destroy_all_enemies(self):
         if self.player.destroyAllEnemies:
+            self.player.after_destroy_all()
             sound = pygame.mixer.Sound("data/sounds/destroyall.wav")
             sound.play()
-            if not self.bossMode:
-                for enemy in self.enemies:
+            for enemy in self.enemies:
+                if enemy.typeofenemy == 'boss' or enemy.typeofenemy == 'link':
+                    enemy.takeHit(1)
+                else:
                     enemy.takeHit(enemy.health)
-        self.player.after_destroy_all()
+                    
         
         
     def update(self):
@@ -146,7 +151,7 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            if not self.player.invincible and not enemy.dead:
+            if not self.player.invincible and not enemy.dead and not enemy.animName == 'spawn':
                 self.player.decrease_life()
                 self.score -= 100
             
@@ -225,18 +230,19 @@ class World (object):
             if self.frames % 350 == 0:
                 self.spawnSafe()
         
-            if self.frames == MUSIC_LENGTH_MAIN:
-                pygame.mixer.music.load("data/music/Mainloop.mp3")
-                pygame.mixer.music.play(-1)
-            elif self.frames == FRAMES_UNTIL_BOSS + MUSIC_LENGTH_BOSS:
-                pygame.mixer.music.load("data/music/Bossloop.mp3")
-                pygame.mixer.music.play(-1)
+        # Check if main music has ended, and loop music should start
+        if self.frames == MUSIC_LENGTH_MAIN:
+            pygame.mixer.music.load("data/music/Mainloop.mp3")
+            pygame.mixer.music.play(-1)
+        elif self.frames == FRAMES_UNTIL_BOSS + MUSIC_LENGTH_BOSS:
+            pygame.mixer.music.load("data/music/Bossloop.mp3")
+            pygame.mixer.music.play(-1)
                 
                 
         # Check gameover
         if self.player.lives == 0:
             self.gameOver = True
-            
+        
         # Check win screen!
         if self.bossMode and self.boss.dead and self.boss.anim.done:
             if not self.winScreen:

@@ -74,7 +74,7 @@ class ResizeAnimation(Animation):
         
         for i in range(numFrames):
             scale = ((final[0] - initial[0]) * (float(i)/numFrames) + initial[0], (final[1] - initial[1]) * (float(i)/numFrames) + initial[1])
-            scale = (scale[0] * rect.width, scale[1] * rect.height)
+            scale = (int(scale[0] * rect.width), int(scale[1] * rect.height))
             imageStrip.blit(pygame.transform.scale(image, scale), (rect.width * i, 0))
         
         super(ResizeAnimation, self).__init__(imageStrip, rect.width, 1, False)

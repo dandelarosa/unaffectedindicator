@@ -84,8 +84,6 @@ class Player(entity.Entity):
             self.hasAlt = True
         elif cadId is 3:
             self.hasDel = True
-        if self.hasCtrl and self.hasAlt and self.hasDel:
-            self.increase_health(50)
         
     def init_safe_mode(self, time):
         if not self.invincible:

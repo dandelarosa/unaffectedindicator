@@ -175,7 +175,7 @@ class World (object):
             
         # Check enemies offscreen, popups doing damage
         for enemy in self.enemies:       
-            if enemy.rect.top > SCREEN_HEIGHT:
+            if enemy.rect.top > SCREEN_HEIGHT and not enemy.typeofenemy == 'link':
                 enemy.kill()
                 self.player.decrease_health(1)
                 sound = pygame.mixer.Sound("data/sounds/CPUload.wav")

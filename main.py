@@ -59,7 +59,7 @@ def main():
                 elif event.key == pygame.K_LALT or pygame.K_RALT or pygame.K_LCTRL or pygame.K_RCTRL or pygame.K_DELETE:
                     #use CTRL_ALT_DEL function, resets the damage
                     if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:
-                        gameWorld.damage = 0
+                        gameWorld.player.health = MAX_HEALTH
                         gameWorld.player.hasCtrl = False
                         gameWorld.player.hasAlt = False
                         gameWorld.player.hasDel = False

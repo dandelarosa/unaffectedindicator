@@ -161,6 +161,4 @@ class Boss(Entity):
                 if self.death_frame < 5:
                     self.animRect = self.animRects[2+self.death_frame]
                     self.death_frame = self.death_frame + 1
-                else:
-                    self.phase = 3
                 self.timer = currenttime

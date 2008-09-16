@@ -99,6 +99,10 @@ class World (object):
         self.enemies.add(enemy)
     
     def spawnBoss(self):
+        # Need boss music in WAV or OGG format
+        #self.music.stop()
+        #self.music = pygame.mixer.Sound("data/music/Bossloop.mp3")
+        #self.music.play(-1)
         self.boss = Boss((200,-200))
         self.enemies.add(self.boss)
         for tentacle in self.boss.tentacles:
@@ -165,14 +169,12 @@ class World (object):
                 
                 if enemy.health <= 0:
                     if enemy.typeofenemy == "boss" and enemy.phase == 1:
+                        sound = pygame.mixer.Sound("data/sounds/bossxplode.wav")
+                        sound.play()
                         enemy.go_to_death_phase()
                         for entry in self.enemies:
                             if entry.typeofenemy == "link":
                                 self.enemies.remove(entry)
-                                
-                    elif enemy.typeofenemy == "boss" and enemy.death_frame == 3:
-                        self.enemies.remove(enemy)
-                        
                     else:
                         self.enemies.remove(enemy)
                         self.player.increase_powerup(5)
@@ -235,10 +237,10 @@ class World (object):
             if self.frames == 350:
                 self.spawnSafe()
         
-        if self.frames % 4200 == 0:
-            self.music.stop()
-            self.music = pygame.mixer.Sound("data/music/Mainloop.wav")
-            self.music.play(-1)
+            if self.frames % 4200 == 0:
+                self.music.stop()
+                self.music = pygame.mixer.Sound("data/music/Mainloop.wav")
+                self.music.play(-1)
             
         # Scroll level
         self.scrollPosition += self.scrollSpeed

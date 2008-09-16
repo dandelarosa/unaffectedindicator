@@ -52,11 +52,11 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     #quit
                     return
-                elif event.key == pygame.K_k:
+                elif event.key == pygame.K_SPACE:
                     #destroy all enemies if possible
                     gameWorld.destroy_all_enemies()
-                    pygame.display.set_caption('Shmup!')
-                elif event.key == pygame.K_r:
+                    #pygame.display.set_caption('Shmup!')
+                elif event.key == pygame.K_LALT or pygame.K_RALT or pygame.K_LCTRL or pygame.K_RCTRL or pygame.K_DELETE:
                     #use CTRL_ALT_DEL function, resets the damage
                     if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:
                         gameWorld.damage = 0

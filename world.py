@@ -44,7 +44,9 @@ class World (object):
         pygame.mixer.music.play()
         
     def spawnWorld(self):
-        self.player = Player(self, (SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
+        playerPos = (PLAY_WIDTH / 2, SCREEN_HEIGHT - 50)
+        pygame.mouse.set_pos(playerPos)
+        self.player = Player(self, playerPos)
         self.playerGroup.add(self.player)
 
         self.hud.createHudElements()

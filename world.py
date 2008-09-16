@@ -171,11 +171,14 @@ class World (object):
                         self.score += 15
                             
             
-        # Check enemies offscreen
+        # Check enemies offscreen, popups doing damage
         for enemy in self.enemies:       
             if enemy.rect.top > SCREEN_HEIGHT:
                 enemy.kill()
-                self.player.decrease_health(1)                
+                self.player.decrease_health(1)
+                sound = pygame.mixer.Sound("data/sounds/CPUload.wav")
+                sound.play()
+                               
             if enemy.typeofenemy == "popup":
                 if enemy.frame % 20 == 0:
                     self.score -= 1

@@ -70,7 +70,7 @@ def main():
         
         gameWorld.draw(screen)
         
-        if gameOver == True:
+        if gameWorld.gameOver:
             #the game is over at this point, blit the game over screen and give option for replay
             pygame.display.set_caption("Game Over")
             screen = pygame.display.get_surface()
@@ -82,10 +82,6 @@ def main():
             r = image.get_rect()
             r.center = (350,100)
             screen.blit(image,r)
-            pygame.display.flip()
-        
-        if gameWorld.lives == 0 or gameWorld.damage > 5:
-            gameOver = True
         
         pygame.display.flip()
 

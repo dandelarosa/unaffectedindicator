@@ -5,14 +5,13 @@ import entity
 from pygame.locals import *
 from constants import *
 
-class Ctrl(entity.Entity):
+class Ctrl(entity.StaticEntity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
         super(Ctrl, self).__init__(self.position, 'ctrl button.png')
         self.id = 1
         self.lifetime = 1
-        self.typeofenemy = "cad"
         t = threading.Timer(2.5, self.delete_pickup)
         t.start()
 
@@ -25,21 +24,21 @@ class Ctrl(entity.Entity):
         entity.Entity.set_position(self,pos)
 
     def on_collision(self, player1):
-        player1.collected_ctrlAltDel(self.id);
+        player1.collected_ctrlAltDel(self.id)
+        self.delete_pickup()
 
     def delete_pickup(self):
         self.kill()
         del(self)
         
 
-class Alt(entity.Entity):
+class Alt(entity.StaticEntity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
         super(Alt, self).__init__(self.position, 'alt button.png')
         self.id = 2
         self.lifetime = 1
-        self.typeofenemy = "cad"
         t = threading.Timer(2.5, self.delete_pickup)
         t.start()
 
@@ -53,20 +52,20 @@ class Alt(entity.Entity):
 
     def on_collision(self, player1):
         player1.collected_ctrlAltDel(self.id)
+        self.delete_pickup()
 
     def delete_pickup(self):
         self.kill()
         del(self)
         
 
-class Del(entity.Entity):
+class Del(entity.StaticEntity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
         super(Del, self).__init__(self.position, 'del button.png')
         self.id = 3
         self.lifetime = 1
-        self.typeofenemy = "cad"
         t = threading.Timer(2.5, self.delete_pickup)
         t.start()
 
@@ -80,6 +79,7 @@ class Del(entity.Entity):
 
     def on_collision(self, player1):
         player1.collected_ctrlAltDel(self.id)
+        self.delete_pickup()
 
     def delete_pickup(self):
         self.kill()

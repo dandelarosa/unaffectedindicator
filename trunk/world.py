@@ -236,6 +236,9 @@ class World (object):
         if self.player.lives == 0:
             self.gameOver = True
             
+        if self.bossMode and self.boss.dead and self.boss.anim.done:
+            print "w00t!"
+            
         # Scroll level
         self.scrollPosition += self.scrollSpeed
         self.scrollPosition = min(self.scrollPosition, self.endPosition)

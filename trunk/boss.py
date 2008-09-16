@@ -104,17 +104,24 @@ class Boss(enemy.Enemy):
     """Overall handler for the final boss"""
     def __init__(self, position = (0, 0)):
         
-        anims = {'intro': Animation("Bossintro.png"), 'idle': Animation("Boss.png"), 'death': Animation("bossstrip.png", 400, 1, False)}
+        anims = {'intro': Animation("Bossintro.png"), 'idle': Animation("Boss.png"), 'death': Animation("bossstrip.png", 400, 3, False)}
         super(Boss, self).__init__('boss', position, anims, 'intro')
-        
+
         # Define phase constants
         self.phase = 0
         self.timer = pygame.time.get_ticks()
         self.tentacles = []
         self.death_frame = 0
-        self.health = 25
+        self.health = 50
         # Create Tentacles
         self.create_tentacles()
+        # "Fold" Boss
+        self.fold_frame = 0
+        self.abs_center = self.rect.center
+        self.image = pygame.transform.scale(self.image,(50,200))
+        self.rect = self.image.get_rect()
+        self.rect.center = self.abs_center
+        #self.rect.center = (self.rect.center[0]+175,self.rect.center[1])
 
     def create_tentacles(self):
         # Get current boss coordinates
@@ -131,17 +138,18 @@ class Boss(enemy.Enemy):
         
     def go_to_main_phase(self):
         # Show attack face
+        #self.rect.center = (self.rect.center[0]-175,self.rect.center[1])
+        self.abs_center = self.rect.center
         self.changeAnimation('idle')
+        self.rect.center = self.abs_center
         # Create Tentacles
         self.create_tentacles()
         # Switch to next phase
         self.phase = 1
         
-    def skip_to_main_phase(self):
-        self.rect.topleft = ( self.rect.topleft[0], 0)
-        self.go_to_main_phase()
-        
     def go_to_death_phase(self):
+        sound = pygame.mixer.Sound("data/sounds/bossxplode.wav")
+        sound.play()
         self.destroy_tentacles()
         self.phase = 2
     
@@ -158,23 +166,32 @@ class Boss(enemy.Enemy):
         currenttime = pygame.time.get_ticks()
         
         if self.phase == 0: # Entry Phase
-            if currenttime - self.timer > 30:
-                self.rect.move_ip((0,1))
-                for tentacle in self.tentacles:
-                    tentacle.x = tentacle.x + 1
-                    for link in tentacle.links:
-                        link.default_pos = (link.default_pos[0],link.default_pos[1]+1)
+            if currenttime - self.timer > 60:
                 if self.rect.topleft[1] == 0:
-                    self.go_to_main_phase()
+                    if self.fold_frame < 7:
+                        self.abs_center = self.rect.center
+                        self.image = pygame.transform.scale(self.image,(50+25*self.fold_frame,200))
+                        self.rect = self.image.get_rect()
+                        self.rect.center = self.abs_center
+                        #self.rect.center = (self.rect.center[0]-25,self.rect.center[1])
+                        self.fold_frame = self.fold_frame + 1
+                    else:
+                        self.go_to_main_phase()
+                else:
+                    self.rect.move_ip((0,2))
+                    for tentacle in self.tentacles:
+                        tentacle.x = tentacle.x + 2
+                        for link in tentacle.links:
+                            link.default_pos = (link.default_pos[0],link.default_pos[1]+2)
                 self.timer = currenttime
-                
+
         elif self.phase == 1:   # Main Phase
             currenttime = pygame.time.get_ticks()
             if currenttime - self.timer > 1000:
                 for tentacle in self.tentacles:
-                    tentacle.init_extend(( random.randint(-300,300),random.randint(-100,600) ))
+                    tentacle.init_extend(( random.randint(-300,300),random.randint(-100,550) ))
                 self.timer = currenttime
-                
+
         elif self.phase == 2:   # Death Phase
             pass
                 

@@ -116,7 +116,7 @@ class World (object):
         sound.play()
 
     def rightMouseButtonDown(self):
-        self.player.quarantine(self.sprites, self.mines)
+        self.player.quarantine(self.mines)
         sound = pygame.mixer.Sound("data/sounds/minedeploy.wav")
         sound.set_volume(.25)
         sound.play()

@@ -84,10 +84,9 @@ class Player(entity.Entity):
         if self.powerup is 100:
             self.destroyAllEnemies = True
 
-    def quarantine(self, sprites, mines):
+    def quarantine(self, mines):
         if not self.quarantineSet and self.mines > 0:
             mine = QuarantineMine(self, pygame.mouse.get_pos())
-            sprites.add(mine)
             mines.add(mine)
             self.quarantineSet = True
             self.mines -= 1

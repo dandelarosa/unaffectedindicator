@@ -3,26 +3,20 @@ HUD_WIDTH = 200
 SCREEN_WIDTH = PLAY_WIDTH + HUD_WIDTH
 SCREEN_HEIGHT = 768
 
-MUSIC_LENGTH_MAIN = 5040
-MUSIC_LENGTH_MAIN_LOOP = 3240
-MUSIC_LENGTH_BOSS = 2550
+MUSIC_LENGTH_MAIN = 5040        # Main.mp3 = 2:48 = 168 seconds = 5040 frames
+MUSIC_LENGTH_MAIN_LOOP = 3240   # Mainloop.mp3 = 1:48 = 108 seconds = 3240 frames
+MUSIC_LENGTH_BOSS = 2550        # Boss.mp3 = 1:25 = 85 seconds = 2550 frames
 
-#play through Main.mp3 and Mainloop.mp3 once each, then boss shows up
-#length = 2:48 + 1:48 = 276 seconds = 8280 frames
-FRAMES_UNTIL_BOSS = 8280
+# play through Main.mp3 and Mainloop.mp3 once each, then boss shows up
+#FRAMES_UNTIL_BOSS = MUSIC_LENGTH_MAIN + MUSIC_LENGTH_MAIN_LOOP
 
-#or just play Main.mp3 once to keep things shorter
-#length = 2:48 = 168 seconds = 5040 frames
-#FRAMES_UNTIL_BOSS = 5040
+# or just play Main.mp3 once to keep things shorter
+FRAMES_UNTIL_BOSS = MUSIC_LENGTH_MAIN
 
-#uncomment this to just test boss
+# or uncomment this to just test boss
 #FRAMES_UNTIL_BOSS = 1
 
-#length of Boss.mp3, switch to Bossloop.mp3 after
-#1:25 = 85 seconds = 2550
-FRAMES_BOSS_MUSIC = 2550
-
-LIVES = 3
+LIVES = 10
 MAX_HEALTH = 15
 
 PLAY_BG_COLOR = (255, 255, 255)

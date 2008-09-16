@@ -22,8 +22,6 @@ def main():
     
     clock = pygame.time.Clock()
     
-    gameOver = False
-    
     gameWorld = world.World()
     gameWorld.spawnWorld()
     #create the world
@@ -35,6 +33,12 @@ def main():
 
             if event.type == pygame.QUIT:
                 return
+
+            elif event.type == pygame.KEYDOWN and gameWorld.gameOver == True:
+                #reset the game if the game is over
+                gameWorld.gameOver = False
+                gameWorld = world.World()
+                gameWorld.spawnWorld()
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -51,11 +55,6 @@ def main():
                 elif event.key == pygame.K_k:
                     #destroy all enemies if possible
                     gameWorld.destroy_all_enemies()
-                elif event.key == pygame.K_SPACE and gameOver == True:
-                    #reset the game if the game is over
-                    gameOver = False
-                    gameWorld = world.World()
-                    gameWorld.spawnWorld()
                     pygame.display.set_caption('Shmup!')
                 elif event.key == pygame.K_r:
                     #use CTRL_ALT_DEL function, resets the damage
@@ -65,7 +64,7 @@ def main():
                         gameWorld.player.hasAlt = False
                         gameWorld.player.hasDel = False
         
-        if not gameOver:
+        if not gameWorld.gameOver:
             gameWorld.update()
             
         screen.fill(HUD_BG_COLOR)
@@ -77,14 +76,8 @@ def main():
             #the game is over at this point, blit the game over screen and give option for replay
             pygame.display.set_caption("Game Over")
             screen = pygame.display.get_surface()
-            s1 = pygame.image.load('data/images/Gameover1.png')
+            s1 = pygame.image.load('data/images/alternateBlueScreen.jpg')
             screen.blit(s1, (0,0))
-            f = pygame.font.Font(None,32)
-            txt = "Score: "+str(gameWorld.score)
-            image = f.render(txt,1,(255,255,255))
-            r = image.get_rect()
-            r.center = (350,100)
-            screen.blit(image,r)
         
         pygame.display.flip()
 

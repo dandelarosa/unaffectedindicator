@@ -99,8 +99,11 @@ class Player(entity.Entity):
     def decrease_life(self):
         self.lives -= 1
         self.dying = True
-        self.changeAnimation('death')
+        self.changeAnimation('death')        
         self.init_safe_mode(10.0)
+        
+        sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
+        sound.play()
     
     def increase_health(self, amount):
         self.health += amount

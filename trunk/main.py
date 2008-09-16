@@ -64,8 +64,10 @@ def main():
         
         if not gameOver:
             gameWorld.update()
+            
         screen.fill((200,200,200))
         screen.fill((255,255,255),playArea)
+        
         gameWorld.draw(screen)
         
         if gameOver == True:

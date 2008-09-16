@@ -8,6 +8,7 @@ from constants import *
 def main():
     """Does the main loop, 30fps, handles input and output of the game world"""
 
+    pygame.mixer.pre_init(44100)  # sample at 44100 khz instead of default 22050
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), False) 
     #initialize the screen
@@ -17,6 +18,7 @@ def main():
     screen.fill((200,200,200))
     screen.fill((255, 255, 255),playArea)
     pygame.display.flip()
+    
     
     clock = pygame.time.Clock()
     

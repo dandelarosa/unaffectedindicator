@@ -95,7 +95,7 @@ class World (object):
         self.enemies.add(enemy)
     
     def spawnBoss(self):
-        pygame.mixer.music.load("data/music/Bossloop.mp3")
+        pygame.mixer.music.load("data/music/Boss.mp3")
         pygame.mixer.music.play(-1)
         self.boss = Boss((PLAY_WIDTH / 2, -200))
         self.enemies.add(self.boss)
@@ -219,9 +219,13 @@ class World (object):
             if self.frames % 350 == 0:
                 self.spawnSafe()
         
-            if self.frames % 4200 == 0:
+            if self.frames == MUSIC_LENGTH_MAIN:
                 pygame.mixer.music.load("data/music/Mainloop.mp3")
                 pygame.mixer.music.play(-1)
+            elif self.frames == FRAMES_UNTIL_BOSS + MUSIC_LENGTH_BOSS:
+                pygame.mixer.music.load("data/music/Bossloop.mp3")
+                pygame.mixer.music.play(-1)
+                
                 
         # Check gameover
         if self.player.lives == 0:

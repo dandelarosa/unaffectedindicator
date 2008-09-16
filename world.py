@@ -143,7 +143,7 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            if not self.player.invincible:
+            if not self.player.invincible and not enemy.dead:
                 self.player.decrease_life()
                 self.score -= 100
             

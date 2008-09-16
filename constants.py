@@ -6,7 +6,7 @@ SCREEN_HEIGHT = 768
 #play through Main.wav and Mainloop.wav once each, then boss shows up
 #length = 2:20 + 1:30 = 230 seconds = 6900 frames
 FRAMES_UNTIL_BOSS = 6900
-#FRAMES_UNTIL_BOSS = 1
+#FRAMES_UNTIL_BOSS = 100
 
 LIVES = 3
 MAX_DAMAGE = 5

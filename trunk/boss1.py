@@ -13,6 +13,8 @@ class Chainlink(Entity):
     """A link on the chain"""
     def __init__(self, position = (0, 0), image = "Tentacle.png"):
         Entity.__init__(self, position, image, 32, 0)
+        self.typeofenemy = "link"
+        self.health = 3
         # Set default position of the link
         self.default_pos = position
         # Set destination to the default position
@@ -23,7 +25,6 @@ class Chainlink(Entity):
         self.error = (0,0)
         self.previous_error = (0,0)
         self.sum_error = (0,0)
-        self.health = 100
         
     def init_motion(self, position = (0,0)):
         # Initiate motion to given distance from the default position
@@ -104,7 +105,9 @@ class Boss(Entity):
         self.death_frame = 0
         self.typeofenemy = "boss"
         self.health = 100
-        
+        # Create Tentacles
+        self.create_tentacles()
+
     def create_tentacles(self):
         # Get current boss coordinates
         x = self.rect.topleft[0]
@@ -119,7 +122,7 @@ class Boss(Entity):
         
     def go_to_main_phase(self):
         # Show attack face
-        self.image = self.images[1]
+        self.animRect = self.animRects[1]
         self.death_frame = 0
         # Create Tentacles
         self.create_tentacles()
@@ -140,6 +143,10 @@ class Boss(Entity):
         if self.phase == 0: # Entry Phase
             if currenttime - self.timer > 30:
                 self.rect.move_ip((0,1))
+                for tentacle in self.tentacles:
+                    tentacle.x = tentacle.x + 1
+                    for link in tentacle.links:
+                        link.default_pos = (link.default_pos[0],link.default_pos[1]+1)
                 if self.rect.topleft[1] == 0:
                     self.go_to_main_phase()
                 self.timer = currenttime
@@ -147,14 +154,13 @@ class Boss(Entity):
             currenttime = pygame.time.get_ticks()
             if currenttime - self.timer > 600:
                 for tentacle in self.tentacles:
-                    tentacle.init_extend(( random.randint(-100,100),random.randint(0,500) ))
+                    tentacle.init_extend(( random.randint(-300,300),random.randint(-100,550) ))
                 self.timer = currenttime
         elif self.phase == 2:   # Death Phase
-            if currenttime - self.timer > 60:
+            if currenttime - self.timer > 240:
                 if self.death_frame < 5:
-                    self.image = self.images[2+self.death_frame]
+                    self.animRect = self.animRects[2+self.death_frame]
                     self.death_frame = self.death_frame + 1
                 else:
-                    self.death_frame = 6
+                    self.phase = 3
                 self.timer = currenttime
-                

@@ -102,9 +102,13 @@ class World (object):
         self.enemies.add(enemy)
     
     def spawnBoss(self):
-        self.boss = Boss((0,-200))
+        self.boss = Boss((200,-200))
         self.sprites.add(self.boss)
         self.enemies.add(self.boss)
+        for tentacle in self.boss.tentacles:
+            for link in tentacle.links:
+                self.sprites.add(link)
+                self.enemies.add(link)
 
     def spawnSafe(self):
         safe = SafeMode()
@@ -170,21 +174,31 @@ class World (object):
                 self.sprites.remove(bullet)
                 self.bullets.remove(bullet)
                 
-                if enemy.health == 0:
-                    self.sprites.remove(enemy)
-                    self.enemies.remove(enemy)
-                    
-                    self.player.increase_powerup(5)
-                    
-                    if enemy.typeofenemy == "worm":
-                        self.score += 25
-                    elif enemy.typeofenemy == "virus":
-                        self.score += 10
-                    elif enemy.typeofenemy == "popup":
-                        self.score += 15
+                if enemy.health <= 0:
+                    if enemy.typeofenemy == "boss" and enemy.phase == 1:
+                        enemy.go_to_death_phase()
+                        for entry in self.enemies:
+                            if entry.typeofenemy == "link":
+                                self.sprites.remove(entry)
+                                self.enemies.remove(entry)
+                    elif enemy.typeofenemy == "boss" and enemy.death_frame == 3:
+                        self.sprites.remove(enemy)
+                        self.enemies.remove(enemy)
+                    else:
+                        self.sprites.remove(enemy)
+                        self.enemies.remove(enemy)
                         
-                    sounds = pygame.mixer.Sound("data/sounds/hit.wav")
-                    sounds.play()
+                        self.player.increase_powerup(5)
+                        
+                        if enemy.typeofenemy == "worm":
+                            self.score += 25
+                        elif enemy.typeofenemy == "virus":
+                            self.score += 10
+                        elif enemy.typeofenemy == "popup":
+                            self.score += 15
+                            
+                        sounds = pygame.mixer.Sound("data/sounds/hit.wav")
+                        sounds.play()
             
         # Check enemies offscreen
         for enemy in self.enemies:       

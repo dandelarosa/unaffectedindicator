@@ -26,6 +26,7 @@ class World (object):
         self.endPosition = FRAMES_UNTIL_BOSS * self.scrollSpeed
         self.bossMode = False
         self.gameOver = False
+        self.winScreen = False
         self.score = 0
 
         self.playerGroup = pygame.sprite.GroupSingle()
@@ -236,8 +237,10 @@ class World (object):
         if self.player.lives == 0:
             self.gameOver = True
             
+        # Check win screen!
         if self.bossMode and self.boss.dead and self.boss.anim.done:
-            print "w00t!"
+            if not self.winScreen:
+                self.winScreen = True
             
         # Scroll level
         self.scrollPosition += self.scrollSpeed

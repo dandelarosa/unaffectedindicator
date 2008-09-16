@@ -27,6 +27,8 @@ class Enemy(entity.Entity):
             if self.health <= 0:
                 self.dead = True
                 self.changeAnimation('death')
+                self.movex = 0
+                self.movey = 0
     
     def update(self):
         super(Enemy, self).update()

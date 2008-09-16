@@ -15,10 +15,10 @@ class Player(entity.Entity):
         
         anims = {
             'idle': Animation("player icon.png", 32), 
-            'shoot': Animation("fire.png", 32, 1, False),
-            'death': Animation("player death.png", 32, 1, False),
-            'revive': Animation("player revive.png", 32, 1, False),
-            'respawn': Animation("respawn.png", 32, 1, False)
+            'shoot': Animation("fire.png", 32, 2, False),
+            'death': Animation("player death.png", 32, 2, False),
+            'revive': Animation("player revive.png", 32, 3, False),
+            'respawn': Animation("respawn.png", 32, 3, False)
             }
         
         super(Player, self).__init__(pos, anims, 'idle')

@@ -10,7 +10,7 @@ class Worm(enemy.Enemy):
         
         imageName = "worm " + subtype + ".png"
         deathImageName = "worm " + subtype + " death.png"
-        anims = {'idle': Animation(imageName), 'death': Animation(deathImageName, 32, 1, False)}
+        anims = {'idle': Animation(imageName), 'death': Animation(deathImageName, 32, 2, False)}
         
         super(Worm, self).__init__("worm", position, anims, 'idle')
         

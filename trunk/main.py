@@ -78,6 +78,12 @@ def main():
             screen = pygame.display.get_surface()
             s1 = pygame.image.load('data/images/alternateBlueScreen.jpg')
             screen.blit(s1, (0,0))
+
+        if gameWorld.winScreen:
+            #you won! here's the win screen
+            screen = pygame.display.get_surface()
+            s1 = pygame.image.load('data/images/winscreen.jpg')
+            screen.blit(s1, (0,0))
         
         pygame.display.flip()
 

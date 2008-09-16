@@ -204,19 +204,19 @@ class World (object):
             if self.frames % 250 == 0:
                 self.spawnPopup()
                 
-            if self.frames == 1100:
+            if self.frames % 1100 == 0:
                 self.player.destroyAllEnemies = True
                 
-            if self.frames == 200:
+            if self.frames % 200 == 0:
                 self.spawnCtrl()
                 
-            if self.frames == 400:
+            if self.frames % 400 == 0:
                 self.spawnAlt()
                 
-            if self.frames == 600:
+            if self.frames % 600 == 0:
                 self.spawnDel()
                 
-            if self.frames == 350:
+            if self.frames % 350 == 0:
                 self.spawnSafe()
         
             if self.frames % 4200 == 0:

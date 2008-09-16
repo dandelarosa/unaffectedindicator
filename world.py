@@ -24,11 +24,8 @@ class World (object):
         self.scrollPosition = 0
         self.scrollSpeed = 3
         self.endPosition = FRAMES_UNTIL_BOSS * self.scrollSpeed
-        
         self.bossMode = False
-
-        self.damage = 0
-        self.lives = 3
+        self.gameOver = False
         self.score = 0
 
         self.playerGroup = pygame.sprite.GroupSingle()
@@ -43,8 +40,8 @@ class World (object):
         
         self.hud = Hud()
 
-        self.music = pygame.mixer.Sound("data/music/Main.wav")
-        self.music.play()
+        pygame.mixer.music.load("data/music/Main.mp3")
+        pygame.mixer.music.play()
         
     def spawnWorld(self):
         self.player = Player(self, (SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
@@ -81,29 +78,26 @@ class World (object):
         position1 = random.randint(165,PLAY_WIDTH-50)
         position2 = 10
         position = position1, position2
-        enemy = Worm(position,'worm head.png')
+        enemy = Worm(position,'head')
         self.enemies.add(enemy)
         for i in range(random.randint(1,5)):
             position1 -= 32
             position = position1, position2
-            enemy = Worm(position,'worm body.png')
+            enemy = Worm(position,'body')
             self.enemies.add(enemy)
         position1 -= 32
         position = position1, position2
-        enemy = Worm(position,'worm tail.png')
+        enemy = Worm(position,'tail')
         self.enemies.add(enemy)
         
-
     def spawnPopup(self):
         enemy = Popup()
         self.enemies.add(enemy)
     
     def spawnBoss(self):
-        # Need boss music in WAV or OGG format
-        #self.music.stop()
-        #self.music = pygame.mixer.Sound("data/music/Bossloop.mp3")
-        #self.music.play(-1)
-        self.boss = Boss((200,-200))
+        pygame.mixer.music.load("data/music/Bossloop.mp3")
+        pygame.mixer.music.play(-1)
+        self.boss = Boss((PLAY_WIDTH / 2, -200))
         self.enemies.add(self.boss)
         for tentacle in self.boss.tentacles:
             for link in tentacle.links:
@@ -115,9 +109,6 @@ class World (object):
 
     def leftMouseButtonDown(self):
         self.player.shoot(self.bullets)
-        sound = pygame.mixer.Sound("data/sounds/shoot.wav")
-        sound.set_volume(.25)
-        sound.play()
 
     def rightMouseButtonDown(self):
         self.player.quarantine(self.mines)
@@ -133,7 +124,16 @@ class World (object):
         sound = pygame.mixer.Sound("data/sounds/mineexplosion.wav")
         sound.play()
 
-
+    def destroy_all_enemies(self):
+        if self.player.destroyAllEnemies:
+            sound = pygame.mixer.Sound("data/sounds/destroyall.wav")
+            sound.play()
+            if not self.bossMode:
+                for enemy in self.enemies:
+                    enemy.takeHit(enemy.health)
+        self.player.after_destroy_all()
+        
+        
     def update(self):
     
         for group in self.spriteGroups:
@@ -146,54 +146,36 @@ class World (object):
             if not self.player.invincible:
                 self.player.decrease_life()
                 self.score -= 100
-                sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
-                sound.set_volume(.25)
-                sound.play()
-                if self.player.lives == 0 :
-                    print "game over!"
             
-            self.enemies.remove(enemy)
+            enemy.takeHit(enemy.health)
         
         # Test player-pickup collisions
         for pickup in pygame.sprite.spritecollide(self.player, self.pickups, False):
             pickup.on_collision(self.player)
-            self.pickups.remove(pickup)
             sound = pygame.mixer.Sound("data/sounds/keypickup.wav")
             sound.play()
         
         # Test enemy-playerBullet collisions
         for enemy, bullets in pygame.sprite.groupcollide(self.enemies, self.bullets, False, False).items():
             for bullet in bullets:
-                enemy.health -= 1
-                self.bullets.remove(bullet)
+                enemy.collideWithBullet(bullet)
                 
-                if enemy.health <= 0:
-                    if enemy.typeofenemy == "boss" and enemy.phase == 1:
-                        sound = pygame.mixer.Sound("data/sounds/bossxplode.wav")
-                        sound.play()
-                        enemy.go_to_death_phase()
-                        for entry in self.enemies:
-                            if entry.typeofenemy == "link":
-                                self.enemies.remove(entry)
-                    else:
-                        self.enemies.remove(enemy)
-                        self.player.increase_powerup(5)
-                        
-                        if enemy.typeofenemy == "worm":
-                            self.score += 25
-                        elif enemy.typeofenemy == "virus":
-                            self.score += 10
-                        elif enemy.typeofenemy == "popup":
-                            self.score += 15
+                if enemy.dead:
+                    self.player.increase_powerup(5)
+                    
+                    if enemy.typeofenemy == "worm":
+                        self.score += 25
+                    elif enemy.typeofenemy == "virus":
+                        self.score += 10
+                    elif enemy.typeofenemy == "popup":
+                        self.score += 15
                             
-                        sounds = pygame.mixer.Sound("data/sounds/hit.wav")
-                        sounds.play()
             
         # Check enemies offscreen
         for enemy in self.enemies:       
             if enemy.rect.top > SCREEN_HEIGHT:
-                self.enemies.remove(enemy)
-                self.damage += 1
+                enemy.kill()
+                self.player.decrease_health(1)                
             if enemy.typeofenemy == "popup":
                 if enemy.frame % 20 == 0:
                     self.score -= 1
@@ -201,12 +183,12 @@ class World (object):
         # Check bullets offscreen
         for bullet in self.bullets:
             if bullet.rect.bottom < 0:
-                self.bullets.remove(bullet)
+                bullet.kill()
         
         # Check backgrounds offscreen
         for bkg in self.backgrounds:
             if bkg.rect.top > SCREEN_HEIGHT:
-                self.backgrounds.remove(bkg)
+                bkg.kill()
         
         if self.frames % 30 == 0:
             self.spawnBkg()
@@ -238,9 +220,12 @@ class World (object):
                 self.spawnSafe()
         
             if self.frames % 4200 == 0:
-                self.music.stop()
-                self.music = pygame.mixer.Sound("data/music/Mainloop.wav")
-                self.music.play(-1)
+                pygame.mixer.music.load("data/music/Mainloop.mp3")
+                pygame.mixer.music.play(-1)
+                
+        # Check gameover
+        if self.player.lives == 0:
+            self.gameOver = True
             
         # Scroll level
         self.scrollPosition += self.scrollSpeed
@@ -251,15 +236,6 @@ class World (object):
             self.spawnBoss()
         
         self.frames += 1
-
-
-    def destroy_all_enemies(self):
-        if self.player.destroyAllEnemies:
-            sound = pygame.mixer.Sound("data/sounds/destroyall.wav")
-            sound.play()
-            if not self.bossMode:
-                self.enemies.empty()
-        self.player.after_destroy_all()
         
 
     def draw(self, screen):

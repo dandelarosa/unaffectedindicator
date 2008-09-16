@@ -1,15 +1,19 @@
-import pygame, sys, os, random
-from pygame.locals import *
+import pygame
 
-import entity
+import enemy
+from animation import Animation
 from constants import *
 
 """class Worm subclasses entity.  Position starts randomly across the top of the screen, moves to the left until it hits the edge of the game scren, falls down a little, then moves to the right. Back and forth."""
-class Worm(entity.Entity):
-    def __init__(self, position, image):
-        self.typeofenemy = "worm"
+class Worm(enemy.Enemy):
+    def __init__(self, position, subtype):
         
-        super(Worm, self).__init__(position, image)
+        imageName = "worm " + subtype + ".png"
+        deathImageName = "worm " + subtype + " death.png"
+        anims = {'idle': Animation(imageName), 'death': Animation(deathImageName, 32, 1, False)}
+        
+        super(Worm, self).__init__("worm", position, anims, 'idle')
+        
         self.health = 2
         self.movex = 5
         self.movey = 0

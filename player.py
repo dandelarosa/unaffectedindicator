@@ -1,10 +1,9 @@
-#!/usr/bin/env python
-
 import pygame, threading
-import entity
+
 from playerBullet import PlayerBullet
 from quarantineMine import QuarantineMine
-from pygame.locals import *
+import entity
+from animation import Animation
 from constants import *
 
 class Player(entity.Entity):
@@ -13,9 +12,20 @@ class Player(entity.Entity):
         self.bullets = []
         self.respawnPos = pos
         self.gameWorld = world
-        entity.Entity.__init__(self, pos, "player icon.png", 32)
+        
+        anims = {
+            'idle': Animation("player icon.png", 32), 
+            'shoot': Animation("fire.png", 32, 1, False),
+            'death': Animation("player death.png", 32, 1, False),
+            'revive': Animation("player revive.png", 32, 1, False),
+            'respawn': Animation("respawn.png", 32, 1, False)
+            }
+        
+        super(Player, self).__init__(pos, anims, 'idle')
+        
         pygame.mouse.set_visible(False)
-        self.health = 100
+        
+        self.health = MAX_HEALTH
         self.powerup = 0
         self.lives = 3
         self.mines = 3
@@ -26,22 +36,46 @@ class Player(entity.Entity):
         self.quarantineSet = False
         self.destroyAllEnemies = False
         
-    def set_position(self,pos):
-        entity.Entity.set_position(self,pos)
         
     def update(self):
         super(Player, self).update()
         
-        mousepos = list(pygame.mouse.get_pos())
-        mousepos[0] = min(PLAY_WIDTH - self.rect.height / 2, max(self.rect.width / 2, mousepos[0]))
-        mousepos[1] = min(SCREEN_HEIGHT - self.rect.height / 2, max(self.rect.height / 2, mousepos[1]))
+        if self.animName == 'death':
+            if self.anim.done:
+                self.changeAnimation('respawn')
+                self.set_position(self.respawnPos)
+                
+        elif self.animName == 'respawn':
+            if self.anim.done:
+                self.changeAnimation('revive')
         
-        self.set_position(mousepos)
-    
+        elif self.animName == 'revive':
+            if self.anim.done:
+                self.changeAnimation('idle')
+                self.end_safe_mode()
+                pygame.mouse.set_pos(self.respawnPos)
+        
+        else:
+            if self.anim.done and self.animName == 'shoot':
+                self.changeAnimation('idle')
+
+            mousepos = list(pygame.mouse.get_pos())
+            mousepos[0] = min(PLAY_WIDTH - self.rect.height / 2, max(self.rect.width / 2, mousepos[0]))
+            mousepos[1] = min(SCREEN_HEIGHT - self.rect.height / 2, max(self.rect.height / 2, mousepos[1]))
+            
+            self.set_position(mousepos)
+        
     def shoot(self, bullets):
-        b = PlayerBullet(pygame.mouse.get_pos())
-        self.bullets.append(b)
-        bullets.add(b)
+        if self.animName == 'idle' or self.animName == 'shoot':
+            b = PlayerBullet(self.rect.center)
+            self.bullets.append(b)
+            bullets.add(b)
+            
+            self.changeAnimation('shoot')
+            
+            sound = pygame.mixer.Sound("data/sounds/shoot.wav")
+            sound.set_volume(.25)
+            sound.play()
 
     def collected_ctrlAltDel(self, cadId):
         if cadId is 1:
@@ -64,9 +98,9 @@ class Player(entity.Entity):
     
     def decrease_life(self):
         self.lives -= 1
-        self.set_position(self.respawnPos)
-        pygame.mouse.set_pos(self.respawnPos)
-        self.init_safe_mode(2.0)
+        self.dying = True
+        self.changeAnimation('death')
+        self.init_safe_mode(10.0)
     
     def increase_health(self, amount):
         self.health += amount
@@ -77,7 +111,7 @@ class Player(entity.Entity):
                 self.health -= amount
             elif (self.health - amount) <= 0:
                 self.decrease_life()
-                self.health = 100
+                self.health = MAX_HEALTH
 
     def increase_powerup(self, amount):
         self.powerup += amount

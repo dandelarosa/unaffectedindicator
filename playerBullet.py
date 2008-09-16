@@ -1,17 +1,11 @@
-#!/usr/bin/env python
-
 import pygame
-from entity import Entity
-from pygame.locals import *
 
-class PlayerBullet(Entity):
+import entity
+
+class PlayerBullet(entity.StaticEntity):
     def __init__(self, pos):
-        self.position = pos
-        super(PlayerBullet, self).__init__(pos, "bullet.png",32)
-        
-    def set_position(self,pos):
-        Entity.set_position(self,pos)
+        super(PlayerBullet, self).__init__(pos, "bullet.png")
+        self.movey = -8
 
     def update(self):
-        self.position = (self.position[0], self.position[1] - 8)
-        self.set_position(self.position)
+        super(PlayerBullet, self).update()

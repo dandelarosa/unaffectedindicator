@@ -6,10 +6,8 @@ class ScrollButton(pygame.sprite.Sprite):
 	def __init__(self, pointUp):
 		super(ScrollButton, self).__init__()
 		
-		self.image = pygame.Surface((32, 32))
-		self.image.fill((128, 128, 128))
+		self.image = pygame.image.load("data/images/scroll bar arrows.png").convert_alpha()
 		self.rect = self.image.get_rect()
-		pygame.draw.rect(self.image, (0, 0, 0), self.rect, 3)
 		
 		if not pointUp:
 			self.image = pygame.transform.flip(self.image, False, True)
@@ -20,10 +18,8 @@ class ScrollBar(pygame.sprite.Sprite):
 		
 		assert start > end, "ScrollBar assumes we're scrolling up in a coord system where +y is down"
 		
-		self.image = pygame.Surface((32, 64))
-		self.image.fill((128, 128, 128))
+		self.image = pygame.image.load("data/images/scroll bar.png").convert_alpha()
 		self.rect = self.image.get_rect()
-		pygame.draw.rect(self.image, (0, 0, 0), self.rect, 3)
 		
 		self.start = start
 		self.end = end + self.rect.height
@@ -33,21 +29,28 @@ class ScrollBar(pygame.sprite.Sprite):
 		self.rect.bottom = (self.end - self.start) * progress + self.start
 
 class DamageBar(pygame.sprite.Sprite):
-	def __init__(self):
-		super(DamageBar, self).__init__()
+    def __init__(self):
+        super(DamageBar, self).__init__()
+        pygame.font.init()
+        
+        self.images = [pygame.Surface((160, 64)) for i in range(MAX_HEALTH + 1)]
+        i = 0
+        for image in self.images:
+            image.fill(HUD_BG_COLOR)
 		
-		self.images = [pygame.Surface((128, 32)) for i in range(MAX_DAMAGE + 1)]
-		i = 0
-		for image in self.images:
-			image.fill((0,0,0))
-			pygame.draw.rect(image, (0, 255, 0), (0, 0, int(i * 128.0 / MAX_DAMAGE), 32))
-			i += 1
+            f = pygame.font.Font(None, 32)
+            image.blit(f.render("Memory Usage:", 1, (255, 0, 0)), (0, 0))
+            
+            pygame.draw.rect(image, (0, 0, 0), (0, 32, 160, 32))
+            pygame.draw.rect(image, (0, 255, 0), (0, 32, int(i * 160.0 / MAX_HEALTH), 32))
+			
+            i += 1
 		
-		self.image = self.images[0]
-		self.rect = self.image.get_rect()
+        self.image = self.images[0]
+        self.rect = self.image.get_rect()
 	
-	def update(self, damage):
-		self.image = self.images[min(MAX_DAMAGE, damage)]
+    def update(self, health):
+        self.image = self.images[max(0, MAX_HEALTH - health)]
 
         
 class Lives(pygame.sprite.Sprite):
@@ -159,39 +162,39 @@ class Hud (object):
 		
         #initialize the damage bar
         self.damageBar = DamageBar()
-        self.damageBar.rect.topleft = (48, 0)
+        self.damageBar.rect.topleft = (32, 16)
         
         #initialize the box displaying amount of lives
         self.lives = Lives()
-        self.lives.rect.topleft = (48,40)
-		
-        #initialize the box displaying whether nukes are active or not
-        self.destr = Destr()
-        self.destr.rect.topleft = (48,80)
-        
-        #initialize the rect displaying the score
-        self.score = Score(0)
-        self.score.rect.topleft = (48, 700)
-        
-        #initialize the rect displaying whether or not Ctrl has been picked up
-        self.ctrl = hasCtrl()
-        self.ctrl.rect.topleft = (48, 200)
-        
-        #initialize the rect displaying whether or not Alt has been picked up
-        self.alt = hasAlt()
-        self.alt.rect.topleft = (48, 230)
-        
-        #initialize the rect displaying whether or not Del has been picked up
-        self.dele = hasDel()
-        self.dele.rect.topleft = (48, 260)
-        
-        #initialize the rect displaying whether or not god mode is active
-        self.invincible = invincible()
-        self.invincible.rect.topleft = (48, 300)
+        self.lives.rect.topleft = (32, 96)
         
         #initialize the rect displaying amount of mines left
         self.mines = mines(3)
-        self.mines.rect.topleft = (48,110)
+        self.mines.rect.topleft = (32,128)
+		
+        #initialize the box displaying whether nukes are active or not
+        self.destr = Destr()
+        self.destr.rect.topleft = (32,160)
+        
+        #initialize the rect displaying the score
+        self.score = Score(0)
+        self.score.rect.topleft = (32, 700)
+        
+        #initialize the rect displaying whether or not Ctrl has been picked up
+        self.ctrl = hasCtrl()
+        self.ctrl.rect.topleft = (32, 200)
+        
+        #initialize the rect displaying whether or not Alt has been picked up
+        self.alt = hasAlt()
+        self.alt.rect.topleft = (32, 230)
+        
+        #initialize the rect displaying whether or not Del has been picked up
+        self.dele = hasDel()
+        self.dele.rect.topleft = (32, 260)
+        
+        #initialize the rect displaying whether or not god mode is active
+        self.invincible = invincible()
+        self.invincible.rect.topleft = (32, 300)
         
         #add all these elements to the group
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score, self.mines)
@@ -199,8 +202,8 @@ class Hud (object):
     def update(self, world):
         #update all the elements
         self.scrollbar.update(world.scrollPosition / float(world.endPosition))
-        self.damageBar.update(world.damage)
-        self.lives.update(world.lives)
+        self.damageBar.update(world.player.health)
+        self.lives.update(world.player.lives)
         self.score.update(world.score)
         self.mines.update(world.player.mines)
         
@@ -231,6 +234,7 @@ class Hud (object):
         
     
     def draw(self, screen, offset):
+        pygame.draw.rect(screen, (128, 128, 128), (offset, 0, self.scrollbar.rect.width, SCREEN_HEIGHT))
         for element in self.hudElements:
             screen.blit(element.image, (element.rect.left + offset, element.rect.top))
 		

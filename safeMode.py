@@ -1,14 +1,11 @@
-#!/usr/bin/env python
-
 import pygame, random
 import entity, player, threading
 from pygame.locals import *
 
-class SafeMode(entity.Entity):
+class SafeMode(entity.StaticEntity):
     def __init__(self):
         pos = random.randint(10,450),random.randint(10,450)
-        image = "shield.png"
-        entity.Entity.__init__(self,pos,image)
+        super(SafeMode, self).__init__(pos, "shield.png")
         self.typeofenemy = "cad"
         t = threading.Timer(5, self.delete_pickup)
         t.start()
@@ -20,8 +17,8 @@ class SafeMode(entity.Entity):
         super(SafeMode,self).update()
         
     def on_collision(self, player1):
-        print "Safe Mode!"
-        player1.init_safe_mode(5.0);
+        player1.init_safe_mode(5.0)
+        self.delete_pickup()
 		
     def delete_pickup(self):
         self.kill()

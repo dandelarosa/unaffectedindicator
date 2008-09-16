@@ -16,7 +16,7 @@ class Chainlink(enemy.Enemy):
         
         super(Chainlink, self).__init__('link', position, anims, 'default')
         
-        self.health = 3
+        self.health = 5
         # Set default position of the link
         self.default_pos = position
         # Set destination to the default position
@@ -74,6 +74,7 @@ class Tentacle():
             
     def init_extend(self, destination = (0,0)):
         """Specify distance (vector) to extend tentacle"""
+        self.num_links = len(self.links)
         factor = self.num_links -1
         # Initiate motion for end of tentacle
         if self.num_links > 1:
@@ -121,7 +122,7 @@ class Boss(enemy.Enemy):
         y = self.rect.topleft[1]
         # Create the tentacles
         for i in range(5):
-            self.tentacles.append( Tentacle(( i * 72 + 40 + x, 150 + y ), 10) )
+            self.tentacles.append( Tentacle(( i * 72 + 40 + x, 150 + y ), 15) )
             
     def destroy_tentacles(self):
         for tentacle in self.tentacles:
@@ -143,8 +144,6 @@ class Boss(enemy.Enemy):
     def go_to_death_phase(self):
         self.destroy_tentacles()
         self.phase = 2
-        sound = pygame.mixer.Sound("data/sounds/bossxplode.wav")
-        sound.play()
     
     def takeHit(self, damage):
         if self.phase == 1:
@@ -171,12 +170,10 @@ class Boss(enemy.Enemy):
                 
         elif self.phase == 1:   # Main Phase
             currenttime = pygame.time.get_ticks()
-            if currenttime - self.timer > 600:
+            if currenttime - self.timer > 1000:
                 for tentacle in self.tentacles:
-                    tentacle.init_extend(( random.randint(-300,300),random.randint(-100,550) ))
+                    tentacle.init_extend(( random.randint(-300,300),random.randint(-100,600) ))
                 self.timer = currenttime
-            if self.health == 0:
-                self.go_to_death_phase()
                 
         elif self.phase == 2:   # Death Phase
             pass

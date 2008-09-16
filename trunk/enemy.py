@@ -19,13 +19,14 @@ class Enemy(entity.Entity):
             sound = pygame.mixer.Sound("data/sounds/hit.wav")
             sound.play()
             
+            #redOverlay = pygame.Surface(self.rect.size).convert_alpha(self.image)
+            #redOverlay.fill((255,0,0, 128))
+            #self.image.blit(redOverlay, (0,0))
+            
             self.health -= damage
             if self.health <= 0:
                 self.dead = True
                 self.changeAnimation('death')
-                sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
-                sound.set_volume(.5)
-                sound.play()
     
     def update(self):
         super(Enemy, self).update()

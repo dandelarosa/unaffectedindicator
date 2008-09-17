@@ -126,7 +126,7 @@ class invincible(pygame.sprite.Sprite):
         super(invincible, self).__init__()
         pygame.font.init()
         f = pygame.font.Font(None,32)
-        txt = "GOD MODE"
+        txt = "SAFE MODE"
         self.image = f.render(txt,1,(255,0,0))
         self.rect = self.image.get_rect()
 

@@ -56,8 +56,7 @@ class World (object):
         
         self.hud = Hud()
 
-        pygame.mixer.music.load("data/music/Main.mp3")
-        pygame.mixer.music.play()
+
         
     def spawnWorld(self):
         self.StartScreen = False
@@ -66,6 +65,9 @@ class World (object):
         self.player = Player(self, playerPos)
         self.playerGroup.add(self.player)
 
+
+        pygame.mixer.music.load("data/music/Main.mp3")
+        pygame.mixer.music.play()
         self.hud.createHudElements()
         self.frames = 1
 

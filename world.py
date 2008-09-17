@@ -132,26 +132,6 @@ class World (object):
         sound.set_volume(.25)
         sound.play()
 
-    def quarantine_explode(self):
-        for mine in self.mines:
-            for enemy in pygame.sprite.spritecollide(mine, self.enemies, False):
-                if enemy.typeofenemy is 'virus':
-                    self.numViruses += 1
-                    self.numEnemiesDestroyed += 1
-                    print "8"
-                if enemy.typeofenemy is 'worm':
-                    self.numWorms += 1
-                    self.numEnemiesDestroyed += 1
-                    print "9"
-                if enemy.typeofenemy is 'pop up window':
-                    self.numPopUps += 1
-                    self.numEnemiesDestroyed += 1
-                    print "10"
-                self.enemies.remove(enemy)
-            self.mines.remove(mine)
-        sound = pygame.mixer.Sound("data/sounds/mineexplosion.wav")
-        sound.play()
-
     def destroy_all_enemies(self):
         if self.player.destroyAllEnemies:
             self.player.after_destroy_all()
@@ -234,6 +214,26 @@ class World (object):
                         print "6"
                         self.numPopUps += 1
                         self.score += 15
+                        
+        # Test enemy-mine collisions
+        for mine in self.mines:
+            if mine.exploding:
+                for enemy in pygame.sprite.spritecollide(mine, self.enemies, False):
+                    enemy.takeHit(1)
+                    if enemy.dead:
+                        if enemy.typeofenemy is 'virus':
+                            self.numViruses += 1
+                            self.numEnemiesDestroyed += 1
+                            print "8"
+                        if enemy.typeofenemy is 'worm':
+                            self.numWorms += 1
+                            self.numEnemiesDestroyed += 1
+                            print "9"
+                        if enemy.typeofenemy is 'pop up window':
+                            self.numPopUps += 1
+                            self.numEnemiesDestroyed += 1
+                            print "10"
+
                             
             
         # Check enemies offscreen, popups doing damage
@@ -258,8 +258,9 @@ class World (object):
             if bkg.rect.top > SCREEN_HEIGHT:
                 bkg.kill()
         
-        if self.frames % 30 == 0:
-            self.spawnBkg()
+        if self.frames % 32 == 0:
+            for i in range(random.randint(0, 4)):
+                self.spawnBkg()
         
         # Spawn more enemies
         if not self.bossMode:

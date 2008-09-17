@@ -33,7 +33,6 @@ class Player(entity.Entity):
         self.hasAlt = False
         self.hasDel = False
         self.invincible = False
-        self.quarantineSet = False
         self.destroyAllEnemies = False
         
         
@@ -120,15 +119,11 @@ class Player(entity.Entity):
             self.destroyAllEnemies = True
 
     def quarantine(self, mines):
-        if not self.quarantineSet and self.mines > 0:
-            mine = QuarantineMine(self, pygame.mouse.get_pos())
+        if self.mines > 0:
+            mine = QuarantineMine(pygame.mouse.get_pos())
             mines.add(mine)
-            self.quarantineSet = True
             self.mines -= 1
 
-    def quarantine_explode(self):
-         self.quarantineSet = False
-         self.gameWorld.quarantine_explode()
 
     def after_destroy_all(self):
         self.powerup = 0

@@ -88,7 +88,7 @@ class ColorFadeAnimation(Animation):
     def __init__(self, image, framesIn, framesOut, color):
         image = loadImage(image)
         rect = image.get_rect()
-        imageStrip = pygame.Surface((rect.width * (framesIn + framesOut + 1), rect.height)).convert_alpha()
+        imageStrip = pygame.Surface((rect.width * (framesIn + framesOut), rect.height)).convert_alpha()
         imageStrip.fill((0,0,0,0))
         image = image.convert_alpha(imageStrip)
         
@@ -106,7 +106,7 @@ class ColorFadeAnimation(Animation):
             else:
                 imageStrip.fill(fillcolor, (rect.width * i, 0, rect.width, rect.height))
         
-        for i in range(framesOut + 1):
+        for i in range(framesOut):
             fillcolor = [color[j] * (float(framesOut - i) / framesOut) for j in range(len(color))]
             imageStrip.blit(image, (rect.width * (i + framesIn), 0))
             if useBlend:

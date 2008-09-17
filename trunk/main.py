@@ -18,7 +18,8 @@ def main():
     screen.fill((200,200,200))
     screen.fill((255, 255, 255),playArea)
     pygame.display.flip()
-    
+
+    itrChosen = 0
     
     clock = pygame.time.Clock()
     
@@ -49,9 +50,26 @@ def main():
                         pass
 
                     elif gameWorld.startScreen:
-                        if event.key == pygame.K_RETURN:
-                            gameWorld.spawnWorld()
-                            gameWorld.startScreen = False
+                        if event.key == pygame.K_UP:
+                            itrChosen -= 1
+                            if itrChosen < 0:
+                                itrChosen = 4
+                        elif event.key == pygame.K_DOWN:
+                            itrChosen += 1
+                            if itrChosen > 4:
+                                itrChosen = 0
+                        elif event.key == pygame.K_RETURN:
+                            if itrChosen == 0:
+                                screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+                            if itrChosen == 1:
+                                screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                            if itrChosen == 2:
+                                pass
+                            if itrChosen == 3:
+                                pass
+                            if itrChosen == 4:
+                                gameWorld.spawnWorld()
+                                gameWorld.startScreen = False
                         
                     else:
                         if event.key == pygame.K_SPACE:
@@ -72,10 +90,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if gameWorld.gameOver == True:
-                        #reset the game if the game is over
-                        gameWorld.gameOver = False
-                        gameWorld = world.World()
-                        gameWorld.startScreen = True
+                        pass
                         
                     elif gameWorld.winScreen:
                         pos = pygame.mouse.get_pos()
@@ -85,11 +100,11 @@ def main():
                             gameWorld = world.World()
                             gameWorld.startScreen = True
                             
-                    elif not gameWorld.gameOver and not gameWorld.winScreen:
+                    elif not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
                         #shooting
                         gameWorld.leftMouseButtonDown()
                     
-                elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen:
+                elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
                     gameWorld.rightMouseButtonDown()
         
         if not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
@@ -113,11 +128,60 @@ def main():
             screen = pygame.display.get_surface()
             s1 = pygame.image.load('data/images/bootupscreen.png')
             screen.blit(s1, (0,0))
+            
+            chosen = pygame.Surface((500, 30))
+            chosen.fill((230, 230, 230), chosen.get_rect())
+            chosenstate = [ 220, 270, 330, 380, 465 ]
+            r = chosen.get_rect()
+            r.topleft = (100, chosenstate[itrChosen])
+            screen.blit(chosen, r)
+            
+            f = pygame.font.Font('data/fonts/courbd.ttf', 24)
+            color  = (230, 230, 230)
+            if itrChosen is 0:
+                color = (0, 0, 0)
+            a = f.render("Enable Full Screen Display Mode", 1, color)
+            r = a.get_rect()
+            r.topleft = (100, 220)
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosen is 1:
+                color = (0, 0, 0)
+            a = f.render("Enable Windowed Display Mode", 1, color)
+            r = a.get_rect()
+            r.topleft = (100, 270)
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosen is 2:
+                color = (0, 0, 0)
+            a = f.render("View Help Manual", 1, color)
+            r = a.get_rect()
+            r.topleft = (100, 330)
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosen is 3:
+                color = (0, 0, 0)
+            a = f.render("Configure Debug Options", 1, color)
+            r = a.get_rect()
+            r.topleft = (100, 380)
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosen is 4:
+                color = (0, 0, 0)
+            a = f.render("Begin Debugging", 1, color)
+            r = a.get_rect()
+            r.topleft = (100, 465)
+            screen.blit(a, r)
 
         elif gameWorld.winScreen:
             #you won! here's the win screen
             pygame.mouse.set_visible(True)
             screen = pygame.display.get_surface()
+            pygame.display.set_caption("Congratulations!")
             s2 = pygame.image.load('data/images/winscreen.jpg')
             screen.blit(s2, (0,0))
             f = pygame.font.Font(None, 32)

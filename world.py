@@ -148,7 +148,6 @@ class World (object):
                     if enemy.typeofenemy is 'pop up window':
                         self.numPopUps += 1
                     self.numEnemiesDestroyed += 1
-                    print "11"
                     enemy.takeHit(enemy.health)
                     
         
@@ -175,15 +174,12 @@ class World (object):
                     if enemy.typeofenemy is 'virus':
                         self.numViruses += 1
                         self.numEnemiesDestroyed += 1
-                        print "1"
                     if enemy.typeofenemy is 'worm':
                         self.numWorms += 1
                         self.numEnemiesDestroyed += 1
-                        print "2"
                     if enemy.typeofenemy is 'pop up window':
                         self.numPopUps += 1
                         self.numEnemiesDestroyed += 1
-                        print "3"
         
         # Test player-pickup collisions
         for pickup in pygame.sprite.spritecollide(self.player, self.pickups, False):
@@ -202,16 +198,13 @@ class World (object):
                     if enemy.typeofenemy == "worm":
                         self.numWorms += 1
                         self.numEnemiesDestroyed += 1
-                        print "4"
                         self.score += 25
                     elif enemy.typeofenemy == "virus":
                         self.numViruses += 1
                         self.numEnemiesDestroyed += 1
-                        print "5"
                         self.score += 10
                     elif enemy.typeofenemy == "popup":
                         self.numEnemiesDestroyed += 1
-                        print "6"
                         self.numPopUps += 1
                         self.score += 15
                         
@@ -224,15 +217,12 @@ class World (object):
                         if enemy.typeofenemy is 'virus':
                             self.numViruses += 1
                             self.numEnemiesDestroyed += 1
-                            print "8"
                         if enemy.typeofenemy is 'worm':
                             self.numWorms += 1
                             self.numEnemiesDestroyed += 1
-                            print "9"
                         if enemy.typeofenemy is 'pop up window':
                             self.numPopUps += 1
                             self.numEnemiesDestroyed += 1
-                            print "10"
 
                             
             
@@ -305,7 +295,6 @@ class World (object):
         if self.bossMode and self.boss.dead and self.boss.anim.done:
             if not self.winScreen:
                 self.numEnemiesDestroyed += 1
-                print "7"
                 self.winScreen = True
             
         # Scroll level

@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# Requires pygame 1.8.1 or higher for RGBA blending flags in animation.py
+
 import pygame, time
 
 import world

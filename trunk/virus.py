@@ -9,7 +9,10 @@ class Virus(enemy.Enemy):
     def __init__(self):
         
         position = random.randint(10,PLAY_WIDTH - 40), 10
-        anims = {'idle': Animation("virus.png"), 'death': Animation("virus death.png", 32, 2, False)}
+        anims = {
+            'idle': Animation("virus.png"),
+            'death': Animation("virus death.png", 32, 2, False)
+            }
         
         super(Virus, self).__init__('virus', position, anims, 'idle')
         

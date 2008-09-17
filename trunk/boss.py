@@ -110,8 +110,8 @@ class Boss(enemy.Enemy):
     def __init__(self, position = (0, 0)):
         
         anims = {
-            'intro': ResizeAnimation("Bossintro.png", 1, (0.2, 1.0), (0.2, 1.0), (0.5, 0.0)),
-            'introUnfold': ResizeAnimation("Bossintro.png", 30, (0.2, 1.0), (1.0, 1.0), (0.5, 0.0)),
+            'intro': ResizeAnimation("Bossintro.png", 1, 0, (0.2, 1.0), (0.2, 1.0), (0.5, 0.0), -1),
+            'introUnfold': ResizeAnimation("Bossintro.png", 30, 0, (0.2, 1.0), (1.0, 1.0), (0.5, 0.0)),
             'idle': Animation("Boss.png"),
             'death': Animation("bossstrip.png", 400, 3, False),
             'takehit': ColorFadeAnimation('Boss.png', 3, 3, (255, 0, 0, 0)),

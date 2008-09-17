@@ -322,6 +322,7 @@ class World (object):
         # Check gameover
         if self.player.lives == 0:
             self.gameOver = True
+            pygame.mixer.music.stop()
         
         # Check win screen!
         if self.bossMode and self.boss.dead and self.boss.anim.done:

@@ -13,14 +13,14 @@ class Player(entity.Entity):
         self.respawnPos = pos
         self.gameWorld = world
         
-        self.safeModeTime = 5
+        self.safeModeTime = 15
         anims = {
             'idle': Animation("player icon.png", 32), 
-            'shoot': Animation("fire.png", 32, 2, False),
-            'death': Animation("player death.png", 32, 2, False),
-            'revive': Animation("player revive.png", 32, 3, False),
-            'respawn': Animation("respawn.png", 32, 3, False),
-            'safemode': ColorFadeAnimation("player icon.png", 32, (self.safeModeTime*2)*32, (0, 255, 0, 0))
+            'shoot': Animation("fire.png", 32, 2, 0),
+            'death': Animation("player death.png", 32, 2, 0),
+            'revive': Animation("player revive.png", 32, 3, 0),
+            'respawn': Animation("respawn.png", 32, 2, 2),
+            'safemode': ColorFadeAnimation("player icon.png", 8, 8, (0, 255, 0, 0), self.safeModeTime),
             }
         
         super(Player, self).__init__(pos, anims, 'respawn')
@@ -59,6 +59,10 @@ class Player(entity.Entity):
         else:
             if self.anim.done and self.animName == 'shoot':
                 self.changeAnimation('idle')
+                
+            elif self.animName == 'safemode':
+                if self.anim.done:
+                    self.end_safe_mode()
 
             mousepos = list(pygame.mouse.get_pos())
             mousepos[0] = min(PLAY_WIDTH - self.rect.height / 2, max(self.rect.width / 2, mousepos[0]))
@@ -71,7 +75,7 @@ class Player(entity.Entity):
             b = PlayerBullet(self.rect.center)
             self.bullets.append(b)
             bullets.add(b)
-            if not self.invincible:
+            if not self.animName == 'safemode':
                 self.changeAnimation('shoot')
             
             sound = pygame.mixer.Sound("data/sounds/shoot.wav")
@@ -91,8 +95,6 @@ class Player(entity.Entity):
         if not self.invincible:
             self.changeAnimation('safemode')
             self.invincible = True
-            t = threading.Timer(time, self.end_safe_mode)
-            t.start()
         
     def end_safe_mode(self):
         self.invincible = False

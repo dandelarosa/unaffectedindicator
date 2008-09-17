@@ -12,8 +12,8 @@ class Popup(enemy.Enemy):
         imageFile = 'pop up window ' + str(random.randint(1,8)) + '.png'
         anims = {
             'idle': Animation(imageFile),
-            'spawn': ResizeAnimation(imageFile, 30, (0, 0), (1, 1)),
-            'death': ResizeAnimation(imageFile, 10, (1, 1), (0, 0)),
+            'spawn': ResizeAnimation(imageFile, 30, 0, (0, 0), (1, 1)),
+            'death': ResizeAnimation(imageFile, 10, 0, (1, 1), (0, 0)),
             'takehit': ColorFadeAnimation(imageFile, 3, 3, (255, 0, 0, 0)),
             }
         

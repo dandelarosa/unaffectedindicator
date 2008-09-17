@@ -9,13 +9,13 @@ class QuarantineMine(entity.Entity):
         
         anims = {
             'idle': Animation("quarintine mine.png"),
-            'explode': ResizeAnimation("quarintine explosion.png", 20, (0.1, 0.1), (1, 1), (0.5, 0.5)),
+            'explode': ResizeAnimation("quarintine explosion.png", 20, 0, (0.1, 0.1), (1, 1), (0.5, 0.5)),
             'done': ColorFadeAnimation("quarintine explosion.png", 5, 0, (255,255,255,0))
             }
         
         super(QuarantineMine, self).__init__(self.position, anims, 'idle')
         
-        t = threading.Timer(3.75, self.explode)
+        t = threading.Timer(1.0, self.explode)
         t.start()
 
     def update(self):

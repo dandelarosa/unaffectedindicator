@@ -61,6 +61,8 @@ def main():
                                 gameWorld.player.hasCtrl = False
                                 gameWorld.player.hasAlt = False
                                 gameWorld.player.hasDel = False
+                                sound = pygame.mixer.Sound("data/sounds/CtrlAltDel.wav")
+                                sound.play()
                                 
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:

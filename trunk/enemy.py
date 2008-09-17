@@ -31,6 +31,9 @@ class Enemy(entity.Entity):
     def update(self):
         super(Enemy, self).update()
         
+        if self.animName == 'takehit' and self.anim.done:
+            self.changeAnimation('idle')
+        
         if self.dead and self.anim.done:
             self.kill()
             del self

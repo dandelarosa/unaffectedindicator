@@ -13,7 +13,7 @@ class Bkg(entity.StaticEntity):
         
         fade = pygame.Surface(self.rect.size)
         fade.fill(PLAY_BG_COLOR)
-        fade.set_alpha(96)
+        fade.set_alpha(196)
         self.image.blit(fade, (0, 0))
         
         self.movey = 2

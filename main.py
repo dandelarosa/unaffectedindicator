@@ -20,6 +20,7 @@ def main():
     pygame.display.flip()
 
     itrChosen = 0
+    itrChosenDiff = 1
     
     clock = pygame.time.Clock()
     
@@ -49,6 +50,24 @@ def main():
                     elif gameWorld.winScreen:
                         pass
 
+                    elif gameWorld.helpScreen:
+                        if event.key == pygame.K_RETURN:
+                            gameWorld.startScreen = True
+                            gameWorld.helpScreen = False
+
+                    elif gameWorld.difficultyScreen:
+                        if event.key == pygame.K_UP:
+                            itrChosenDiff -= 1
+                            if itrChosenDiff < 0:
+                                itrChosenDiff = 3
+                        if event.key == pygame.K_DOWN:
+                            itrChosenDiff += 1
+                            if itrChosenDiff > 3:
+                                itrChosenDiff = 0
+                        if event.key == pygame.K_RETURN:
+                            gameWorld.startScreen = True
+                            gameWorld.difficultyScreen = False
+
                     elif gameWorld.startScreen:
                         if event.key == pygame.K_UP:
                             itrChosen -= 1
@@ -64,9 +83,11 @@ def main():
                             if itrChosen == 1:
                                 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
                             if itrChosen == 2:
-                                pass
+                                gameWorld.startScreen = False
+                                gameWorld.helpScreen = True
                             if itrChosen == 3:
-                                pass
+                                gameWorld.startScreen = False
+                                gameWorld.difficultyScreen = True
                             if itrChosen == 4:
                                 gameWorld.spawnWorld()
                                 gameWorld.startScreen = False
@@ -100,14 +121,14 @@ def main():
                             gameWorld = world.World()
                             gameWorld.startScreen = True
                             
-                    elif not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
+                    elif not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen and not gameWorld.helpScreen and not gameWorld.difficultyScreen:
                         #shooting
                         gameWorld.leftMouseButtonDown()
                     
-                elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
+                elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen and not gameWorld.helpScreen and not gameWorld.difficultyScreen:
                     gameWorld.rightMouseButtonDown()
         
-        if not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
+        if not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen and not gameWorld.helpScreen and not gameWorld.difficultyScreen:
             gameWorld.update()
             
             screen.fill(HUD_BG_COLOR)
@@ -142,7 +163,7 @@ def main():
                 color = (0, 0, 0)
             a = f.render("Enable Full Screen Display Mode", 1, color)
             r = a.get_rect()
-            r.topleft = (100, 220)
+            r.topleft = (100, chosenstate[0])
             screen.blit(a, r)
 
             color  = (230, 230, 230)
@@ -150,7 +171,7 @@ def main():
                 color = (0, 0, 0)
             a = f.render("Enable Windowed Display Mode", 1, color)
             r = a.get_rect()
-            r.topleft = (100, 270)
+            r.topleft = (100, chosenstate[1])
             screen.blit(a, r)
 
             color  = (230, 230, 230)
@@ -158,7 +179,7 @@ def main():
                 color = (0, 0, 0)
             a = f.render("View Help Manual", 1, color)
             r = a.get_rect()
-            r.topleft = (100, 330)
+            r.topleft = (100, chosenstate[2])
             screen.blit(a, r)
 
             color  = (230, 230, 230)
@@ -166,7 +187,7 @@ def main():
                 color = (0, 0, 0)
             a = f.render("Configure Debug Options", 1, color)
             r = a.get_rect()
-            r.topleft = (100, 380)
+            r.topleft = (100, chosenstate[3])
             screen.blit(a, r)
 
             color  = (230, 230, 230)
@@ -174,8 +195,68 @@ def main():
                 color = (0, 0, 0)
             a = f.render("Begin Debugging", 1, color)
             r = a.get_rect()
-            r.topleft = (100, 465)
+            r.topleft = (100, chosenstate[4])
             screen.blit(a, r)
+
+        elif gameWorld.helpScreen:
+            # can be chosen from the start screen
+            screen = pygame.display.get_surface()
+            pygame.display.set_caption("Controls")
+            s = pygame.image.load('data/images/helpscreen.png')
+            screen.blit(s, (0,0))
+
+        elif gameWorld.difficultyScreen:
+            # can be chosen from the start screen
+            pygame.display.set_caption("Set Difficulty")
+            screen = pygame.display.get_surface()
+            s = pygame.image.load('data/images/difficultyscreen.png')
+            screen.blit(s, (0,0))
+            
+            chosen = pygame.Surface((500, 30))
+            chosen.fill((230, 230, 230), chosen.get_rect())
+            chosenstate = [ 200, 300, 400, 500 ]
+            r = chosen.get_rect()
+            r.topleft = (100, chosenstate[itrChosenDiff])
+            screen.blit(chosen, r)
+            
+            f = pygame.font.Font('data/fonts/courbd.ttf', 24)
+            color  = (230, 230, 230)
+            if itrChosenDiff is 0:
+                color = (0, 0, 0)
+            a = f.render("Easy", 1, color)
+            gameWorld.difficulty = .7
+            r = a.get_rect()
+            r.topleft = (100, chosenstate[0])
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosenDiff is 1:
+                color = (0, 0, 0)
+            a = f.render("Normal", 1, color)
+            gameWorld.difficulty = 1
+            r = a.get_rect()
+            r.topleft = (100, chosenstate[1])
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosenDiff is 2:
+                color = (0, 0, 0)
+            a = f.render("Hard", 1, color)
+            gameWorld.difficulty = 1.3
+            r = a.get_rect()
+            r.topleft = (100, chosenstate[2])
+            screen.blit(a, r)
+
+            color  = (230, 230, 230)
+            if itrChosenDiff is 3:
+                color = (0, 0, 0)
+            a = f.render("Ricockulous", 1, color)
+            gameWorld.difficulty = 10
+            r = a.get_rect()
+            r.topleft = (100, chosenstate[3])
+            screen.blit(a, r)
+            
+
 
         elif gameWorld.winScreen:
             #you won! here's the win screen

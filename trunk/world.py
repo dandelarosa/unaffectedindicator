@@ -21,6 +21,10 @@ class World (object):
 
         self.frames = 1
 
+        # this is normal difficulty by default
+        # easy would prolly be .7ish and hard.. 1.3 or so?
+        self.difficulty = 1 
+        self.spawnFreq = 10
         self.scrollPosition = 0
         self.scrollSpeed = 3
         self.endPosition = FRAMES_UNTIL_BOSS * self.scrollSpeed
@@ -253,31 +257,36 @@ class World (object):
         if self.frames % 32 == 0:
             for i in range(random.randint(0, 4)):
                 self.spawnBkg()
+
+        if self.frames % (500 / difficulty) == 0:
+            if self.spawnFreq is not 1:
+                self.spawnFreq -= 1
         
         # Spawn more enemies
+        baseSpawnRate = (self.spawnFreq * 5 + random.randint(-5, 5))
         if not self.bossMode:
-            if self.frames % 50 == 0:
+            if self.frames % baseSpawnRate == 0:
                 self.spawnVirus()
                 
-            if self.frames % 300 == 0:
+            if self.frames % (baseSpawnRate * 6) == 0:
                 self.spawnWorm()
 			
-            if self.frames % 250 == 0:
+            if self.frames % (baseSpawnRate * 5) == 0:
                 self.spawnPopup()
                 
-            if self.frames % 1100 == 0:
+            if self.frames % (baseSpawnRate * 21) == 0:
                 self.player.destroyAllEnemies = True
                 
-            if self.frames % 200 == 0:
+            if self.frames % (baseSpawnRate * 4) == 0:
                 self.spawnCtrl()
                 
-            if self.frames % 400 == 0:
+            if self.frames % (baseSpawnRate * 8) == 0:
                 self.spawnAlt()
                 
-            if self.frames % 600 == 0:
+            if self.frames % (baseSpawnRate * 12) == 0:
                 self.spawnDel()
                 
-            if self.frames % 350 == 0:
+            if self.frames % (baseSpawnRate * 7) == 0:
                 self.spawnSafe()
         
         # Check if main music has ended, and loop music should start

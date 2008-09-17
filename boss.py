@@ -5,16 +5,21 @@ import random
 import pygame
 
 import enemy
-from animation import Animation
+from animation import Animation, ResizeAnimation, ColorFadeAnimation
 
 # These are my boss classes
 
 class Chainlink(enemy.Enemy):
     """A link on the chain"""
     def __init__(self, position):
-        anims = {'default': Animation('Tentacle.png'), 'death': Animation('Tentacle.png', loops = False)}
+    
+        anims = {
+            'idle': Animation('Tentacle.png'),
+            'death': ResizeAnimation('Tentacle.png', 10, (1, 1), (0, 0), (0.5, 0.5)),
+            'takehit': ColorFadeAnimation('Tentacle.png', 3, 3, (255, 0, 0, 0)),
+            }
         
-        super(Chainlink, self).__init__('link', position, anims, 'default')
+        super(Chainlink, self).__init__('link', position, anims, 'idle')
         
         self.health = 5
         # Set default position of the link
@@ -104,7 +109,13 @@ class Boss(enemy.Enemy):
     """Overall handler for the final boss"""
     def __init__(self, position = (0, 0)):
         
-        anims = {'intro': Animation("Bossintro.png"), 'idle': Animation("Boss.png"), 'death': Animation("bossstrip.png", 400, 3, False)}
+        anims = {
+            'intro': ResizeAnimation("Bossintro.png", 1, (0.2, 1.0), (0.2, 1.0), (0.5, 0.0)),
+            'introUnfold': ResizeAnimation("Bossintro.png", 30, (0.2, 1.0), (1.0, 1.0), (0.5, 0.0)),
+            'idle': Animation("Boss.png"),
+            'death': Animation("bossstrip.png", 400, 3, False),
+            'takehit': ColorFadeAnimation('Boss.png', 3, 3, (255, 0, 0, 0)),
+            }
         super(Boss, self).__init__('boss', position, anims, 'intro')
 
         # Define phase constants
@@ -118,10 +129,10 @@ class Boss(enemy.Enemy):
         # "Fold" Boss
         self.fold_frame = 0
         self.abs_center = self.rect.center
-        self.image = pygame.transform.scale(self.image,(50,200))
         self.rect = self.image.get_rect()
         self.rect.center = self.abs_center
         #self.rect.center = (self.rect.center[0]+175,self.rect.center[1])
+        self.movey = 2
 
     def create_tentacles(self):
         # Get current boss coordinates
@@ -142,8 +153,6 @@ class Boss(enemy.Enemy):
         self.abs_center = self.rect.center
         self.changeAnimation('idle')
         self.rect.center = self.abs_center
-        # Create Tentacles
-        self.create_tentacles()
         # Switch to next phase
         self.phase = 1
         
@@ -166,24 +175,18 @@ class Boss(enemy.Enemy):
         currenttime = pygame.time.get_ticks()
         
         if self.phase == 0: # Entry Phase
-            if currenttime - self.timer > 60:
-                if self.rect.topleft[1] == 0:
-                    if self.fold_frame < 7:
-                        self.abs_center = self.rect.center
-                        self.image = pygame.transform.scale(self.image,(50+25*self.fold_frame,200))
-                        self.rect = self.image.get_rect()
-                        self.rect.center = self.abs_center
-                        #self.rect.center = (self.rect.center[0]-25,self.rect.center[1])
-                        self.fold_frame = self.fold_frame + 1
-                    else:
-                        self.go_to_main_phase()
+            if self.animName == 'intro':
+                if self.rect.top == 0:
+                    self.changeAnimation('introUnfold')
+                    self.movey = 0
                 else:
-                    self.rect.move_ip((0,2))
                     for tentacle in self.tentacles:
-                        tentacle.x = tentacle.x + 2
                         for link in tentacle.links:
-                            link.default_pos = (link.default_pos[0],link.default_pos[1]+2)
-                self.timer = currenttime
+                            link.default_pos = (link.default_pos[0], link.default_pos[1] + self.movey)
+                    
+                
+            elif self.animName == 'introUnfold' and self.anim.done:
+                self.go_to_main_phase()
 
         elif self.phase == 1:   # Main Phase
             currenttime = pygame.time.get_ticks()

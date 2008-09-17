@@ -34,11 +34,34 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-            elif event.type == pygame.KEYDOWN and gameWorld.gameOver == True:
-                #reset the game if the game is over
-                gameWorld.gameOver = False
-                gameWorld = world.World()
-                gameWorld.spawnWorld()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    #quit
+                    return
+                    
+                else:
+                    if gameWorld.gameOver:
+                        #reset the game if the game is over
+                        gameWorld.gameOver = False
+                        gameWorld = world.World()
+                        gameWorld.spawnWorld()
+                    
+                    elif gameWorld.winScreen:
+                        pass
+                        
+                    else:
+                        if event.key == pygame.K_SPACE:
+                            #destroy all enemies if possible
+                            gameWorld.destroy_all_enemies()
+                            
+                        elif event.key == pygame.K_LALT or pygame.K_RALT or pygame.K_LCTRL or pygame.K_RCTRL or pygame.K_DELETE:
+                            #use CTRL_ALT_DEL function, resets the damage
+                            if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:
+                                gameWorld.player.health = MAX_HEALTH
+                                gameWorld.player.hasCtrl = False
+                                gameWorld.player.hasAlt = False
+                                gameWorld.player.hasDel = False
+                                
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -47,52 +70,38 @@ def main():
                         gameWorld.gameOver = False
                         gameWorld = world.World()
                         gameWorld.spawnWorld()
+                        
                     elif gameWorld.winScreen:
                         pos = pygame.mouse.get_pos()
                         if 807 < pos[0] and pos[0] < 943 and 654 < pos[1] and pos[1] < 694:
                             #reset the game if the game is over
                             gameWorld.winScreen = False
                             gameWorld = world.World()
-                            gameWorld.spawnWorld()  
-                    else:
+                            gameWorld.spawnWorld()
+                            
+                    elif not gameWorld.gameOver and not gameWorld.winScreen:
                         #shooting
                         gameWorld.leftMouseButtonDown()
                     
-                if event.button == 3:
+                elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen:
                     gameWorld.rightMouseButtonDown()
-                                        
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    #quit
-                    return
-                elif event.key == pygame.K_SPACE:
-                    #destroy all enemies if possible
-                    gameWorld.destroy_all_enemies()
-                    #pygame.display.set_caption('Shmup!')
-                elif event.key == pygame.K_LALT or pygame.K_RALT or pygame.K_LCTRL or pygame.K_RCTRL or pygame.K_DELETE:
-                    #use CTRL_ALT_DEL function, resets the damage
-                    if gameWorld.player.hasCtrl and gameWorld.player.hasAlt and gameWorld.player.hasDel:
-                        gameWorld.player.health = MAX_HEALTH
-                        gameWorld.player.hasCtrl = False
-                        gameWorld.player.hasAlt = False
-                        gameWorld.player.hasDel = False
         
-        if not gameWorld.gameOver:
+        if not gameWorld.gameOver and not gameWorld.winScreen:
             gameWorld.update()
             
-        screen.fill(HUD_BG_COLOR)
-        screen.fill(PLAY_BG_COLOR, playArea)
+            screen.fill(HUD_BG_COLOR)
+            screen.fill(PLAY_BG_COLOR, playArea)
+            
+            gameWorld.draw(screen)
         
-        gameWorld.draw(screen)
-        
-        if gameWorld.gameOver:
+        elif gameWorld.gameOver:
             #the game is over at this point, blit the game over screen and give option for replay
             pygame.display.set_caption("Game Over")
             screen = pygame.display.get_surface()
             s1 = pygame.image.load('data/images/alternateBlueScreen.jpg')
             screen.blit(s1, (0,0))
 
-        if gameWorld.winScreen:
+        elif gameWorld.winScreen:
             #you won! here's the win screen
             pygame.mouse.set_visible(True)
             screen = pygame.display.get_surface()

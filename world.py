@@ -182,23 +182,28 @@ class World (object):
         
         # Test player-enemy collisions
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            if not self.player.invincible and not enemy.dead and not enemy.animName == 'spawn':
-                self.player.decrease_life()
-                self.score -= 100
-            
-            if enemy.typeofenemy is 'virus':
-                self.numViruses += 1
-                self.numEnemiesDestroyed += 1
-                print "1"
-            if enemy.typeofenemy is 'worm':
-                self.numWorms += 1
-                self.numEnemiesDestroyed += 1
-                print "2"
-            if enemy.typeofenemy is 'pop up window':
-                self.numPopUps += 1
-                self.numEnemiesDestroyed += 1
-                print "3"
-            enemy.takeHit(enemy.health)
+            if not enemy.dead and not enemy.animName == 'spawn':
+                
+                if not enemy.typeofenemy == 'boss':
+                    enemy.takeHit(enemy.health)
+                
+                if not self.player.invincible:
+                    self.player.decrease_life()
+                    self.score -= 100
+                    
+                if enemy.dead:
+                    if enemy.typeofenemy is 'virus':
+                        self.numViruses += 1
+                        self.numEnemiesDestroyed += 1
+                        print "1"
+                    if enemy.typeofenemy is 'worm':
+                        self.numWorms += 1
+                        self.numEnemiesDestroyed += 1
+                        print "2"
+                    if enemy.typeofenemy is 'pop up window':
+                        self.numPopUps += 1
+                        self.numEnemiesDestroyed += 1
+                        print "3"
         
         # Test player-pickup collisions
         for pickup in pygame.sprite.spritecollide(self.player, self.pickups, False):

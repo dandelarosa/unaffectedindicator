@@ -65,7 +65,7 @@ class Animation (object):
             self.rect = pygame.Rect(0, 0, self.animRect.width, self.animRect.height)
             
 class ResizeAnimation(Animation):
-    def __init__(self, image, numFrames, initial, final):
+    def __init__(self, image, numFrames, initial, final, center = (0, 0)):
         image = loadImage(image)
         rect = image.get_rect()
         imageStrip = pygame.Surface((rect.width * numFrames, rect.height)).convert_alpha()
@@ -73,11 +73,34 @@ class ResizeAnimation(Animation):
         image = image.convert_alpha(imageStrip)
         
         for i in range(numFrames):
-            scale = ((final[0] - initial[0]) * (float(i)/numFrames) + initial[0], (final[1] - initial[1]) * (float(i)/numFrames) + initial[1])
+            scale = [(final[j] - initial[j]) * (float(i)/numFrames) + initial[j] for j in range(len(final))]
+            offset = [center[j] * (1 - scale[j]) for j in range(len(center))]
+            
             scale = (int(scale[0] * rect.width), int(scale[1] * rect.height))
-            imageStrip.blit(pygame.transform.scale(image, scale), (rect.width * i, 0))
+            offset = (int(offset[0] * rect.width), int(offset[1] * rect.height))
+            
+            imageStrip.blit(pygame.transform.scale(image, scale), (rect.width * i + offset[0], offset[1]))
         
         super(ResizeAnimation, self).__init__(imageStrip, rect.width, 1, False)
         
+
+class ColorFadeAnimation(Animation):
+    def __init__(self, image, framesIn, framesOut, color):
+        image = loadImage(image)
+        rect = image.get_rect()
+        imageStrip = pygame.Surface((rect.width * (framesIn + framesOut + 1), rect.height)).convert_alpha()
+        imageStrip.fill((0,0,0,0))
+        image = image.convert_alpha(imageStrip)
         
+        for i in range(framesIn):
+            fillcolor = [color[j] * (float(i) / framesIn) for j in range(len(color))]
+            imageStrip.blit(image, (rect.width * i, 0), None, pygame.BLEND_RGBA_ADD)
+            imageStrip.fill(fillcolor, (rect.width * i, 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
+        
+        for i in range(framesOut + 1):
+            fillcolor = [color[j] * (float(framesOut - i) / framesOut) for j in range(len(color))]
+            imageStrip.blit(image, (rect.width * (i + framesIn), 0), None, pygame.BLEND_RGBA_ADD)
+            imageStrip.fill(fillcolor, (rect.width * (i + framesIn), 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
+        
+        super(ColorFadeAnimation, self).__init__(imageStrip, rect.width, 1, False)
         

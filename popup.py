@@ -1,7 +1,7 @@
 import pygame, random
 
 import enemy
-from animation import Animation, ResizeAnimation
+from animation import Animation, ResizeAnimation, ColorFadeAnimation
 from constants import *
 
 """Popup subclasses entity.  Pops up randomly in the top half of the screen and saps your score for every second it is left alive.  """
@@ -13,7 +13,8 @@ class Popup(enemy.Enemy):
         anims = {
             'idle': Animation(imageFile),
             'spawn': ResizeAnimation(imageFile, 30, (0, 0), (1, 1)),
-            'death': ResizeAnimation(imageFile, 10, (1, 1), (0, 0))
+            'death': ResizeAnimation(imageFile, 10, (1, 1), (0, 0)),
+            'takehit': ColorFadeAnimation(imageFile, 3, 3, (255, 0, 0, 0)),
             }
         
         super(Popup, self).__init__('popup', position, anims, 'spawn')
@@ -23,9 +24,11 @@ class Popup(enemy.Enemy):
     def update(self):
         super(Popup, self).update()
         
-        if self.animName == 'spawn' and self.anim.done:
+        if (self.animName == 'spawn' or self.animName == 'takehit') and self.anim.done:
             self.changeAnimation('idle')
     
 
-                
+    def takeHit(self, damage):
+        if not self.animName == 'spawn':
+            super(Popup, self).takeHit(damage)
     

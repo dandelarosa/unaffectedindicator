@@ -8,6 +8,7 @@ class Enemy(entity.Entity):
         self.typeofenemy = enemyType
         self.health = 1
         self.dead = False
+        self.imageOriginal = None
     
     def collideWithBullet(self, bullet):
         if not self.dead:
@@ -19,9 +20,8 @@ class Enemy(entity.Entity):
             sound = pygame.mixer.Sound("data/sounds/hit.wav")
             sound.play()
             
-            #redOverlay = pygame.Surface(self.rect.size).convert_alpha(self.image)
-            #redOverlay.fill((255,0,0, 128))
-            #self.image.blit(redOverlay, (0,0))
+            #self.imageOriginal = self.image.copy()
+            #self.image.fill((255,0,0,0), None, pygame.BLEND_RGBA_ADD)
             
             self.health -= damage
             if self.health <= 0:
@@ -29,9 +29,16 @@ class Enemy(entity.Entity):
                 self.changeAnimation('death')
                 self.movex = 0
                 self.movey = 0
+            else:
+                self.changeAnimation('takehit')
     
     def update(self):
         super(Enemy, self).update()
+        
+        if self.imageOriginal and not self.dead:
+            self.image = self.imageOriginal
+            self.imageOriginal = None
+        
         if self.dead and self.anim.done:
             self.kill()
             del self

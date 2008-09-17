@@ -1,7 +1,7 @@
 import pygame
 
 import enemy
-from animation import Animation
+from animation import Animation, ColorFadeAnimation
 from constants import *
 
 """class Worm subclasses entity.  Position starts randomly across the top of the screen, moves to the left until it hits the edge of the game scren, falls down a little, then moves to the right. Back and forth."""
@@ -10,7 +10,11 @@ class Worm(enemy.Enemy):
         
         imageName = "worm " + subtype + ".png"
         deathImageName = "worm " + subtype + " death.png"
-        anims = {'idle': Animation(imageName), 'death': Animation(deathImageName, 32, 2, False)}
+        anims = {
+            'idle': Animation(imageName),
+            'death': Animation(deathImageName, 32, 2, False),
+            'takehit': ColorFadeAnimation(imageName, 3, 3, (255, 0, 0, 0)),
+            }
         
         super(Worm, self).__init__("worm", position, anims, 'idle')
         

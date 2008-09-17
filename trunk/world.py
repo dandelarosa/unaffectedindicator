@@ -258,7 +258,7 @@ class World (object):
             for i in range(random.randint(0, 4)):
                 self.spawnBkg()
 
-        if self.frames % (500 / difficulty) == 0:
+        if self.frames % (500 / self.difficulty) == 0:
             if self.spawnFreq is not 1:
                 self.spawnFreq -= 1
         

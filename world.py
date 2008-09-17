@@ -142,7 +142,6 @@ class World (object):
         sound.play()
 
     def enemy_popcorn(self):
-	    print "Being called!\n"
             if len(self.enemy_list)==1:
 		self.call_popcorn=0
             else:

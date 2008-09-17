@@ -53,7 +53,7 @@ class Player(entity.Entity):
         elif self.animName == 'revive':
             if self.anim.done:
                 self.changeAnimation('idle')
-                self.end_safe_mode()
+                self.invincible=False
                 pygame.mouse.set_pos(self.respawnPos)
         
         else:
@@ -102,7 +102,7 @@ class Player(entity.Entity):
         self.lives -= 1
         self.dying = True
         self.changeAnimation('death')        
-        self.init_safe_mode(10.0)
+        self.invincible=True
         
         sound = pygame.mixer.Sound("data/sounds/xplosion1.wav")
         sound.play()

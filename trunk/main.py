@@ -250,7 +250,7 @@ def main():
             color  = (230, 230, 230)
             if itrChosenDiff is 3:
                 color = (0, 0, 0)
-            a = f.render("Ricockulous", 1, color)
+            a = f.render("You don't want to. You REALLY don't want to.", 1, color)
             gameWorld.difficulty = 10
             r = a.get_rect()
             r.topleft = (100, chosenstate[3])
@@ -306,7 +306,11 @@ def main():
             r = a.get_rect()
             r.center = (900, 614)
             screen.blit(a, r)
-            
+
+            a = f.render("Score: "+str(gameWorld.score))
+            r = a.get_rect()
+            r.center = (286, 670)
+            screen.blit(a, r)
             
         
         pygame.display.flip()

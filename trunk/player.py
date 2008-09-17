@@ -67,12 +67,12 @@ class Player(entity.Entity):
             self.set_position(mousepos)
         
     def shoot(self, bullets):
-        if self.animName == 'idle' or self.animName == 'shoot':
+        if self.animName == 'idle' or self.animName == 'shoot' or self.animName == 'safemode':
             b = PlayerBullet(self.rect.center)
             self.bullets.append(b)
             bullets.add(b)
-            
-            self.changeAnimation('shoot')
+            if not self.invincible:
+                self.changeAnimation('shoot')
             
             sound = pygame.mixer.Sound("data/sounds/shoot.wav")
             sound.set_volume(.25)

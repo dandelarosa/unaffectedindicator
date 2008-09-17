@@ -21,10 +21,6 @@ class World (object):
 
         self.frames = 1
 
-        # this is normal difficulty by default
-        # easy would prolly be .7ish and hard.. 1.3 or so?
-        self.difficulty = 1 
-        self.spawnFreq = 10
         self.scrollPosition = 0
         self.scrollSpeed = 3
         self.endPosition = FRAMES_UNTIL_BOSS * self.scrollSpeed
@@ -33,6 +29,7 @@ class World (object):
         self.gameOver = False
         self.winScreen = False
         self.score = 0
+	self.call_popcorn = 0
 
         #for keeping track of for the win screen!
         self.numEnemiesAppeared = 0
@@ -138,7 +135,16 @@ class World (object):
         sound.set_volume(.25)
         sound.play()
 
+    def enemy_popcorn(self):
+	    print "Being called!\n"
+            if len(self.enemy_list)==1:
+		self.call_popcorn=0
+            else:
+                self.enemy_list[1].takeHit(self.enemy_list[1].health)
+		self.enemy_list.remove(self.enemy_list[1])
+
     def destroy_all_enemies(self):
+        self.enemy_list=[0]
         if self.player.destroyAllEnemies:
             self.player.after_destroy_all()
             sound = pygame.mixer.Sound("data/sounds/destroyall.wav")
@@ -154,8 +160,9 @@ class World (object):
                     if enemy.typeofenemy is 'pop up window':
                         self.numPopUps += 1
                     self.numEnemiesDestroyed += 1
-                    enemy.takeHit(enemy.health)
-                    
+                    self.enemy_list.insert(1,enemy)
+                    #enemy.takeHit(enemy.health)
+	    self.call_popcorn=self.frames
         
         
     def update(self):
@@ -257,36 +264,31 @@ class World (object):
         if self.frames % 32 == 0:
             for i in range(random.randint(0, 4)):
                 self.spawnBkg()
-
-        if self.frames % (500 / self.difficulty) == 0:
-            if self.spawnFreq is not 1:
-                self.spawnFreq -= 1
         
         # Spawn more enemies
-        baseSpawnRate = (self.spawnFreq * 5 + random.randint(-5, 5))
         if not self.bossMode:
-            if self.frames % baseSpawnRate == 0:
+            if self.frames % 50 == 0:
                 self.spawnVirus()
                 
-            if self.frames % (baseSpawnRate * 6) == 0:
+            if self.frames % 300 == 0:
                 self.spawnWorm()
 			
-            if self.frames % (baseSpawnRate * 5) == 0:
+            if self.frames % 250 == 0:
                 self.spawnPopup()
                 
-            if self.frames % (baseSpawnRate * 21) == 0:
+            if self.frames % 1100 == 0:
                 self.player.destroyAllEnemies = True
                 
-            if self.frames % (baseSpawnRate * 4) == 0:
+            if self.frames % 200 == 0:
                 self.spawnCtrl()
                 
-            if self.frames % (baseSpawnRate * 8) == 0:
+            if self.frames % 400 == 0:
                 self.spawnAlt()
                 
-            if self.frames % (baseSpawnRate * 12) == 0:
+            if self.frames % 600 == 0:
                 self.spawnDel()
                 
-            if self.frames % (baseSpawnRate * 7) == 0:
+            if self.frames % 350 == 0:
                 self.spawnSafe()
         
         # Check if main music has ended, and loop music should start
@@ -296,6 +298,10 @@ class World (object):
         elif self.frames == FRAMES_UNTIL_BOSS + MUSIC_LENGTH_BOSS:
             pygame.mixer.music.load("data/music/Bossloop.mp3")
             pygame.mixer.music.play(-1)
+	    
+	#Check for calling enemy_popcorn
+	if self.call_popcorn != 0 and self.call_popcorn<self.frames-10:
+	       self.enemy_popcorn()
                 
                 
         # Check gameover

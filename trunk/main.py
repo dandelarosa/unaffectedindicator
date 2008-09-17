@@ -307,9 +307,9 @@ def main():
             r.center = (900, 614)
             screen.blit(a, r)
 
-            a = f.render("Score: "+str(gameWorld.score))
+            a = f.render("Score: "+str(gameWorld.score), 1, (0,0,0))
             r = a.get_rect()
-            r.center = (286, 670)
+            r.center = (186, 670)
             screen.blit(a, r)
             
         

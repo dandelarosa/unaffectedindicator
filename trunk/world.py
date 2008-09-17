@@ -36,6 +36,7 @@ class World (object):
         self.winScreen = False
         self.score = 0
 	self.call_popcorn = 0
+        self.boss_music=False
 
         #for keeping track of for the win screen!
         self.numEnemiesAppeared = 0
@@ -121,6 +122,7 @@ class World (object):
         self.enemies.add(enemy)
     
     def spawnBoss(self):
+	self.boss_music=True
         self.numEnemiesAppeared += 1
         pygame.mixer.music.load("data/music/Boss.mp3")
         pygame.mixer.music.play(-1)
@@ -307,12 +309,13 @@ class World (object):
                 self.spawnSafe()
                 
         # Check if main music has ended, and loop music should start
-        if self.frames == MUSIC_LENGTH_MAIN:
-            pygame.mixer.music.load("data/music/Mainloop.mp3")
-            pygame.mixer.music.play(-1)
-        elif self.frames == FRAMES_UNTIL_BOSS + MUSIC_LENGTH_BOSS:
-            pygame.mixer.music.load("data/music/Bossloop.mp3")
-            pygame.mixer.music.play(-1)
+        if not pygame.mixer.music.get_busy():
+          if not self.boss_music:
+              pygame.mixer.music.load("data/music/Mainloop.mp3")
+              pygame.mixer.music.play(-1)
+          elif self.frames == FRAMES_UNTIL_BOSS + MUSIC_LENGTH_BOSS:
+              pygame.mixer.music.load("data/music/Bossloop.mp3")
+              pygame.mixer.music.play(-1)
 	    
 	#Check for calling enemy_popcorn
 	if self.call_popcorn != 0 and self.call_popcorn<self.frames-10:

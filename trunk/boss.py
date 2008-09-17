@@ -15,7 +15,7 @@ class Chainlink(enemy.Enemy):
     
         anims = {
             'idle': Animation('Tentacle.png'),
-            'death': ResizeAnimation('Tentacle.png', 10, (1, 1), (0, 0), (0.5, 0.5)),
+            'death': ResizeAnimation('Tentacle.png', 10, 0, (1, 1), (0, 0), (0.5, 0.5)),
             'takehit': ColorFadeAnimation('Tentacle.png', 3, 3, (255, 0, 0, 0)),
             }
         

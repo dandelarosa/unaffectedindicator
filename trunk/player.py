@@ -29,7 +29,7 @@ class Player(entity.Entity):
         
         self.health = MAX_HEALTH
         self.powerup = 0
-        self.lives = 3
+        self.lives = LIVES
         self.mines = 3
         self.hasCtrl = False
         self.hasAlt = False

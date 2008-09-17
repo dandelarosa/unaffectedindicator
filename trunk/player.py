@@ -3,7 +3,7 @@ import pygame, threading
 from playerBullet import PlayerBullet
 from quarantineMine import QuarantineMine
 import entity
-from animation import Animation
+from animation import Animation, ColorFadeAnimation
 from constants import *
 
 class Player(entity.Entity):
@@ -13,12 +13,14 @@ class Player(entity.Entity):
         self.respawnPos = pos
         self.gameWorld = world
         
+        self.safeModeTime = 5
         anims = {
             'idle': Animation("player icon.png", 32), 
             'shoot': Animation("fire.png", 32, 2, False),
             'death': Animation("player death.png", 32, 2, False),
             'revive': Animation("player revive.png", 32, 3, False),
-            'respawn': Animation("respawn.png", 32, 3, False)
+            'respawn': Animation("respawn.png", 32, 3, False),
+            'safemode': ColorFadeAnimation("player icon.png", 32, (self.safeModeTime*2)*32, (0, 255, 0, 0))
             }
         
         super(Player, self).__init__(pos, anims, 'idle')
@@ -85,13 +87,16 @@ class Player(entity.Entity):
             self.hasDel = True
         
     def init_safe_mode(self, time):
+        self.safeModeTime = time
         if not self.invincible:
+            self.changeAnimation('safemode')
             self.invincible = True
             t = threading.Timer(time, self.end_safe_mode)
             t.start()
         
     def end_safe_mode(self):
         self.invincible = False
+        self.changeAnimation('idle')
     
     def decrease_life(self):
         self.lives -= 1

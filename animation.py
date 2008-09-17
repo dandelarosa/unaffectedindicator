@@ -92,27 +92,15 @@ class ColorFadeAnimation(Animation):
         imageStrip.fill((0,0,0,0))
         image = image.convert_alpha(imageStrip)
         
-        #version = [int(i) for i in pygame.__version__.split('.')]
-        #print version
-        #if version[0] >= 1 and version[1] >= 8 and version[2] >= 1:
-        
-        useBlend = pygame.__version__ == '1.8.1release'
-        
         for i in range(framesIn):
             fillcolor = [color[j] * (float(i) / framesIn) for j in range(len(color))]
             imageStrip.blit(image, (rect.width * i, 0))
-            if useBlend:
-                imageStrip.fill(fillcolor, (rect.width * i, 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
-            else:
-                imageStrip.fill(fillcolor, (rect.width * i, 0, rect.width, rect.height))
+            imageStrip.fill(fillcolor, (rect.width * i, 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
         
         for i in range(framesOut):
             fillcolor = [color[j] * (float(framesOut - i) / framesOut) for j in range(len(color))]
             imageStrip.blit(image, (rect.width * (i + framesIn), 0))
-            if useBlend:
-                imageStrip.fill(fillcolor, (rect.width * (i + framesIn), 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
-            else:
-                imageStrip.fill(fillcolor, (rect.width * (i + framesIn), 0, rect.width, rect.height))
+            imageStrip.fill(fillcolor, (rect.width * (i + framesIn), 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
         
         super(ColorFadeAnimation, self).__init__(imageStrip, rect.width, 1, False)
         

@@ -23,7 +23,7 @@ class Player(entity.Entity):
             'safemode': ColorFadeAnimation("player icon.png", 32, (self.safeModeTime*2)*32, (0, 255, 0, 0))
             }
         
-        super(Player, self).__init__(pos, anims, 'idle')
+        super(Player, self).__init__(pos, anims, 'respawn')
         
         pygame.mouse.set_visible(False)
         

@@ -29,6 +29,13 @@ class World (object):
         self.winScreen = False
         self.score = 0
 
+        #for keeping track of for the win screen!
+        self.numEnemiesAppeared = 0
+        self.numEnemiesDestroyed = 0
+        self.numViruses = 0
+        self.numWorms = 0
+        self.numPopUps = 0
+
         self.playerGroup = pygame.sprite.GroupSingle()
         self.enemies = pygame.sprite.Group()
         self.pickups = pygame.sprite.Group()
@@ -74,10 +81,12 @@ class World (object):
         self.pickups.add(d)
         
     def spawnVirus(self):
+        self.numEnemiesAppeared += 1
         enemy = Virus()
         self.enemies.add(enemy)
 
     def spawnWorm(self):
+        self.numEnemiesAppeared += 1
         position1 = random.randint(195,PLAY_WIDTH-50)
         position2 = 10
         position = position1, position2
@@ -94,12 +103,14 @@ class World (object):
         self.enemies.add(enemy)
         
     def spawnPopup(self):
+        self.numEnemiesAppeared += 1
         enemy = Popup()
         while len(pygame.sprite.spritecollide(enemy, self.playerGroup, False)) > 0:
             enemy = Popup()
         self.enemies.add(enemy)
     
     def spawnBoss(self):
+        self.numEnemiesAppeared += 1
         pygame.mixer.music.load("data/music/Boss.mp3")
         pygame.mixer.music.play(-1)
         self.boss = Boss((PLAY_WIDTH / 2, -200))
@@ -124,6 +135,18 @@ class World (object):
     def quarantine_explode(self):
         for mine in self.mines:
             for enemy in pygame.sprite.spritecollide(mine, self.enemies, False):
+                if enemy.typeofenemy is 'virus':
+                    self.numViruses += 1
+                    self.numEnemiesDestroyed += 1
+                    print "8"
+                if enemy.typeofenemy is 'worm':
+                    self.numWorms += 1
+                    self.numEnemiesDestroyed += 1
+                    print "9"
+                if enemy.typeofenemy is 'pop up window':
+                    self.numPopUps += 1
+                    self.numEnemiesDestroyed += 1
+                    print "10"
                 self.enemies.remove(enemy)
             self.mines.remove(mine)
         sound = pygame.mixer.Sound("data/sounds/mineexplosion.wav")
@@ -138,6 +161,14 @@ class World (object):
                 if enemy.typeofenemy == 'boss' or enemy.typeofenemy == 'link':
                     enemy.takeHit(1)
                 else:
+                    if enemy.typeofenemy is 'virus':
+                        self.numViruses += 1
+                    if enemy.typeofenemy is 'worm':
+                        self.numWorms += 1
+                    if enemy.typeofenemy is 'pop up window':
+                        self.numPopUps += 1
+                    self.numEnemiesDestroyed += 1
+                    print "11"
                     enemy.takeHit(enemy.health)
                     
         
@@ -155,6 +186,18 @@ class World (object):
                 self.player.decrease_life()
                 self.score -= 100
             
+            if enemy.typeofenemy is 'virus':
+                self.numViruses += 1
+                self.numEnemiesDestroyed += 1
+                print "1"
+            if enemy.typeofenemy is 'worm':
+                self.numWorms += 1
+                self.numEnemiesDestroyed += 1
+                print "2"
+            if enemy.typeofenemy is 'pop up window':
+                self.numPopUps += 1
+                self.numEnemiesDestroyed += 1
+                print "3"
             enemy.takeHit(enemy.health)
         
         # Test player-pickup collisions
@@ -172,10 +215,19 @@ class World (object):
                     self.player.increase_powerup(5)
                     
                     if enemy.typeofenemy == "worm":
+                        self.numWorms += 1
+                        self.numEnemiesDestroyed += 1
+                        print "4"
                         self.score += 25
                     elif enemy.typeofenemy == "virus":
+                        self.numViruses += 1
+                        self.numEnemiesDestroyed += 1
+                        print "5"
                         self.score += 10
                     elif enemy.typeofenemy == "popup":
+                        self.numEnemiesDestroyed += 1
+                        print "6"
+                        self.numPopUps += 1
                         self.score += 15
                             
             
@@ -246,6 +298,8 @@ class World (object):
         # Check win screen!
         if self.bossMode and self.boss.dead and self.boss.anim.done:
             if not self.winScreen:
+                self.numEnemiesDestroyed += 1
+                print "7"
                 self.winScreen = True
             
         # Scroll level

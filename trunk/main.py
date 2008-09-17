@@ -42,8 +42,21 @@ def main():
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    #shooting
-                    gameWorld.leftMouseButtonDown()
+                    if gameWorld.gameOver == True:
+                        #reset the game if the game is over
+                        gameWorld.gameOver = False
+                        gameWorld = world.World()
+                        gameWorld.spawnWorld()
+                    elif gameWorld.winScreen:
+                        pos = pygame.mouse.get_pos()
+                        if 807 < pos[0] and pos[0] < 943 and 654 < pos[1] and pos[1] < 694:
+                            #reset the game if the game is over
+                            gameWorld.winScreen = False
+                            gameWorld = world.World()
+                            gameWorld.spawnWorld()  
+                    else:
+                        #shooting
+                        gameWorld.leftMouseButtonDown()
                     
                 if event.button == 3:
                     gameWorld.rightMouseButtonDown()
@@ -81,11 +94,55 @@ def main():
 
         if gameWorld.winScreen:
             #you won! here's the win screen
+            pygame.mouse.set_visible(True)
             screen = pygame.display.get_surface()
-            s1 = pygame.image.load('data/images/winscreen.jpg')
-            screen.blit(s1, (0,0))
+            s2 = pygame.image.load('data/images/winscreen.jpg')
+            screen.blit(s2, (0,0))
+            f = pygame.font.Font(None, 32)
+            f2 = pygame.font.Font(None, 24)
+            a = f.render(str(gameWorld.numEnemiesAppeared), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 324)
+            screen.blit(a, r)
+            
+            a = f.render(str((gameWorld.numEnemiesAppeared - gameWorld.numEnemiesDestroyed)), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 375)
+            screen.blit(a, r)
+            
+            a = f.render(str(gameWorld.numEnemiesDestroyed), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 425)
+            screen.blit(a, r)
+            
+            a = f2.render(str(gameWorld.numViruses), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 475)
+            screen.blit(a, r)
+            
+            a = f2.render(str(gameWorld.numWorms), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 505)
+            screen.blit(a, r)
+            
+            a = f2.render(str(gameWorld.numPopUps), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 535)
+            screen.blit(a, r)
+            
+            a = f2.render(("1"), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 565)
+            screen.blit(a, r)
+            
+            a = f.render(("0"), 1, (0,0,0))
+            r = a.get_rect()
+            r.center = (900, 614)
+            screen.blit(a, r)
+            
+            
+            
         
         pygame.display.flip()
-
     
 main()

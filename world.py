@@ -24,6 +24,7 @@ class World (object):
         self.scrollPosition = 0
         self.scrollSpeed = 3
         self.endPosition = FRAMES_UNTIL_BOSS * self.scrollSpeed
+        self.startScreen = True
         self.bossMode = False
         self.gameOver = False
         self.winScreen = False
@@ -52,6 +53,7 @@ class World (object):
         pygame.mixer.music.play()
         
     def spawnWorld(self):
+        self.StartScreen = False
         playerPos = (PLAY_WIDTH / 2, SCREEN_HEIGHT - 50)
         pygame.mouse.set_pos(playerPos)
         self.player = Player(self, playerPos)

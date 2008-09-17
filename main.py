@@ -23,7 +23,6 @@ def main():
     clock = pygame.time.Clock()
     
     gameWorld = world.World()
-    gameWorld.spawnWorld()
     #create the world
     
     while True:
@@ -44,10 +43,15 @@ def main():
                         #reset the game if the game is over
                         gameWorld.gameOver = False
                         gameWorld = world.World()
-                        gameWorld.spawnWorld()
+                        gameWorld.startScreen = True
                     
                     elif gameWorld.winScreen:
                         pass
+
+                    elif gameWorld.startScreen:
+                        if event.key == pygame.K_RETURN:
+                            gameWorld.spawnWorld()
+                            gameWorld.startScreen = False
                         
                     else:
                         if event.key == pygame.K_SPACE:
@@ -71,7 +75,7 @@ def main():
                         #reset the game if the game is over
                         gameWorld.gameOver = False
                         gameWorld = world.World()
-                        gameWorld.spawnWorld()
+                        gameWorld.startScreen = True
                         
                     elif gameWorld.winScreen:
                         pos = pygame.mouse.get_pos()
@@ -79,7 +83,7 @@ def main():
                             #reset the game if the game is over
                             gameWorld.winScreen = False
                             gameWorld = world.World()
-                            gameWorld.spawnWorld()
+                            gameWorld.startScreen = True
                             
                     elif not gameWorld.gameOver and not gameWorld.winScreen:
                         #shooting
@@ -88,7 +92,7 @@ def main():
                 elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen:
                     gameWorld.rightMouseButtonDown()
         
-        if not gameWorld.gameOver and not gameWorld.winScreen:
+        if not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen:
             gameWorld.update()
             
             screen.fill(HUD_BG_COLOR)
@@ -101,6 +105,13 @@ def main():
             pygame.display.set_caption("Game Over")
             screen = pygame.display.get_surface()
             s1 = pygame.image.load('data/images/alternateBlueScreen.jpg')
+            screen.blit(s1, (0,0))
+
+        elif gameWorld.startScreen:
+            #when game first starts up, and after gameover and win screens    
+            pygame.display.set_caption("Booting...")
+            screen = pygame.display.get_surface()
+            s1 = pygame.image.load('data/images/bootupscreen.png')
             screen.blit(s1, (0,0))
 
         elif gameWorld.winScreen:
@@ -150,7 +161,6 @@ def main():
             r = a.get_rect()
             r.center = (900, 614)
             screen.blit(a, r)
-            
             
             
         

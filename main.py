@@ -212,7 +212,7 @@ def main():
             s = pygame.image.load('data/images/difficultyscreen.png')
             screen.blit(s, (0,0))
             
-            chosen = pygame.Surface((500, 30))
+            chosen = pygame.Surface((700, 30))
             chosen.fill((230, 230, 230), chosen.get_rect())
             chosenstate = [ 200, 300, 400, 500 ]
             r = chosen.get_rect()

@@ -234,7 +234,7 @@ class Hud (object):
         
     
     def draw(self, screen, offset):
-        pygame.draw.rect(screen, (128, 128, 128), (offset, 0, self.scrollbar.rect.width, SCREEN_HEIGHT))
+        pygame.draw.rect(screen, (240, 240, 240), (offset, 0, self.scrollbar.rect.width, SCREEN_HEIGHT))
         for element in self.hudElements:
             screen.blit(element.image, (element.rect.left + offset, element.rect.top))
 		

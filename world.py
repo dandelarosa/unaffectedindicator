@@ -51,6 +51,7 @@ class World (object):
         self.bullets = pygame.sprite.Group()
         self.mines = pygame.sprite.Group()
         self.backgrounds = pygame.sprite.Group()
+        self.spawnBkg()
         
         # sprite groups listed in draw order (lowest sprite get drawn first)
         self.spriteGroups = [self.backgrounds, self.mines, self.pickups, self.bullets, self.enemies, self.playerGroup]
@@ -270,9 +271,8 @@ class World (object):
             if bkg.rect.top > SCREEN_HEIGHT:
                 bkg.kill()
         
-        if self.frames % 32 == 0:
-            for i in range(random.randint(0, 4)):
-                self.spawnBkg()
+        if self.frames % 360 == 0:
+            self.spawnBkg()
 
         if self.spawnFreq is not 1:
             if self.frames % (500 / self.difficulty) == 0:
@@ -349,5 +349,3 @@ class World (object):
             for sprite in group:
                 sprite.draw(screen)
         self.hud.draw(screen, PLAY_WIDTH)
-        
-        

@@ -9,7 +9,7 @@ class Ctrl(entity.StaticEntity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Ctrl, self).__init__(self.position, 'ctrl button.png')
+        super(Ctrl, self).__init__(self.position, 'ctrl.PNG')
         self.id = 1
         self.lifetime = 1
         t = threading.Timer(2.5, self.delete_pickup)
@@ -36,7 +36,7 @@ class Alt(entity.StaticEntity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Alt, self).__init__(self.position, 'alt button.png')
+        super(Alt, self).__init__(self.position, 'alt.PNG')
         self.id = 2
         self.lifetime = 1
         t = threading.Timer(2.5, self.delete_pickup)
@@ -63,7 +63,7 @@ class Del(entity.StaticEntity):
     def __init__(self):
         
         self.position = random.randint(10,450), random.randint(10,450)
-        super(Del, self).__init__(self.position, 'del button.png')
+        super(Del, self).__init__(self.position, 'del.PNG')
         self.id = 3
         self.lifetime = 1
         t = threading.Timer(2.5, self.delete_pickup)

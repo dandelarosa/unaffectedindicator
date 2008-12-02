@@ -20,6 +20,6 @@ LIVES = 5
 MAX_HEALTH = 8
 
 PLAY_BG_COLOR = (255, 255, 255)
-HUD_BG_COLOR = (110, 100, 255)
+HUD_BG_COLOR = (101, 82, 255)
 
 BACKGROUND_IMAGE_FILES = ('folderBig.png', 'folderBig.png')

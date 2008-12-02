@@ -1,7 +1,13 @@
 import pygame
-
 from constants import *
 
+class HudBackground(pygame.sprite.Sprite):
+	def __init__(self):
+		super(HudBackground, self).__init__()
+		
+		self.image = pygame.image.load("data/images/hudbkgd.png").convert_alpha()
+		self.rect = self.image.get_rect()
+		
 class ScrollButton(pygame.sprite.Sprite):
 	def __init__(self, pointUp):
 		super(ScrollButton, self).__init__()
@@ -36,10 +42,10 @@ class DamageBar(pygame.sprite.Sprite):
         self.images = [pygame.Surface((160, 64)) for i in range(MAX_HEALTH + 1)]
         i = 0
         for image in self.images:
-            image.fill(HUD_BG_COLOR)
+            image.fill((214, 223, 247))
 		
             f = pygame.font.Font(None, 32)
-            image.blit(f.render("Memory Usage:", 1, (255, 0, 0)), (0, 0))
+            image.blit(f.render("Memory Usage:", 1, (0, 0, 0)), (0, 0))
             
             pygame.draw.rect(image, (0, 0, 0), (0, 32, 160, 32))
             pygame.draw.rect(image, (0, 255, 0), (0, 32, int(i * 160.0 / MAX_HEALTH), 32))
@@ -59,14 +65,14 @@ class Lives(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None, 32)
         lvr = "Lives: "
-        self.image = f.render(lvr, 1, (255,0,0))
+        self.image = f.render(lvr, 1, (0,0,0))
 
         self.rect = self.image.get_rect()
         
     def update(self, lives):
         f = pygame.font.Font(None, 32)
         lnr = "Lives: " + str(lives)
-        self.image = f.render(lnr, 1, (255,0,0))
+        self.image = f.render(lnr, 1, (0,0,0))
         #nothing
         
 class Destr(pygame.sprite.Sprite):
@@ -75,7 +81,7 @@ class Destr(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None, 32)
         txt1 = "Nukes Active"
-        self.image = f.render(txt1, 1, (255,0,0))
+        self.image = f.render(txt1, 1, (0,0,0))
         self.rect = self.image.get_rect()
         
 class Score(pygame.sprite.Sprite):
@@ -84,13 +90,13 @@ class Score(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None,32)
         txt = "Score: " +str(score)
-        self.image = f.render(txt,1,(255,0,0))
+        self.image = f.render(txt,1,(0,0,0))
         self.rect = self.image.get_rect()
         
     def update(self,score):
         f = pygame.font.Font(None,32)
         txt = "Score: " + str(score)
-        self.image = f.render(txt,1,(255,0,0))
+        self.image = f.render(txt,1,(0,0,0))
 
 class hasCtrl(pygame.sprite.Sprite):
     def __init__(self):
@@ -98,7 +104,7 @@ class hasCtrl(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None,32)
         txt = "CTRL"
-        self.image = f.render(txt, 1, (255,0,0))
+        self.image = f.render(txt, 1, (0,0,0))
         self.rect = self.image.get_rect()
         
 class hasAlt(pygame.sprite.Sprite):
@@ -107,7 +113,7 @@ class hasAlt(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None,32)
         txt = "ALT"
-        self.image = f.render(txt, 1, (255,0,0))
+        self.image = f.render(txt, 1, (0,0,0))
         self.rect = self.image.get_rect()
         
     
@@ -117,7 +123,7 @@ class hasDel(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None,32)
         txt = "DEL"
-        self.image = f.render(txt, 1, (255,0,0))
+        self.image = f.render(txt, 1, (0,0,0))
         self.rect = self.image.get_rect()
         
     
@@ -127,7 +133,7 @@ class invincible(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None,32)
         txt = "SAFE MODE"
-        self.image = f.render(txt,1,(255,0,0))
+        self.image = f.render(txt,1,(0,0,0))
         self.rect = self.image.get_rect()
 
 class mines(pygame.sprite.Sprite):
@@ -136,19 +142,21 @@ class mines(pygame.sprite.Sprite):
         pygame.font.init()
         f = pygame.font.Font(None, 32)
         txt = "Quarantines: " + str(amt)
-        self.image = f.render(txt,1,(255,0,0))
+        self.image = f.render(txt,1,(0,0,0))
         self.rect = self.image.get_rect()
         
     def update(self, amt):
         f = pygame.font.Font(None,32)
         txt = "Quarantines: " + str(amt)
-        self.image = f.render(txt, 1, (255,0,0))
+        self.image = f.render(txt, 1, (0,0,0))
 
 class Hud (object):
 	
     def __init__(self):
         #just initialize the group
         super(Hud, self).__init__()
+        self.background = HudBackground()
+        self.background.rect.topleft = (PLAY_WIDTH + 24, 8)
         self.hudElements = pygame.sprite.Group()
 	
     def createHudElements(self):
@@ -162,39 +170,39 @@ class Hud (object):
 		
         #initialize the damage bar
         self.damageBar = DamageBar()
-        self.damageBar.rect.topleft = (32, 16)
+        self.damageBar.rect.topleft = (32, 48)
         
         #initialize the box displaying amount of lives
         self.lives = Lives()
-        self.lives.rect.topleft = (32, 96)
+        self.lives.rect.topleft = (32, 116)
         
         #initialize the rect displaying amount of mines left
         self.mines = mines(3)
-        self.mines.rect.topleft = (32,128)
+        self.mines.rect.topleft = (32,250)
 		
         #initialize the box displaying whether nukes are active or not
         self.destr = Destr()
-        self.destr.rect.topleft = (32,160)
+        self.destr.rect.topleft = (32,290)
         
         #initialize the rect displaying the score
         self.score = Score(0)
-        self.score.rect.topleft = (32, 700)
+        self.score.rect.topleft = (32, 680)
         
         #initialize the rect displaying whether or not Ctrl has been picked up
         self.ctrl = hasCtrl()
-        self.ctrl.rect.topleft = (32, 200)
+        self.ctrl.rect.topleft = (32, 330)
         
         #initialize the rect displaying whether or not Alt has been picked up
         self.alt = hasAlt()
-        self.alt.rect.topleft = (32, 230)
+        self.alt.rect.topleft = (32, 370)
         
         #initialize the rect displaying whether or not Del has been picked up
         self.dele = hasDel()
-        self.dele.rect.topleft = (32, 260)
+        self.dele.rect.topleft = (32, 410)
         
         #initialize the rect displaying whether or not god mode is active
         self.invincible = invincible()
-        self.invincible.rect.topleft = (32, 300)
+        self.invincible.rect.topleft = (32, 450)
         
         #add all these elements to the group
         self.hudElements.add(self.scrollButtonUp, self.scrollButtonDown, self.scrollbar, self.damageBar, self.lives, self.score, self.mines)
@@ -235,6 +243,7 @@ class Hud (object):
     
     def draw(self, screen, offset):
         pygame.draw.rect(screen, (240, 240, 240), (offset, 0, self.scrollbar.rect.width, SCREEN_HEIGHT))
+        screen.blit(self.background.image, self.background.rect)
         for element in self.hudElements:
             screen.blit(element.image, (element.rect.left + offset, element.rect.top))
 		

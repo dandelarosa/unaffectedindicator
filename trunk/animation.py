@@ -119,3 +119,26 @@ class ColorFadeAnimation(Animation):
         
         super(ColorFadeAnimation, self).__init__(imageStrip, rect.width, 1, loops)
         
+class TriColorAnimation(Animation):
+    def __init__(self, image, c1, c2, c3, color1, color2, color3, loops=0):
+        image = loadImage(image)
+        rect = image.get_rect()
+        imageStrip = pygame.Surface((rect.width * (c1 + c2 + c3), rect.height)).convert_alpha()
+        imageStrip.fill((0,0,0,0))
+        image = image.convert_alpha(imageStrip)
+        
+        for i in range(c1):
+            imageStrip.blit(image, (rect.width * i, 0))
+            imageStrip.fill(color1, (rect.width * i, 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
+        
+        for i in range(c2):
+            imageStrip.blit(image, (rect.width * (i+c1), 0))
+            imageStrip.fill(color2, (rect.width * (i+c1), 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
+        
+        for i in range(c3):
+            fillcolor = [color3[j] * (float(c3 - i) / c3) for j in range(len(color3))]
+            imageStrip.blit(image, (rect.width * (i + c1+c2), 0))
+            imageStrip.fill(fillcolor, (rect.width * (i + c1+c2), 0, rect.width, rect.height), pygame.BLEND_RGBA_ADD)
+        
+        super(TriColorAnimation, self).__init__(imageStrip, rect.width, 1, loops)
+

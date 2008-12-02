@@ -3,7 +3,7 @@ import pygame, threading
 from playerBullet import PlayerBullet
 from quarantineMine import QuarantineMine
 import entity
-from animation import Animation, ColorFadeAnimation
+from animation import Animation, ColorFadeAnimation, TriColorAnimation
 from constants import *
 
 class Player(entity.Entity):
@@ -20,7 +20,7 @@ class Player(entity.Entity):
             'death': Animation("player death.png", 32, 2, 0),
             'revive': Animation("player revive.png", 32, 3, 0),
             'respawn': Animation("respawn.png", 32, 2, 2),
-            'safemode': ColorFadeAnimation("player icon.png", 8, 8, (0, 255, 0, 0), self.safeModeTime),
+            'safemode': TriColorAnimation("player icon.png", 100, 50, 25, (0, 255, 0, 0), (255, 255, 0, 0), (255, 0, 0, 0))
             }
         
         super(Player, self).__init__(pos, anims, 'respawn')
@@ -63,7 +63,7 @@ class Player(entity.Entity):
             elif self.animName == 'safemode':
                 if self.anim.done:
                     self.end_safe_mode()
-
+                    
             mousepos = list(pygame.mouse.get_pos())
             mousepos[0] = min(PLAY_WIDTH - self.rect.height / 2, max(self.rect.width / 2, mousepos[0]))
             mousepos[1] = min(SCREEN_HEIGHT - self.rect.height / 2, max(self.rect.height / 2, mousepos[1]))

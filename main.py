@@ -231,8 +231,8 @@ def main():
             color  = (230, 230, 230)
             if itrChosenDiff is 0:
                 color = (0, 0, 0)
+                gameWorld.difficulty = .5
             a = f.render("Easy", 1, color)
-            gameWorld.difficulty = .7
             r = a.get_rect()
             r.topleft = (100, chosenstate[0])
             screen.blit(a, r)
@@ -240,8 +240,8 @@ def main():
             color  = (230, 230, 230)
             if itrChosenDiff is 1:
                 color = (0, 0, 0)
+                gameWorld.difficulty = .7
             a = f.render("Normal", 1, color)
-            gameWorld.difficulty = 1
             r = a.get_rect()
             r.topleft = (100, chosenstate[1])
             screen.blit(a, r)
@@ -249,8 +249,8 @@ def main():
             color  = (230, 230, 230)
             if itrChosenDiff is 2:
                 color = (0, 0, 0)
+                gameWorld.difficulty = 1
             a = f.render("Hard", 1, color)
-            gameWorld.difficulty = 1.3
             r = a.get_rect()
             r.topleft = (100, chosenstate[2])
             screen.blit(a, r)
@@ -258,8 +258,8 @@ def main():
             color  = (230, 230, 230)
             if itrChosenDiff is 3:
                 color = (0, 0, 0)
+                gameWorld.difficulty = 3
             a = f.render("You don't want to. You REALLY don't want to.", 1, color)
-            gameWorld.difficulty = 10
             r = a.get_rect()
             r.topleft = (100, chosenstate[3])
             screen.blit(a, r)

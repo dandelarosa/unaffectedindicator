@@ -295,14 +295,15 @@ class World (object):
             self.spawnBkg()
 
         if self.spawnFreq is not 1:
-            if self.frames % (500 / self.difficulty) == 0:
+            if self.frames % (500) == 0:
                 if self.spawnFreq <= 1:
                     self.spawnFreq = 1
                 elif self.spawnFreq > 1:
-                    self.spawnFreq -= 1
+                    self.spawnFreq -= self.difficulty
         
         # Spawn more enemies
-        baseSpawnRate = (self.spawnFreq * 5 + random.randint(1, 5))
+        baseSpawnRate = int(self.spawnFreq * 5 + random.randint(1, 5))
+        print self.difficulty, baseSpawnRate, self.spawnFreq
         if not self.bossMode:
             if self.frames % baseSpawnRate == 0:
                 seed = random.randint(1, 10)
@@ -313,25 +314,25 @@ class World (object):
                 else:
                     self.spawnTripleVirus()
                 
-            if self.frames % (baseSpawnRate * 6) == 0:
+            if self.frames % (baseSpawnRate * random.randint(3, 6)) == 0:
                 self.spawnWorm()
 			
-            if self.frames % (baseSpawnRate * 5) == 0:
+            if self.frames % (baseSpawnRate * random.randint(2, 5)) == 0:
                 self.spawnPopup()
                 
-            if self.frames % (baseSpawnRate * 21) == 0:
+            if self.frames % (baseSpawnRate * random.randint(18, 21)) == 0:
                 self.player.destroyAllEnemies = True
                 
-            if self.frames % (baseSpawnRate * 4) == 0:
+            if self.frames % (baseSpawnRate * random.randint(1, 4)) == 0:
                 self.spawnCtrl()
                 
-            if self.frames % (baseSpawnRate * 8) == 0:
+            if self.frames % (baseSpawnRate * random.randint(5, 8)) == 0:
                 self.spawnAlt()
                 
-            if self.frames % (baseSpawnRate * 12) == 0:
+            if self.frames % (baseSpawnRate * random.randint(9, 12)) == 0:
                 self.spawnDel()
                 
-            if self.frames % (baseSpawnRate * 7) == 0:
+            if self.frames % (baseSpawnRate * random.randint(4, 7)) == 0:
                 self.spawnSafe()
                 
         # Check if main music has ended, and loop music should start

@@ -11,7 +11,7 @@ MUSIC_LENGTH_BOSS = 2550        # Boss.mp3 = 1:25 = 85 seconds = 2550 frames
 #FRAMES_UNTIL_BOSS = MUSIC_LENGTH_MAIN + MUSIC_LENGTH_MAIN_LOOP
 
 # or just play Main.mp3 once to keep things shorter
-FRAMES_UNTIL_BOSS = 1000
+FRAMES_UNTIL_BOSS = 5040
 
 # or uncomment this to just test boss
 #FRAMES_UNTIL_BOSS = 1

@@ -129,6 +129,12 @@ def main():
                     
                 elif event.button == 3 and not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen and not gameWorld.helpScreen and not gameWorld.difficultyScreen:
                     gameWorld.rightMouseButtonDown()
+            
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    if not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen and not gameWorld.helpScreen and not gameWorld.difficultyScreen:
+                        #releasing
+                        gameWorld.leftMouseButtonUp()
         
         if not gameWorld.gameOver and not gameWorld.winScreen and not gameWorld.startScreen and not gameWorld.helpScreen and not gameWorld.difficultyScreen:
             gameWorld.update()
@@ -265,7 +271,7 @@ def main():
             pygame.mouse.set_visible(True)
             screen = pygame.display.get_surface()
             pygame.display.set_caption("Congratulations!")
-            s2 = pygame.image.load('data/images/winscreen.jpg')
+            s2 = pygame.image.load('data/images/winscreen.png')
             screen.blit(s2, (0,0))
             f = pygame.font.Font(None, 32)
             f2 = pygame.font.Font(None, 24)

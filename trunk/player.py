@@ -92,9 +92,8 @@ class Player(entity.Entity):
         
     def init_safe_mode(self, time):
         self.safeModeTime = time
-        if not self.invincible:
-            self.changeAnimation('safemode')
-            self.invincible = True
+        self.changeAnimation('safemode')
+        self.invincible = True
         
     def end_safe_mode(self):
         self.invincible = False

@@ -32,7 +32,7 @@ class DoubleVirus(Virus):
         if position is 0:
             position = random.randint(10,PLAY_WIDTH - 40), 10
         super(DoubleVirus, self).__init__(position, imagename)
-        self.movey = 2
+        self.movey = 1.5
         
     def update(self):
         super(DoubleVirus, self).update()

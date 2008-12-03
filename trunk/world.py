@@ -35,8 +35,9 @@ class World (object):
         self.gameOver = False
         self.winScreen = False
         self.score = 0
-	self.call_popcorn = 0
+        self.call_popcorn = 0
         self.boss_music=False
+        self.holdingLeftMouseButton = False
 
         #for keeping track of for the win screen!
         self.numEnemiesAppeared = 0
@@ -148,7 +149,11 @@ class World (object):
         self.pickups.add(safe)
 
     def leftMouseButtonDown(self):
+        self.holdingLeftMouseButton = True
         self.player.shoot(self.bullets)
+    
+    def leftMouseButtonUp(self):
+        self.holdingLeftMouseButton = False
 
     def rightMouseButtonDown(self):
         self.player.quarantine(self.mines)
@@ -186,7 +191,10 @@ class World (object):
         
         
     def update(self):
-    
+        if self.holdingLeftMouseButton:
+            if self.frames % 5 == 0:
+                self.player.shoot(self.bullets)
+                
         for group in self.spriteGroups:
             group.update()
         
@@ -281,6 +289,7 @@ class World (object):
         for bkg in self.backgrounds:
             if bkg.rect.top > SCREEN_HEIGHT:
                 bkg.kill()
+                
         
         if self.frames % 360 == 0:
             self.spawnBkg()

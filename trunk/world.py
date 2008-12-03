@@ -296,7 +296,13 @@ class World (object):
         baseSpawnRate = (self.spawnFreq * 5 + random.randint(1, 5))
         if not self.bossMode:
             if self.frames % baseSpawnRate == 0:
-                self.spawnTripleVirus()
+                seed = random.randint(1, 10)
+                if(seed < 7):
+                    self.spawnVirus(0)
+                elif(seed < 10):
+                    self.spawnDoubleVirus(0)
+                else:
+                    self.spawnTripleVirus()
                 
             if self.frames % (baseSpawnRate * 6) == 0:
                 self.spawnWorm()

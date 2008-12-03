@@ -3,7 +3,7 @@ import random
 import sys
 
 from ctrlAltDel import *
-from virus import Virus
+from virus import Virus, DoubleVirus, TripleVirus
 from popup import Popup
 from worm import Worm
 from entity import Entity
@@ -93,11 +93,21 @@ class World (object):
         d = Del()
         self.pickups.add(d)
         
-    def spawnVirus(self):
+    def spawnVirus(self, position):
         self.numEnemiesAppeared += 1
-        enemy = Virus()
+        enemy = Virus(position)
         self.enemies.add(enemy)
 
+    def spawnDoubleVirus(self, position):
+        self.numEnemiesAppeared += 1
+        enemy = DoubleVirus(self, position)
+        self.enemies.add(enemy)
+        
+    def spawnTripleVirus(self):
+        self.numEnemiesAppeared += 1
+        enemy = TripleVirus(self)
+        self.enemies.add(enemy)
+        
     def spawnWorm(self):
         self.numEnemiesAppeared += 1
         position1 = random.randint(195,PLAY_WIDTH-50)
@@ -253,6 +263,7 @@ class World (object):
         for enemy in self.enemies:       
             if enemy.rect.top > SCREEN_HEIGHT and not enemy.typeofenemy == 'link':
                 enemy.kill()
+                self.score -= 10
                 self.player.decrease_health(1)
                 sound = pygame.mixer.Sound("data/sounds/CPUload.wav")
                 sound.play()
@@ -285,7 +296,7 @@ class World (object):
         baseSpawnRate = (self.spawnFreq * 5 + random.randint(1, 5))
         if not self.bossMode:
             if self.frames % baseSpawnRate == 0:
-                self.spawnVirus()
+                self.spawnTripleVirus()
                 
             if self.frames % (baseSpawnRate * 6) == 0:
                 self.spawnWorm()

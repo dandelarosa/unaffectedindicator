@@ -12,7 +12,7 @@ def main():
 
     pygame.mixer.pre_init(44100)  # sample at 44100 khz instead of default 22050
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
     #initialize the screen
     pygame.display.set_caption('Shmup!')
 

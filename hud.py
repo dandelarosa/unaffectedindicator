@@ -73,6 +73,8 @@ class Lives(pygame.sprite.Sprite):
         f = pygame.font.Font(None, 32)
         lnr = "Lives: " + str(lives)
         self.image = f.render(lnr, 1, (0,0,0))
+        for i in range(lives):
+            pass
         #nothing
         
 class Destr(pygame.sprite.Sprite):

@@ -1,0 +1,1 @@
+A top-down, vertical-scrolling shooter set inside a computer beset by viruses, pop-ups and other malware.  Made for the first project for Game Development 1, Fall 2008, at RPI, by Corey, Adam, Dan, Dan, Darien and Tim.
